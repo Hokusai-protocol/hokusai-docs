@@ -2,10 +2,11 @@ const config = {
   title: 'Hokusai Protocol',
   tagline: 'Documentation for Hokusai Protocol',
   favicon: 'img/favicon.ico',
-  url: 'https://docs.hokusai.io',
-  baseUrl: '/',
+  url: 'https://hokusai-protocol.github.io',
+  baseUrl: '/hokusai-docs/',
   organizationName: 'hokusai-protocol',
   projectName: 'hokusai-docs',
+  trailingSlash: false,
 
   presets: [
     [
