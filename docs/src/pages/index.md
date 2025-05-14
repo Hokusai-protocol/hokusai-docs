@@ -25,9 +25,8 @@ Hokusai Protocol is a decentralized system that:
 
 To get started with Hokusai Protocol, you can:
 
-- [Explore Models](/explore-models) to see available AI models
-- [Create a Token](/create-token) to start your own model token
-- [Contribute Data](/docs) to earn rewards
+- [Create a Token](/creating-models)
+- [Contribute Data](/data-suppliers)
 - [Join the Community](https://github.com/hokusai-protocol) to participate in development
 
 ## Protocol Architecture
