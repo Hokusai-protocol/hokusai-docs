@@ -19,7 +19,15 @@ const sidebars = {
       type: 'category',
       label: 'Using Models',
       items: ['using-models'],
-    }
+    },
+    {
+      type: 'category',
+      label: 'Tokenomics',
+      items: ['tokenomics'],
+    },
+    'api-reference',
+    'governance',
+    'faqs',
   ],
 };
 

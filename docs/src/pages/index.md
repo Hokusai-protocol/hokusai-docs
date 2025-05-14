@@ -16,31 +16,16 @@ Hokusai Protocol is a decentralized system that:
 
 ## Key Features
 
-- **DeltaOne Tokens**: Create and trade tokens that represent AI model performance
+- **Hokusai Tokens**: ERC20 tokens that represent AI model performance. 
 - **Data Rewards**: Earn rewards for contributing high-quality training data
 - **Model Access**: Access performant models through the protocol
 - **Decentralized Governance**: Community-driven protocol development and decision making
 
 ## Getting Started
 
-To get started with Hokusai Protocol, you can:
+- [Getting Started as a Data Supplier](/supplying-data)
+- [Getting Started as a AI Developer](/ai-developers)
+- [Investors should understand Tokenomics](/tokenomics)
+- [Technical Architecture](/architecture)
 
-- [Create a Token](/creating-models)
-- [Contribute Data](/data-suppliers)
-- [Join the Community](https://github.com/hokusai-protocol) to participate in development
-
-## Protocol Architecture
-
-The Hokusai Protocol consists of several key components:
-
-1. **Token System**: DeltaOne tokens that represent model performance
-2. **Data Marketplace**: Platform for data contribution and rewards
-3. **Model Registry**: Repository of available AI models
-4. **Governance**: Decentralized decision-making system
-
-## Next Steps
-
-- Learn about [DeltaOne Tokens](/concepts/deltaone)
-- Understand [Tokenomics](/concepts/tokenomics)
-- Explore the [API Reference](/dev/api)
-- Read the [Integration Guide](/dev/integrate) 
+For further assistance, refer to the FAQs or join our community discussions.

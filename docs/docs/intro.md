@@ -1,4 +1,7 @@
 ---
+id: intro
+title: Introduction to Hokusai
+sidebar_label: Introduction
 sidebar_position: 1
 ---
 
@@ -8,7 +11,8 @@ Welcome to the Hokusai documentation. This guide will help you how Hokusai token
 
 ## What is Hokusai Protocol?
 
-Hokusai Protocol is a decentralized protocol designed to reward contributors of valuable, privacy-conscious data that improves AI models. It creates a fair and transparent marketplace where data suppliers can earn rewards for improving model performance, and AI developers can access high-quality data to enhance their models.
+Hokusai is a decentralized protocol that incentivizes the contribution of high-quality data to improve AI models. Contributors are rewarded with tokens when their data leads to measurable performance enhancements.
+
 
 ## Key Features
 
@@ -19,14 +23,10 @@ Hokusai Protocol is a decentralized protocol designed to reward contributors of 
 
 ## Getting Started
 
-- [Getting Started as a Data Supplier](/data-suppliers)
+- [Getting Started as a Data Supplier](/supplying-data)
 - [Getting Started as a AI Developer](/ai-developers)
+- [Investors should understand Tokenomics](/tokenomics)
 - [Technical Architecture](/architecture)
 
-To get started with Hokusai Protocol, you'll need to:
 
-## Understanding Hokusai Token Lifecycle
-
-- [How Tokens are created](/ai-developers)
-- [Supply Inflation Events](/token-supply-inflation)
-- [Supply Reduction Events](/token-supply-reduction)
+For further assistance, refer to the FAQs or join our community discussions.
