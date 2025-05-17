@@ -1,26 +1,19 @@
-const config = {
-  title: 'Hokusai Protocol',
-  tagline: 'Documentation for Hokusai Protocol',
-  favicon: 'img/favicon.ico',
+module.exports = {
+  title: 'Hokusai Docs',
   url: 'https://docs.hokus.ai',
   baseUrl: '/',
-  organizationName: 'hokusai-protocol',
-  projectName: 'hokusai-docs',
-  trailingSlash: false,
+  favicon: 'img/favicon.ico',
 
+  // Add presets configuration
   presets: [
     [
-      'classic',
+      '@docusaurus/preset-classic',
       {
         docs: {
-          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/hokusai-protocol/hokusai-docs/tree/main/',
+          routeBasePath: '/',
         },
-        blog: {
-          showReadingTime: true,
-          editUrl: 'https://github.com/hokusai-protocol/hokusai-docs/tree/main/',
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -28,25 +21,24 @@ const config = {
     ],
   ],
 
+  stylesheets: [
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
+      type: 'text/css',
+    },
+  ],
+
   themeConfig: {
     navbar: {
-      title: 'Hokusai Protocol',
+      title: 'Hokusai Docs',
       logo: {
-        alt: 'Hokusai Protocol Logo',
-        src: 'img/logo.svg',
+        alt: 'Hokusai Logo',
+        src: 'img/logo-light.svg',
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Documentation',
-        },
-        {
-          href: 'https://github.com/hokusai-protocol/hokusai-docs',
-          label: 'GitHub',
-          position: 'right',
-        },
+        { to: '/', label: 'Home', position: 'left' },
+        { href: 'https://hokus.ai', label: 'Main Site', position: 'right' },
       ],
     },
     footer: {
@@ -55,38 +47,17 @@ const config = {
         {
           title: 'Docs',
           items: [
-            {
-              label: 'Documentation',
-              to: '/intro',
-            },
+            { label: 'Getting Started', to: '/' },
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Discord',
-              href: 'https://discord.gg/hokusai',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/hokusai_protocol',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/hokusai-protocol/hokusai-docs',
-            },
+            { label: 'GitHub', href: 'https://github.com/your-repo' },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Hokusai Protocol. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} Hokusai`,
     },
   },
 };
-
-module.exports = config;

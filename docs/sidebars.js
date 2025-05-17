@@ -13,7 +13,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Creating Models',
-      items: ['creating-models'],
+      items: ['creating-models', 'improving-models'],
     },
     {
       type: 'category',
