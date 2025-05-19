@@ -8,11 +8,11 @@
 
 /* Example: Customize buttons */
 .button--primary {
-  background-color: var(--ifm-color-primary);
+  background-color: var(--1A2E5C);
   border-radius: 8px;
   transition: background-color 0.2s ease-in-out;
 }
 
 .button--primary:hover {
-  background-color: #YourHoverColor;
+  background-color: #1A2E5C;
 }
