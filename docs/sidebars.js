@@ -25,6 +25,17 @@ const sidebars = {
       label: 'Tokenomics',
       items: ['tokenomics'],
     },
+    {
+      type: 'category',
+      label: 'Licensing',
+      items: [
+        'licensing/overview',
+        'licensing/open-source',
+        'licensing/commercial',
+        'licensing/co-op',
+        'licensing/proprietary',
+      ],
+    },
     'api-reference',
     'governance',
     'faqs',
