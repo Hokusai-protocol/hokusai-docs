@@ -24,9 +24,9 @@ Hokusai is a decentralized protocol that incentivizes the contribution of high-q
 ## Getting Started
 
 - [Getting Started as a Data Supplier](/supplying-data)
-- [Getting Started as a AI Developer](/ai-developers)
-- [Investors should understand Tokenomics](/tokenomics)
-- [Technical Architecture](/architecture)
-
+- [Getting Started as a AI Developer](/using-models)
+- [Understanding Tokenomics](/tokenomics)
+- [Understanding Model Licenses](/licensing/overview)
+- [Smart Contract Architecture](/smart-contracts/smart-contracts-overview)
 
 For further assistance, refer to the FAQs or join our community discussions.

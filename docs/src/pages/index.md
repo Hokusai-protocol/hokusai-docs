@@ -24,8 +24,9 @@ Hokusai Protocol is a decentralized system that:
 ## Getting Started
 
 - [Getting Started as a Data Supplier](/supplying-data)
-- [Getting Started as a AI Developer](/ai-developers)
+- [Getting Started as a AI Developer](/using-models)
 - [Investors should understand Tokenomics](/tokenomics)
-- [Technical Architecture](/architecture)
+- [Understanding the various Model Licenses](/licensing/overview)
+- [Smart Contract Architecture](/smart-contracts/smart-contracts-overview)
 
 For further assistance, refer to the FAQs or join our community discussions.
