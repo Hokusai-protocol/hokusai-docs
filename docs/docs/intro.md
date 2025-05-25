@@ -5,14 +5,11 @@ sidebar_label: Introduction
 sidebar_position: 1
 ---
 
-# Introduction
-
-Welcome to the Hokusai documentation. This guide will help you how Hokusai tokens work, how you can contribute data to a specific model and potentially earn token rewards, and how to use Hokusai models in a production app. 
-
 ## What is Hokusai Protocol?
 
 Hokusai is a decentralized protocol that incentivizes the contribution of high-quality data to improve AI models. Contributors are rewarded with tokens when their data leads to measurable performance enhancements.
 
+This guide will help you understand how Hokusai tokens work, how you can contribute data to a specific model and potentially earn token rewards, and how to use Hokusai models in a production app. 
 
 ## Key Features
 

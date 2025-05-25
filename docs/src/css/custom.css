@@ -32,11 +32,19 @@
 }
 
 .navbar__inner {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply flex justify-between items-center h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 .navbar__items {
-  @apply flex items-center space-x-8;
+  @apply hidden md:flex items-center space-x-8;
+}
+
+.navbar__items.navbar__items--right {
+  @apply hidden md:flex items-center space-x-8;
+}
+
+.navbar__toggle {
+  @apply md:hidden;
 }
 
 .navbar__link {
