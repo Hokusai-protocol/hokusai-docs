@@ -27,6 +27,17 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Smart Contracts',
+      items: [
+        'smart-contracts/smart-contracts-overview',
+        'smart-contracts/model-tokens-and-token-manager',
+        'smart-contracts/verifier-and-contribution',
+        'smart-contracts/treasury-and-access',
+        'smart-contracts/governance-and-security',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Licensing',
       items: [
         'licensing/overview',
