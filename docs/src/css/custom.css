@@ -1,9 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom styles below */
 :root {
-  --ifm-font-family-base: 'Inter', sans-serif;
-  --ifm-color-primary: #1A2E5C;
-  --ifm-color-secondary: #00B2FF;
-  --ifm-background-color: #FFFFFF;
-  --ifm-link-color: #1A2E5C;
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e40af;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #bfdbfe;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Basic navbar styling */
+.navbar {
+  @apply bg-white/90 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200;
+}
+
+.navbar__inner {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.navbar__items {
+  @apply flex items-center space-x-8;
+}
+
+.navbar__link {
+  @apply text-gray-600 hover:text-blue-700;
 }
 
 /* Example: Customize buttons */
@@ -15,4 +52,38 @@
 
 .button--primary:hover {
   background-color: #1A2E5C;
+}
+
+/* Navbar styles */
+.navbar__brand {
+  @apply flex items-center;
+}
+
+.navbar__logo {
+  @apply w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center mr-2;
+}
+
+.navbar__title {
+  @apply text-xl font-bold text-blue-900 dark:text-blue-100;
+}
+
+/* Mobile menu styles */
+.navbar-sidebar {
+  @apply bg-white border-t border-gray-200;
+}
+
+.navbar-sidebar__backdrop {
+  @apply bg-white/90 backdrop-blur-sm;
+}
+
+.navbar-sidebar__brand {
+  @apply border-b border-gray-200;
+}
+
+.navbar-sidebar__items {
+  @apply space-y-1;
+}
+
+.navbar-sidebar__item {
+  @apply block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50;
 }

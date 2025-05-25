@@ -30,15 +30,28 @@ module.exports = {
 
   themeConfig: {
     navbar: {
-      title: 'Hokusai Docs',
-      logo: {
-        alt: 'Hokusai Logo',
-        src: 'img/logo-light.svg',
-        srcDark: 'img/logo-dark.svg',
-      },
+      style: 'primary',
       items: [
-        { to: '/', label: 'Home', position: 'left' },
-        { href: 'https://hokus.ai', label: 'Main Site', position: 'right' },
+        {
+          to: 'https://hokus.ai/data-suppliers',
+          label: 'Data Suppliers',
+          position: 'left',
+        },
+        {
+          to: 'https://hokus.ai/ai-developers',
+          label: 'AI Developers',
+          position: 'left',
+        },
+        {
+          to: 'https://hokus.ai/explore-models',
+          label: 'Explore Models',
+          position: 'left',
+        },
+        {
+          to: 'https://docs.hokus.ai',
+          label: 'Docs',
+          position: 'left',
+        },
       ],
     },
     footer: {
