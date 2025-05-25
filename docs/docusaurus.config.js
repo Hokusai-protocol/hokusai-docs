@@ -53,11 +53,10 @@ module.exports = {
         {
           title: 'Community',
           items: [
-            { label: 'GitHub', href: 'https://github.com/your-repo' },
+            { label: 'GitHub', href: 'https://github.com/Hokusai-protocol/hokusai-docs/' },
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} Hokusai`,
     },
   },
 };
