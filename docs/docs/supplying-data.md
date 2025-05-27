@@ -51,12 +51,11 @@ pip install hokusai-sdk
 
 Each model has specific data format requirements. To find the exact requirements:
 
-1. Visit the [Models](/models) page
-2. Select your target model
-3. Navigate to the "Submit Data" tab
-4. Review the specific data format requirements and instructions
-5. Note any model-specific validation rules
-6. Check required metadata fields
+1. Select your target model
+2. Navigate to the "Submit Data" tab
+3. Review the specific data format requirements and instructions
+4. Note any model-specific validation rules
+5. Check required metadata fields
 
 Here's a basic example of the expected JSON format:
 
@@ -221,6 +220,5 @@ Common issues and solutions:
 
 - Learn about [Data Validation Tools](/data-validation-tools)
 - Understand [Privacy Compliance](/privacy-compliance)
-- Review [Model Requirements](/explore-models)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai).
