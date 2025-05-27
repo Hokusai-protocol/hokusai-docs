@@ -13,4 +13,5 @@
           - run: bash ./deploy-docs.sh
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              GIT_USER: ${{ github.actor }}
+              GIT_USER: Hokusai-protocol
+              GIT_PASS: ${{ secrets.GITHUB_TOKEN }}
