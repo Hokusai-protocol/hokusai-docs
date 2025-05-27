@@ -204,6 +204,6 @@ Common issues and solutions:
 
 - Learn about [Data Contribution Workflow](/supplying-data)
 - Understand [Privacy Compliance](/privacy-compliance)
-- Review [Model Requirements](/explore-models)
+- Review [Model Requirements](/models)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

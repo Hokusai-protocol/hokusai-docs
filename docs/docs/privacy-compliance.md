@@ -212,7 +212,7 @@ Common privacy issues and solutions:
 ## Next Steps
 
 - Learn about [Data Validation Tools](/data-validation-tools)
-- Review [Model Requirements](/explore-models)
+- Review [Model Requirements](/models)
 - Understand [Data Contribution Process](/supplying-data)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

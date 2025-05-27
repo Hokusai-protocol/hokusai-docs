@@ -51,7 +51,7 @@ pip install hokusai-sdk
 
 Each model has specific data format requirements. To find the exact requirements:
 
-1. Visit the [Explore Models](/explore-models) page
+1. Visit the [Models](/models) page
 2. Select your target model
 3. Navigate to the "Submit Data" tab
 4. Review the specific data format requirements and instructions
