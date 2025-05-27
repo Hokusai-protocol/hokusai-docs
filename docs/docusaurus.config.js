@@ -2,6 +2,8 @@ module.exports = {
   title: 'Hokusai Docs',
   url: 'https://docs.hokus.ai',
   baseUrl: '/',
+  organizationName: 'Hokusai-protocol',
+  projectName: 'hokusai-docs',
   favicon: 'img/favicon.ico',
 
   // Add presets configuration
