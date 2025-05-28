@@ -1,0 +1,184 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Data Contribution Flow
+
+<ContributionFlow>
+  <FlowSection
+    title="Step-by-Step"
+    type="process"
+    description="Detailed steps for data contribution and reward process"
+  >
+    <FlowStep
+      step="Prepare data"
+      order={1}
+      type="preparation"
+      importance="high"
+      description="Use Hokusai SDK to prepare and validate data"
+      tool="Hokusai SDK"
+      requirements={[
+        "Data format validation",
+        "Quality checks",
+        "Privacy compliance"
+      ]}
+    />
+    <FlowStep
+      step="Submit"
+      order={2}
+      type="submission"
+      importance="high"
+      description="Submit anonymized data through API"
+      tool="Hokusai API"
+      requirements={[
+        "Data anonymization",
+        "API authentication",
+        "Submission validation"
+      ]}
+    />
+    <FlowStep
+      step="Run evaluation"
+      order={3}
+      type="validation"
+      importance="high"
+      description="Off-chain evaluation against benchmark defined by model creator"
+      tool="Evaluation System"
+      requirements={[
+        "Benchmark compliance",
+        "Performance metrics",
+        "Result verification"
+      ]}
+    />
+    <FlowStep
+      step="Minting"
+      order={4}
+      type="reward"
+      importance="high"
+      description="Token minting occurs if model shows ≥ 1pp improvement (DeltaOne)"
+      tool="Smart Contract"
+      requirements={[
+        "DeltaOne verification",
+        "Improvement validation",
+        "Minting authorization"
+      ]}
+    />
+    <FlowStep
+      step="Token reward"
+      order={5}
+      type="distribution"
+      importance="high"
+      description="Token reward is issued using bonding curve logic"
+      tool="Bonding Curve"
+      requirements={[
+        "Price calculation",
+        "Token distribution",
+        "Transaction confirmation"
+      ]}
+    />
+  </FlowSection>
+
+  <ToolSection
+    title="Tools"
+    type="resources"
+    description="Tools and resources for data contribution"
+  >
+    <ContributionTool
+      tool="SDK"
+      type="development"
+      importance="high"
+      description="For data validation and preparation"
+      features={[
+        "Format validation",
+        "Quality checks",
+        "Privacy compliance"
+      ]}
+    />
+    <ContributionTool
+      tool="Evaluation System"
+      type="validation"
+      importance="high"
+      description="For evaluation against shared metric"
+      features={[
+        "Benchmark testing",
+        "Performance measurement",
+        "Result verification"
+      ]}
+    />
+  </ToolSection>
+</ContributionFlow>
+
+## Component Documentation
+
+### ContributionFlow
+The main container component for the data contribution flow documentation.
+
+### FlowSection
+Represents a major section of the contribution flow.
+
+Props:
+- `title`: string - The section title
+- `type`: 'process' | 'resources' | 'requirements' - The type of section
+- `description`: string - A brief description of the section
+
+### FlowStep
+Represents a specific step in the contribution process.
+
+Props:
+- `step`: string - The step description
+- `order`: number - The sequential order of the step
+- `type`: 'preparation' | 'submission' | 'validation' | 'reward' | 'distribution' - The type of step
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the step
+- `tool`: string - The tool used in this step
+- `requirements`: string[] - Array of requirements for this step
+
+### ToolSection
+Represents a section of tools and resources.
+
+Props:
+- `title`: string - The section title
+- `type`: 'resources' | 'development' | 'validation' - The type of section
+- `description`: string - A brief description of the section
+
+### ContributionTool
+Represents a specific tool used in the contribution process.
+
+Props:
+- `tool`: string - The tool name
+- `type`: 'development' | 'validation' | 'distribution' - The type of tool
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the tool
+- `features`: string[] - Array of tool features
+
+## Usage Example
+
+```tsx
+<ContributionFlow>
+  <FlowSection
+    title="Example Section"
+    type="process"
+    description="Example section description"
+  >
+    <FlowStep
+      step="Example Step"
+      order={1}
+      type="preparation"
+      importance="high"
+      description="Example step description"
+      tool="Example Tool"
+      requirements={["Example requirement"]}
+    />
+  </FlowSection>
+</ContributionFlow>
+```
+
+## Notes
+- Each step must be completed in sequence
+- All requirements must be met before proceeding
+- Document any step-specific prerequisites
+- Include error handling procedures
+- Specify timeout and retry policies
+- Document data format requirements
+- Include privacy and security considerations
+- Specify validation criteria for each step

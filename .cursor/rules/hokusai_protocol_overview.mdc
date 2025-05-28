@@ -1,0 +1,152 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Hokusai Protocol Overview
+
+<ProtocolOverview
+  name="Hokusai"
+  type="decentralized"
+  description="A decentralized protocol that allows contributors to launch Hokusai tokens tied to improvements in AI model performance. Tokens are minted only when data contributions result in a verifiable improvement on shared performance benchmarks."
+>
+  <ProtocolSection
+    title="Key Roles"
+    type="participants"
+    description="Primary participants in the Hokusai ecosystem"
+  >
+    <ParticipantRole
+      role="Data Suppliers"
+      type="contributor"
+      importance="high"
+      description="Contribute anonymized datasets"
+      responsibilities={[
+        "Provide quality training data",
+        "Ensure data privacy",
+        "Follow contribution guidelines"
+      ]}
+    />
+    <ParticipantRole
+      role="Model Developers"
+      type="developer"
+      importance="high"
+      description="Deploy or improve models"
+      responsibilities={[
+        "Deploy new models",
+        "Improve existing models",
+        "Maintain model performance"
+      ]}
+    />
+    <ParticipantRole
+      role="Investors"
+      type="stakeholder"
+      importance="high"
+      description="Buy tokens and provide liquidity"
+      responsibilities={[
+        "Provide market liquidity",
+        "Support protocol growth",
+        "Participate in governance"
+      ]}
+    />
+  </ProtocolSection>
+
+  <ProtocolSection
+    title="Design Philosophy"
+    type="principles"
+    description="Core principles guiding the protocol's design"
+  >
+    <DesignPrinciple
+      principle="Trustless, transparent token issuance"
+      type="mechanism"
+      importance="high"
+      description="Token creation tied to verifiable performance improvements"
+      implementation="Smart contracts and performance metrics"
+    />
+    <DesignPrinciple
+      principle="Shared performance metrics"
+      type="standard"
+      importance="high"
+      description="Common benchmarks for model evaluation"
+      implementation="DeltaOne and other standardized metrics"
+    />
+    <DesignPrinciple
+      principle="Economic alignment through scarcity and demand"
+      type="economics"
+      importance="high"
+      description="Token value tied to model performance and usage"
+      implementation="Bonding curves and burn mechanisms"
+    />
+  </ProtocolSection>
+</ProtocolOverview>
+
+## Component Documentation
+
+### ProtocolOverview
+The main container component for the protocol overview.
+
+Props:
+- `name`: string - The protocol name
+- `type`: string - The protocol type
+- `description`: string - A comprehensive description of the protocol
+
+### ProtocolSection
+Represents a major section of the protocol overview.
+
+Props:
+- `title`: string - The section title
+- `type`: 'participants' | 'principles' | 'mechanics' | 'governance' - The type of section
+- `description`: string - A brief description of the section
+
+### ParticipantRole
+Represents a specific role in the protocol.
+
+Props:
+- `role`: string - The role name
+- `type`: 'contributor' | 'developer' | 'stakeholder' - The type of role
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the role
+- `responsibilities`: string[] - Array of role responsibilities
+
+### DesignPrinciple
+Represents a core design principle of the protocol.
+
+Props:
+- `principle`: string - The principle name
+- `type`: 'mechanism' | 'standard' | 'economics' | 'governance' - The type of principle
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the principle
+- `implementation`: string - How the principle is implemented
+
+## Usage Example
+
+```tsx
+<ProtocolOverview
+  name="Example Protocol"
+  type="decentralized"
+  description="Example protocol description"
+>
+  <ProtocolSection
+    title="Example Section"
+    type="participants"
+    description="Example section description"
+  >
+    <ParticipantRole
+      role="Example Role"
+      type="contributor"
+      importance="high"
+      description="Example role description"
+      responsibilities={["Example responsibility"]}
+    />
+  </ProtocolSection>
+</ProtocolOverview>
+```
+
+## Notes
+- Maintain clear separation of concerns between roles
+- Document all responsibilities and requirements
+- Keep principles aligned with protocol goals
+- Update documentation as protocol evolves
+- Include implementation details where relevant
+- Document interaction between different roles
+- Specify governance and decision-making processes
+- Include security and compliance considerations
