@@ -130,10 +130,10 @@
   - [ ] Add example requests/responses
 
 ## 10. FAQs Section
-- [ ] Create `faqs.md`
-  - [ ] Compile questions from each persona
-  - [ ] Organize by topic
-  - [ ] Include detailed answers
+- [x] Create `faqs.md`
+  - [x] Compile questions from each persona
+  - [x] Organize by topic
+  - [x] Include detailed answers
 
 ## Technical Setup Tasks
 - [x] Set up Docusaurus configuration
