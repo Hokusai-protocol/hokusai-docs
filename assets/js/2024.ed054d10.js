@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_hokusai_protocol_docs=self.webpackChunk_hokusai_protocol_docs||[]).push([[2024],{2024:(c,e,o)=>{o.d(e,{createArchitectureServices:()=>s.S});var s=o(8815);o(3579)}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_hokusai_protocol_docs=self.webpackChunk_hokusai_protocol_docs||[]).push([[647],{8122:(s,e,o)=>{o.r(e),o.d(e,{default:()=>d});o(6540);var r=o(8215),c=o(1769),u=o(204),a=o(2831),t=o(4439),l=o(4848);function d(s){return(0,l.jsx)(c.e3,{className:(0,r.A)(u.G.wrapper.docsPages),children:(0,l.jsx)(t.A,{children:(0,a.v)(s.route.routes)})})}}}]);
