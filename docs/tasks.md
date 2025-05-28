@@ -29,10 +29,10 @@
   - [x] Include compliance checklist
 
 ## 3. Creating & Improving Models Section
-- [ ] Create `creating-models.md`
-  - [ ] Document model registration process
-  - [ ] Include technical requirements
-  - [ ] Add integration guidelines
+- [x] Create `creating-models.md`
+  - [x] Document model registration process
+  - [x] Include technical requirements
+  - [x] Add integration guidelines
 - [ ] Create `improving-models.md`
   - [ ] Document improvement measurement process
   - [ ] Explain token inflation qualification
