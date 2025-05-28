@@ -154,6 +154,6 @@ def verify_oracle_attestation(
 
 - Review [Token Flow](/smart-contracts/token-flow)
 - Understand [Governance](/smart-contracts/governance)
-- Learn about [Verification Process](/smart-contracts/verification)
+- Learn about [Tokenomics](/tokenomics)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

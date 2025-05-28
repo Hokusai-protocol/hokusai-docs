@@ -148,6 +148,6 @@ Prices can be adjusted through community governance:
 
 - Learn about [Using Models](/using-models)
 - Review [Model API Guide](/model-api-guide)
-- Understand [Tokenomics](/tokenomics/index)
+- Understand [Tokenomics](/tokenomics)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

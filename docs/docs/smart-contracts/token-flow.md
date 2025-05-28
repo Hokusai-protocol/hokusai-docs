@@ -179,7 +179,7 @@ function distributeTreasuryRewards(
 ## Next Steps
 
 - Review [Security Measures](/smart-contracts/security)
-- Understand [Verification Process](/smart-contracts/verification)
-- Learn about [Governance](/smart-contracts/governance)
+- Understand [Governance](/smart-contracts/governance)
+- Learn about [Tokenomics](/tokenomics)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 
