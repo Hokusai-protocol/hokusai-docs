@@ -47,6 +47,7 @@ Improvements are measured in basis points (bps) and converted to DeltaOnes:
 baseline_performance = 0.85  # 85% accuracy
 new_performance = 0.8725    # 87.25% accuracy
 improvement_bps = (new_performance - baseline_performance) * 10000  # 210 bps (2.1%)
+require(improvement_bps >= 10, "Improvement below minimum threshold")  # Minimum 10 bps (0.1%)
 delta_ones = improvement_bps / 100  # 2.1 DeltaOnes
 ```
 
@@ -59,7 +60,7 @@ The DeltaOneVerifier smart contract handles automated verification and reward ca
 ```solidity
 // Simplified verification and reward calculation logic
 contract DeltaOneVerifier {
-    uint256 public constant MIN_IMPROVEMENT_BPS = 100; // 1 basis point
+    uint256 public constant MIN_IMPROVEMENT_BPS = 10; // 0.1 basis points
     uint256 public constant REWARD_RATE = 10; // 0.1% per basis point
     
     struct Improvement {

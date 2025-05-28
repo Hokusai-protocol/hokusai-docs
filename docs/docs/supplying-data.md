@@ -220,5 +220,6 @@ Common issues and solutions:
 
 - Learn about [Data Validation Tools](/data-validation-tools)
 - Understand [Privacy Compliance](/privacy-compliance)
+- Review [Reward Mechanisms](/tokenomics/rewards)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai).

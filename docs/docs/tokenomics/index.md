@@ -78,10 +78,67 @@ graph LR
 - User adoption
 - Network growth
 
+## Token Flow Diagram
+```mermaid
+graph TD
+    A[Data Contributor] -->|Improves Model| B[DeltaOne Verifier]
+    B -->|Confirms Improvement| C[Token Manager]
+    C -->|Mints Tokens| D[Token Supply]
+    E[Model User] -->|Burns Tokens| D
+    D -->|Bonding Curve| F[Treasury]
+    F -->|USDC| G[Liquidity Pool]
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#bfb,stroke:#333,stroke-width:2px
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style F fill:#bfb,stroke:#333,stroke-width:2px
+    style G fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+## Key Concepts
+
+### DeltaOne Rewards
+- Represent model improvements
+- 1 DeltaOne = 1% improvement
+- Minted upon verified improvements
+- Used for model access
+
+### Token Value Drivers
+1. Model Performance
+   - Accuracy improvements
+   - Efficiency gains
+   - New capabilities
+
+2. Usage Demand
+   - Model access frequency
+   - User adoption
+   - Market penetration
+
+3. Supply Dynamics
+   - Minting rate
+   - Burn rate
+   - Liquidity depth
+
+## Governance
+
+### Parameter Control
+- Reward rates
+- Burn rates
+- Price bounds
+- Liquidity incentives
+
+### Emergency Controls
+- Circuit breakers
+- Pause functionality
+- Emergency updates
+
 ## Next Steps
 
 - Learn about [Bonding Curve](/tokenomics/bonding-curve)
 - Understand [DeltaOne Calculations](/tokenomics/deltaone-calculations)
+- Review [Reward Mechanisms](/tokenomics/rewards)
+- Review [Token Value Mechanics](/tokenomics/token-value)
 - Review [Smart Contracts](/smart-contracts/overview)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

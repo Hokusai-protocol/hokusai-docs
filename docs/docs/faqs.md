@@ -36,7 +36,7 @@ Reward = Base_Reward × Improvement_Percentage × Quality_Factor
 - Base reward per DeltaOne
 - Improvement measured in percentage points
 - Quality factor based on data attributes
-- Minimum threshold: 1% improvement
+- Minimum threshold: 0.1% improvement (10 bps)
 
 #### When do I receive my rewards?
 - After verification (typically 24-48 hours)
