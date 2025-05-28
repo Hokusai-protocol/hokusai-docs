@@ -4,106 +4,84 @@ This document outlines the core principles and mechanics of the Hokusai tokenomi
 
 ## Core Principles
 
-### 1. Value Alignment
-The tokenomics system is designed to align incentives across all participants:
+### Value Alignment
+- Token value tied to model performance
+- Rewards for quality contributions
+- Sustainable growth mechanisms
 
-- **Model Developers**: Rewarded for improvements and maintenance
-- **Data Suppliers**: Compensated for quality data contributions
-- **Model Users**: Access models through token burning
-- **Protocol Contributors**: Earn rewards for governance participation
+### Sustainable Growth
+- Controlled token supply
+- Balanced reward distribution
+- Long-term value preservation
 
-### 2. Sustainable Growth
-The system implements mechanisms to ensure long-term sustainability:
-
-- **Controlled Inflation**: Maximum annual inflation rate of 5%
-- **Burn Mechanisms**: Tokens burned for model access
-- **Vesting Periods**: Gradual release of rewards
-- **Performance Requirements**: Minimum thresholds for rewards
-
-### 3. Market Stability
-Price stability is maintained through:
-
-- **Bonding Curves**: Predictable price discovery
-- **Liquidity Pools**: Deep market liquidity
-- **Arbitrage Opportunities**: Market efficiency
-- **Price Impact Controls**: Large transaction protection
+### Market Stability
+- Price discovery through bonding curve
+- Liquidity provision incentives
+- Market making mechanisms
 
 ## Tokenomics Overview
 
-### 1. Token Distribution
-Initial token allocation:
+### Token Distribution
+- Initial supply: 100M tokens
+- Distribution schedule
+- Vesting periods
 
-- **Model Development**: 40%
-- **Data Contribution**: 30%
-- **Protocol Treasury**: 20%
-- **Team & Advisors**: 10%
+### Reward Mechanisms
+- Performance-based rewards
+- Contribution incentives
+- Governance participation
 
-### 2. Reward Mechanisms
-Tokens are distributed through:
-
-- **Performance Rewards**: Model improvement incentives
-- **Data Rewards**: Quality data contribution incentives
-- **Governance Rewards**: Protocol participation incentives
-- **Liquidity Rewards**: Market making incentives
-
-### 3. Burn Mechanisms
-Tokens are burned through:
-
-- **Model Access**: Pay-per-use model access
-- **Governance Actions**: Protocol parameter updates
-- **Treasury Redemption**: USDC conversion
-- **Fee Collection**: Protocol fee burning
+### Burn Mechanisms
+- Usage-based burning
+- Performance penalties
+- Market stability measures
 
 ## Economic Models
 
-### 1. Bonding Curve
-Price discovery mechanism:
+### Bonding Curve
+```mermaid
+graph LR
+    A[User] -->|Buy| B[Bonding Curve]
+    B -->|Mint| C[Token Supply]
+    D[User] -->|Sell| B
+    B -->|Burn| C
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#bfb,stroke:#333,stroke-width:2px
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+```
 
-- **Initial Price**: 0.01 USDC
-- **Curve Slope**: 0.1% per token
-- **Maximum Price**: 10 USDC
-- **Minimum Price**: 0.001 USDC
+### Liquidity Pools
+- Automated market making
+- Price stability
+- Trading efficiency
 
-### 2. Liquidity Pools
-Market making incentives:
-
-- **Primary Pool**: USDC/Token pair
-- **Secondary Pools**: Model-specific pairs
-- **LP Rewards**: 0.3% trading fees
-- **Staking Rewards**: Additional token incentives
-
-### 3. Vesting Schedules
-Token release mechanisms:
-
-- **Team Tokens**: 2-year linear vesting
-- **Advisor Tokens**: 1-year linear vesting
-- **Reward Tokens**: 6-month cliff, 1-year vesting
-- **Treasury Tokens**: Governance-controlled release
+### Vesting Schedules
+- Linear vesting
+- Cliff periods
+- Performance milestones
 
 ## Performance Metrics
 
-### 1. Supply Metrics
+### Supply Metrics
 - Total supply
 - Circulating supply
-- Burned tokens
-- Locked tokens
+- Burn rate
 
-### 2. Market Metrics
-- Market capitalization
+### Market Metrics
+- Price discovery
 - Trading volume
 - Liquidity depth
-- Price impact
 
-### 3. Protocol Metrics
-- Active models
-- Total improvements
-- Governance participation
-- Treasury health
+### Protocol Metrics
+- Model performance
+- User adoption
+- Network growth
 
 ## Next Steps
 
-- Review [Bonding Curve](/tokenomics/bonding-curve)
+- Learn about [Bonding Curve](/tokenomics/bonding-curve)
 - Understand [DeltaOne Calculations](/tokenomics/deltaone-calculations)
-- Learn about [Smart Contracts](/smart-contracts/overview)
+- Review [Smart Contracts](/smart-contracts/overview)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 
