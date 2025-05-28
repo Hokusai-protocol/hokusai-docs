@@ -1,4 +1,4 @@
-# 🪙 Token Flow
+# Token Flow
 
 This document details the complete lifecycle of model tokens in the Hokusai ecosystem, from minting to burning.
 

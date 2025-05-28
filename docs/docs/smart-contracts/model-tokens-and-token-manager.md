@@ -1,4 +1,4 @@
-# 🪙 Model Tokens & TokenManager
+# Model Tokens & TokenManager
 
 ## HokusaiToken (ERC-20)
 Each model has its own token:

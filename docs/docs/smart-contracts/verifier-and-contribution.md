@@ -1,4 +1,4 @@
-# 📈 DeltaOne Verifier & Contribution Registry
+# DeltaOne Verifier & Contribution Registry
 
 ## DeltaOneVerifier
 - Verifies fractional DeltaOne improvements

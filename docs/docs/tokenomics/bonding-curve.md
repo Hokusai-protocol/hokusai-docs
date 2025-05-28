@@ -1,4 +1,4 @@
-# 📈 Bonding Curve
+# Bonding Curve
 
 The Hokusai protocol uses a bonding curve for price discovery and token distribution. This document explains the mechanics, mathematics, and examples of our bonding curve system.
 

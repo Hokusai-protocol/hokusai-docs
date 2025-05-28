@@ -1,4 +1,4 @@
-# 🔢 DeltaOne Calculations
+# DeltaOne Calculations
 
 This document explains the mathematical foundations and calculations used in the Hokusai protocol's DeltaOne token system.
 

@@ -1,4 +1,4 @@
-# 💎 Token Value Mechanics
+# Token Value Mechanics
 
 This document explains how Hokusai tokens derive and maintain their value within the ecosystem.
 

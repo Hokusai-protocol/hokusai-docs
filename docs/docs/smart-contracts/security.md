@@ -1,4 +1,4 @@
-# 🔒 Security & Verification
+# Security & Verification
 
 This document outlines the security measures, verification methods, and trust assumptions in the Hokusai ecosystem.
 

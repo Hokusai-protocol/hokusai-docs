@@ -1,4 +1,4 @@
-# 🛡️ Governance, Privacy & Admin
+# Governance, Privacy & Admin
 
 ## HOK Token
 - Meta-token for ecosystem governance

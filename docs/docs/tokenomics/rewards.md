@@ -1,4 +1,4 @@
-# 🎁 Reward Mechanisms
+# Reward Mechanisms
 
 This document details how rewards are distributed in the Hokusai ecosystem for contributions and participation.
 

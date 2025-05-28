@@ -1,4 +1,4 @@
-# 💱 Treasury & Access Mechanics
+# Treasury & Access Mechanics
 
 ## BondingCurveTreasury
 - Users can buy/sell tokens with USDC

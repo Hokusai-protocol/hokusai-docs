@@ -2,7 +2,7 @@ const sidebars = {
   docs: [
     {
       type: 'category',
-      label: '📚 Getting Started',
+      label: 'Getting Started',
       items: [
         'intro',
         'getting-started',
@@ -11,7 +11,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '🔄 Core Workflows',
+      label: 'Core Workflows',
       items: [
         'supplying-data',
         'creating-models',
@@ -21,7 +21,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '💎 Tokenomics',
+      label: 'Tokenomics',
       items: [
         'tokenomics',
         'tokenomics/token-value',
@@ -31,7 +31,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '📝 Smart Contracts',
+      label: 'Smart Contracts',
       items: [
         'smart-contracts/smart-contracts-overview',
         'smart-contracts/model-tokens-and-token-manager',
@@ -42,7 +42,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '📄 Licensing',
+      label: 'Licensing',
       items: [
         'licensing/overview',
         'licensing/open-source',
@@ -53,7 +53,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '🔧 Reference',
+      label: 'Reference',
       items: [
         'api-reference',
         'governance',

@@ -1,4 +1,4 @@
-# 🏛️ Protocol Governance
+# Protocol Governance
 
 This document outlines the governance roles and responsibilities in the Hokusai ecosystem.
 

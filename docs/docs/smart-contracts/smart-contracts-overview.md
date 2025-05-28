@@ -1,6 +1,6 @@
-# 🧠 Smart Contract Overview
+# Smart Contract Overview
 
-Hokusai’s smart contract system is modular, designed to support decentralized AI model development and tokenization. Here's a simplified flow:
+Hokusai's smart contract system is modular, designed to support decentralized AI model development and tokenization. Here's a simplified flow:
 
 ```
 [Data Contributor]
