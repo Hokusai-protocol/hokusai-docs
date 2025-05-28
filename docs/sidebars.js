@@ -1,33 +1,37 @@
 const sidebars = {
-  tutorialSidebar: [
+  docs: [
     {
       type: 'category',
-      label: 'Getting Started',
-      items: ['intro'],
+      label: '📚 Getting Started',
+      items: [
+        'intro',
+        'getting-started',
+        'key-concepts',
+      ],
     },
     {
       type: 'category',
-      label: 'Contributing Data',
-      items: ['supplying-data'],
+      label: '🔄 Core Workflows',
+      items: [
+        'supplying-data',
+        'creating-models',
+        'improving-models',
+        'using-models',
+      ],
     },
     {
       type: 'category',
-      label: 'Creating Models',
-      items: ['creating-models', 'improving-models'],
+      label: '💎 Tokenomics',
+      items: [
+        'tokenomics',
+        'tokenomics/token-value',
+        'tokenomics/bonding-curve',
+        'tokenomics/deltaone-calculations',
+      ],
     },
     {
       type: 'category',
-      label: 'Using Models',
-      items: ['using-models'],
-    },
-    {
-      type: 'category',
-      label: 'Tokenomics',
-      items: ['tokenomics'],
-    },
-    {
-      type: 'category',
-      label: 'Smart Contracts',
+      label: '📝 Smart Contracts',
       items: [
         'smart-contracts/smart-contracts-overview',
         'smart-contracts/model-tokens-and-token-manager',
@@ -38,7 +42,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Licensing',
+      label: '📄 Licensing',
       items: [
         'licensing/overview',
         'licensing/open-source',
@@ -47,9 +51,15 @@ const sidebars = {
         'licensing/proprietary',
       ],
     },
-    'api-reference',
-    'governance',
-    'faqs',
+    {
+      type: 'category',
+      label: '🔧 Reference',
+      items: [
+        'api-reference',
+        'governance',
+        'faqs',
+      ],
+    },
   ],
 };
 

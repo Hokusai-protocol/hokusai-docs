@@ -1,144 +1,58 @@
-# 🪙 Tokenomics
+---
+id: tokenomics
+title: Tokenomics Overview
+sidebar_label: Overview
+---
 
-This document outlines the core principles and mechanics of the Hokusai tokenomics system.
+# Tokenomics Overview
 
-## Core Principles
+Hokusai's tokenomics are designed to create a sustainable ecosystem that rewards data contributors while maintaining the value of the protocol's tokens.
 
-### Value Alignment
-- Token value tied to model performance
-- Rewards for quality contributions
-- Sustainable growth mechanisms
+## Core Components
 
-### Sustainable Growth
-- Controlled token supply
-- Balanced reward distribution
-- Long-term value preservation
-
-### Market Stability
-- Price discovery through bonding curve
-- Liquidity provision incentives
-- Market making mechanisms
-
-## Tokenomics Overview
-
-### Token Distribution
-- Initial supply: 100M tokens
-- Distribution schedule
-- Vesting periods
-
-### Reward Mechanisms
-- Performance-based rewards
-- Contribution incentives
-- Governance participation
-
-### Burn Mechanisms
-- Usage-based burning
-- Performance penalties
-- Market stability measures
-
-## Economic Models
-
-### Bonding Curve
-```mermaid
-graph LR
-    A[User] -->|Buy| B[Bonding Curve]
-    B -->|Mint| C[Token Supply]
-    D[User] -->|Sell| B
-    B -->|Burn| C
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#bfb,stroke:#333,stroke-width:2px
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-```
-
-### Liquidity Pools
-- Automated market making
-- Price stability
-- Trading efficiency
-
-### Vesting Schedules
-- Linear vesting
-- Cliff periods
-- Performance milestones
-
-## Performance Metrics
-
-### Supply Metrics
-- Total supply
-- Circulating supply
-- Burn rate
-
-### Market Metrics
+### 1. Token Value
+- Performance-based minting
+- Usage-driven burning
+- Supply dynamics
 - Price discovery
-- Trading volume
-- Liquidity depth
 
-### Protocol Metrics
-- Model performance
-- User adoption
-- Network growth
+[Learn more about Token Value](/tokenomics/token-value)
 
-## Token Flow Diagram
-```mermaid
-graph TD
-    A[Data Contributor] -->|Improves Model| B[DeltaOne Verifier]
-    B -->|Confirms Improvement| C[Token Manager]
-    C -->|Mints Tokens| D[Token Supply]
-    E[Model User] -->|Burns Tokens| D
-    D -->|Bonding Curve| F[Treasury]
-    F -->|USDC| G[Liquidity Pool]
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#bfb,stroke:#333,stroke-width:2px
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#bbf,stroke:#333,stroke-width:2px
-    style F fill:#bfb,stroke:#333,stroke-width:2px
-    style G fill:#f9f,stroke:#333,stroke-width:2px
-```
+### 2. Bonding Curve
+- Price discovery mechanism
+- Liquidity management
+- Supply controls
+- Market dynamics
+
+[Learn more about Bonding Curve](/tokenomics/bonding-curve)
+
+### 3. DeltaOne Calculations
+- Performance measurement
+- Reward distribution
+- Verification process
+- Value assessment
+
+[Learn more about DeltaOne Calculations](/tokenomics/deltaone-calculations)
 
 ## Key Concepts
 
-### DeltaOne Rewards
-- Represent model improvements
-- 1 DeltaOne = 1% improvement
-- Minted upon verified improvements
-- Used for model access
+### Token Utility
+- Model access rights
+- Governance participation
+- Reward distribution
+- Value accrual
 
-### Token Value Drivers
-1. Model Performance
-   - Accuracy improvements
-   - Efficiency gains
-   - New capabilities
-
-2. Usage Demand
-   - Model access frequency
-   - User adoption
-   - Market penetration
-
-3. Supply Dynamics
-   - Minting rate
-   - Burn rate
-   - Liquidity depth
-
-## Governance
-
-### Parameter Control
-- Reward rates
-- Burn rates
-- Price bounds
-- Liquidity incentives
-
-### Emergency Controls
-- Circuit breakers
-- Pause functionality
-- Emergency updates
+### Economic Model
+- Deflationary design
+- Usage-based burning
+- Performance-based minting
+- Governance controls
 
 ## Next Steps
 
-- Learn about [Bonding Curve](/tokenomics/bonding-curve)
-- Understand [DeltaOne Calculations](/tokenomics/deltaone-calculations)
-- Review [Reward Mechanisms](/tokenomics/rewards)
-- Review [Token Value Mechanics](/tokenomics/token-value)
-- Review [Smart Contracts](/smart-contracts/overview)
+- [Understanding Token Value](/tokenomics/token-value)
+- [Exploring Bonding Curve](/tokenomics/bonding-curve)
+- [Learning DeltaOne Calculations](/tokenomics/deltaone-calculations)
+- [Reviewing Smart Contracts](/smart-contracts/smart-contracts-overview)
 
-For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 
+For additional information, check out our [FAQs](/faqs) or join our [Community Forum](https://community.hokus.ai). 
