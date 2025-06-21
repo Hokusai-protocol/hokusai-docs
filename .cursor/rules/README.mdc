@@ -1,5 +1,101 @@
 ---
-description:
-globs:
-alwaysApply: false
+description: 
+globs: 
+alwaysApply: true
 ---
+# Hokusai Cursor Context Index
+
+<ContextIndex
+  title="Hokusai Protocol Documentation"
+  description="This folder contains structured context files used to improve code and documentation generation inside Cursor for the Hokusai protocol."
+>
+
+## Files
+
+<FileList>
+  <FileItem
+    name="hokusai_protocol_overview"
+    description="What is Hokusai and how does it work"
+    type="overview"
+  />
+  <FileItem
+    name="data_contribution_flow"
+    description="How data suppliers interact with the protocol"
+    type="flow"
+  />
+  <FileItem
+    name="model_deployment"
+    description="How new models are added or improved"
+    type="process"
+  />
+  <FileItem
+    name="tokenomics"
+    description="Token design, bonding curves, inflation/deflation logic"
+    type="economics"
+  />
+  <FileItem
+    name="smart_contracts"
+    description="ERC20, minting, burning, bonding curve logic"
+    type="technical"
+  />
+  <FileItem
+    name="glossary"
+    description="Terminology used across Hokusai"
+    type="reference"
+  />
+  <FileItem
+    name="do_not_do"
+    description="Prohibited terms and phrasing to avoid"
+    type="guidelines"
+  />
+  <FileItem
+    name="sdk_and_api"
+    description="Developer tools and API abstractions"
+    type="technical"
+  />
+</FileList>
+
+</ContextIndex>
+
+## Component Documentation
+
+### ContextIndex
+The main container component for the Hokusai documentation index.
+
+Props:
+- `title`: string - The main title of the documentation
+- `description`: string - A brief description of the documentation's purpose
+
+### FileList
+A container component for listing all documentation files.
+
+### FileItem
+Represents a single documentation file in the index.
+
+Props:
+- `name`: string - The name of the file (without extension)
+- `description`: string - A brief description of the file's contents
+- `type`: 'overview' | 'flow' | 'process' | 'economics' | 'technical' | 'reference' | 'guidelines' - The category of the documentation
+
+## Usage Example
+
+```tsx
+<ContextIndex
+  title="Hokusai Protocol Documentation"
+  description="Documentation for the Hokusai protocol"
+>
+  <FileList>
+    <FileItem
+      name="example_file"
+      description="Example documentation file"
+      type="technical"
+    />
+  </FileList>
+</ContextIndex>
+```
+
+## Notes
+- All file names should be in kebab-case
+- File types should be one of the predefined categories
+- Each file should have a clear, concise description
+- File items should be organized by type and importance

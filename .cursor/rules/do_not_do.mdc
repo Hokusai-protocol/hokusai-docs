@@ -1,5 +1,32 @@
 ---
-description:
-globs:
+description: 
+globs: *.md
 alwaysApply: false
 ---
+# Prohibited Terminology and Patterns Rules
+
+## Terminology Corrections
+- Rule: Never use "DeltaOne token"
+  - Correction: Use "Hokusai token" instead
+  - Reason: Maintains consistent branding and terminology
+
+- Rule: Never use "Company"
+  - Correction: Use "protocol" instead
+  - Reason: Accurately reflects the decentralized nature of the system
+
+- Rule: Never state "All data gets tokens"
+  - Correction: Clarify that tokens are only rewarded if performance improves
+  - Reason: Ensures accurate representation of the reward mechanism
+
+## Avoided Practices
+- Rule: No overpromising rewards
+  - Context: When discussing token rewards or incentives
+  - Impact: Prevents misleading expectations
+
+- Rule: No suggesting pre-minting
+  - Context: When discussing token distribution or supply
+  - Impact: Maintains protocol integrity
+
+- Rule: No describing speculative token behavior
+  - Context: When discussing token economics or value
+  - Impact: Focuses on utility rather than speculation

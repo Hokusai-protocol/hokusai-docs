@@ -7,11 +7,23 @@ sidebar_position: 3
 
 # Supplying Data to Hokusai
 
-This guide explains how to supply data to Hokusai models and earn DeltaOne rewards.
+This guide explains how to supply data to Hokusai models and earn DeltaOne rewards through our decentralized data contribution system.
 
 ## Overview
 
-Hokusai allows data suppliers to contribute their data to improve AI models. When your data helps improve a model's performance, you earn DeltaOne tokens through our unique reward system.
+Hokusai creates a marketplace where data suppliers contribute high-quality datasets to improve AI models. When your data leads to measurable performance improvements, you earn DeltaOne tokens through our unique reward system.
+
+### How It Works
+
+```mermaid
+graph LR
+    A[Prepare Data] --> B[Validate Format]
+    B --> C[Submit to Pipeline]
+    C --> D[Processing & Training]
+    D --> E[Model Evaluation]
+    E --> F[Performance Delta]
+    F --> G[DeltaOne Rewards]
+```
 
 ## Hokusai Support Program
 
@@ -35,116 +47,197 @@ For qualified data suppliers, Hokusai offers comprehensive support services to e
 
 Before you begin, ensure you have:
 
-1. A compatible blockchain wallet
-2. Data that meets our privacy and quality standards
-3. Python 3.8+ installed
+1. **Ethereum wallet address** for reward attribution
+2. **Python 3.8+** installed on your system
+3. **Data** that meets our quality and privacy standards
+4. **10GB free disk space** for pipeline processing
 
-## Step 1: Install the SDK
+## Installation Options
+
+### Option 1: Hokusai SDK (Recommended for Most Users)
 
 ```bash
 pip install hokusai-sdk
 ```
 
-## Step 2: Prepare Your Data
+### Option 2: Full Pipeline Installation (For Advanced Users)
 
-### Format Requirements
+```bash
+# Clone the pipeline repository
+git clone https://github.com/hokusai/hokusai-data-pipeline.git
+cd hokusai-data-pipeline
 
-Each model has specific data format requirements. To find the exact requirements:
+# Set up environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-1. Select your target model
-2. Navigate to the "Submit Data" tab
-3. Review the specific data format requirements and instructions
-4. Note any model-specific validation rules
-5. Check required metadata fields
+# Install dependencies
+./setup.sh
+```
 
-Here's a basic example of the expected JSON format:
+## Supported Data Types
 
-```python
+### 1. Query-Document Pairs
+Most common format for information retrieval models:
+
+```csv
+query_id,query,relevant_doc_id,label
+q001,"What is machine learning?",doc123,1
+q002,"How to train a model?",doc456,1
+q003,"Python programming basics",doc789,0
+```
+
+### 2. Classification Data
+For classification model improvements:
+
+```json
 {
-    "metadata": {
-        "source": "your_data_source",
-        "timestamp": "2024-03-20T10:00:00Z",
-        "version": "1.0"
-    },
-    "data": [
-        {
-            "id": "unique_id_1",
-            "content": "your_data_content",
-            "metadata": {
-                "additional_field": "value"
-            }
-        }
-    ]
+  "samples": [
+    {
+      "id": "sample_001",
+      "text": "This product is amazing!",
+      "label": "positive",
+      "confidence": 0.95
+    }
+  ]
 }
 ```
 
-Note: Some models may require additional fields or have different validation rules. Always check the model's specific requirements.
+### 3. Structured Datasets
+For complex model training (Parquet format):
+- Features array
+- Labels
+- Metadata
+- Contributor ID
 
-### Data Preparation Steps
+## Data Quality Requirements
 
-1. **Review Model Requirements**
-   - Check the model's data format specifications
-   - Understand required fields and validation rules
-   - Note any special formatting requirements
+### Minimum Requirements
 
-2. **Clean Your Data**
-   - Remove duplicates
-   - Fix formatting issues
-   - Handle missing values
-   - Normalize data structure
+| Requirement | Value | Description |
+|------------|-------|-------------|
+| **Size** | ≥ 100 samples | Minimum dataset size |
+| **Completeness** | > 95% | Non-null value percentage |
+| **Uniqueness** | > 80% | Unique sample percentage |
+| **Format** | Valid CSV/JSON/Parquet | Proper file encoding |
+| **Schema** | 100% compliance | Matches expected structure |
 
-3. **Validate Your Data**
-   - Use the SDK's validation tools
-   - Check for privacy compliance
-   - Verify data quality
-   - Test with sample submissions
+### Privacy Compliance
 
-## Step 3: Initialize the SDK
+The pipeline automatically handles privacy:
+- **PII Detection**: Automatic scanning for personal information
+- **Data Hashing**: Sensitive identifiers are hashed
+- **Anonymization**: Direct identifiers removed
+- **Audit Trail**: Privacy actions logged
+
+## Step-by-Step Guide
+
+### Step 1: Prepare Your Data
+
+Each model has specific format requirements. To find the exact requirements:
+
+1. Select your target model on the platform
+2. Navigate to the "Submit Data" tab
+3. Review format specifications and validation rules
+4. Note required metadata fields
+
+Example data preparation:
+
+```python
+import pandas as pd
+
+# Create your dataset
+data = pd.DataFrame({
+    'query_id': ['custom_001', 'custom_002', 'custom_003'],
+    'query': [
+        'How to use Hokusai pipeline?',
+        'What is machine learning?',
+        'Best pizza recipe'
+    ],
+    'document_id': ['doc_hokusai', 'doc_ml', 'doc_pizza'],
+    'relevance': [1, 1, 0]
+})
+
+# Save to CSV
+data.to_csv('my_contribution.csv', index=False)
+```
+
+### Step 2: Add Contributor Information
+
+Create a manifest file with your wallet address:
+
+```json
+{
+  "contributor_id": "your_unique_id",
+  "wallet_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f62341",
+  "data_description": "Technology documentation queries",
+  "data_source": "Manual curation",
+  "license": "CC-BY-4.0"
+}
+```
+
+### Step 3: Validate Your Data
+
+#### Using the SDK:
 
 ```python
 from hokusai import HokusaiClient
 
-# Initialize the client
 client = HokusaiClient(
     api_key='your_api_key',
     wallet_address='your_wallet_address'
 )
 
-# Connect your wallet
-client.connect_wallet()
+# Validate data
+validation_result = client.validate_data(
+    data_path='my_contribution.csv',
+    model_id='target_model_id'
+)
+
+print(f"Validation status: {validation_result.status}")
+print(f"Quality score: {validation_result.quality_score}")
 ```
 
-## Step 4: Submit Your Data
+#### Using the Pipeline:
+
+```bash
+python -m src.utils.validate_contribution \
+    --data=my_contribution.csv \
+    --manifest=manifest.json
+```
+
+### Step 4: Submit Your Data
+
+#### Using the SDK:
 
 ```python
-# Prepare your dataset
-dataset = {
-    "metadata": {
-        "source": "your_data_source",
-        "timestamp": "2024-03-20T10:00:00Z",
-        "version": "1.0"
-    },
-    "data": [
-        # Your data entries here
-    ]
-}
-
-# Submit to a specific model
+# Submit to specific model
 result = client.submit_data(
     model_id='target_model_id',
-    dataset=dataset
+    data_path='my_contribution.csv'
 )
 
 print(f"Submission ID: {result.submission_id}")
 print(f"Status: {result.status}")
 ```
 
-## Step 5: Monitor Performance
+#### Using the Pipeline:
+
+```bash
+python -m src.pipeline.hokusai_pipeline run \
+    --contributed-data=my_contribution.csv \
+    --contributor-manifest=manifest.json \
+    --output-dir=./outputs
+```
+
+### Step 5: Monitor Performance
+
+Track your contribution's impact:
 
 ```python
 # Check submission status
 status = client.get_submission_status(result.submission_id)
-print(f"Current status: {status.status}")
+print(f"Processing status: {status.status}")
 print(f"Validation results: {status.validation_results}")
 
 # Monitor model improvement
@@ -152,74 +245,154 @@ improvement = client.get_model_improvement(
     model_id='target_model_id',
     submission_id=result.submission_id
 )
-print(f"Performance improvement: {improvement.percentage}%")
+print(f"Performance delta: {improvement.percentage}%")
 print(f"DeltaOne tokens earned: {improvement.delta_ones}")
 ```
 
-## Step 6: Receive Rewards
+### Step 6: Receive Rewards
 
-When your data contributes to model improvement, you'll automatically receive DeltaOne tokens. The reward amount is calculated based on:
+DeltaOne rewards are automatically calculated based on:
 
-1. The degree of improvement
-2. The quality of your data
-3. The model's current performance
-4. Market conditions
+1. **Performance Impact**: Degree of model improvement (1 DeltaOne = 1% improvement)
+2. **Data Quality**: Higher quality data receives better rewards
+3. **Data Volume**: Number of useful samples contributed
+4. **Uniqueness**: Novel data that adds new capabilities
 
-You can track your rewards in your Hokusai dashboard or through the SDK:
+Track your rewards:
 
 ```python
-# Check your rewards
+# Check rewards
 rewards = client.get_rewards()
 print(f"Total DeltaOnes earned: {rewards.total}")
 print(f"Recent rewards: {rewards.recent}")
+print(f"Pending rewards: {rewards.pending}")
+```
+
+## Advanced Features
+
+### Multi-Contributor Datasets
+
+For collaborative contributions:
+
+```json
+{
+  "contributors": [
+    {
+      "id": "alice",
+      "wallet_address": "0xAlice...",
+      "weight": 0.6
+    },
+    {
+      "id": "bob", 
+      "wallet_address": "0xBob...",
+      "weight": 0.4
+    }
+  ]
+}
+```
+
+### Incremental Contributions
+
+Submit data in batches:
+
+```bash
+# First batch
+python -m src.pipeline.hokusai_pipeline run \
+    --contributed-data=batch1.csv \
+    --incremental-mode=true
+
+# Additional batch
+python -m src.pipeline.hokusai_pipeline run \
+    --contributed-data=batch2.csv \
+    --incremental-mode=true \
+    --previous-run-id=run_123
+```
+
+### Dry-Run Testing
+
+Test your contribution without affecting models:
+
+```bash
+python -m src.pipeline.hokusai_pipeline run \
+    --dry-run \
+    --contributed-data=test_data.csv \
+    --output-dir=./test_outputs
 ```
 
 ## Best Practices
 
-1. **Data Quality**
-   - Ensure high-quality, accurate data
-   - Follow model-specific requirements
-   - Validate before submission
-   - Monitor performance impact
+### Data Quality
+- **Clean thoroughly**: Remove duplicates and errors
+- **Balance labels**: Avoid skewed distributions  
+- **Include diversity**: Cover edge cases and variations
+- **Document sources**: Track data provenance
 
-2. **Privacy Compliance**
-   - Remove all PII
-   - Follow data protection guidelines
-   - Use proper anonymization
-   - Document privacy measures
+### Privacy & Security
+- **Remove all PII**: No personal information
+- **Hash identifiers**: Use SHA-256 for any IDs
+- **Verify rights**: Ensure you can share the data
+- **Secure storage**: Encrypt sensitive datasets
 
-3. **Regular Updates**
-   - Submit data regularly
-   - Monitor model performance
-   - Update as needed
-   - Track reward patterns
+### Optimization Tips
+- **Start small**: Test with 100-1000 samples first
+- **Validate early**: Check format before large submissions
+- **Monitor metrics**: Track quality scores
+- **Iterate**: Refine based on performance feedback
 
 ## Troubleshooting
 
-Common issues and solutions:
+### Common Issues
 
-1. **Validation Failures**
-   - Check data format
-   - Verify required fields
-   - Review error messages
-   - Use validation tools
+**Validation Failures**
+```
+Error: Column 'query_id' not found
+```
+Solution: Ensure your data matches the expected schema exactly
 
-2. **Submission Errors**
-   - Check API key
-   - Verify wallet connection
-   - Review error logs
-   - Contact support
+**Data Quality Issues**
+```
+Warning: Data quality score 0.65 below threshold 0.80
+```
+Solution: Review data for duplicates, missing values, or formatting issues
 
-3. **Performance Issues**
-   - Analyze data quality
-   - Check model requirements
-   - Review validation results
-   - Optimize data structure
+**Wallet Address Invalid**
+```
+Error: Invalid Ethereum address format
+```
+Solution: Verify address starts with '0x' and has 40 hex characters
+
+**Submission Errors**
+- Check API key validity
+- Verify wallet connection
+- Review error logs
+- Contact support if persistent
+
+## Configuration Reference
+
+Key environment variables for the pipeline:
+
+```bash
+# Core settings
+HOKUSAI_TEST_MODE=false
+PIPELINE_LOG_LEVEL=INFO
+
+# Data processing
+ENABLE_PII_DETECTION=true
+DATA_VALIDATION_STRICT=false
+MAX_SAMPLE_SIZE=100000
+
+# Performance
+PARALLEL_WORKERS=8
+BATCH_SIZE=1000
+```
+
+See [Configuration Guide](configuration.md) for complete reference.
 
 ## Next Steps
 
-- Learn about [Data Validation Tools](/data-validation-tools)
-- Understand [Privacy Compliance](/privacy-compliance)
-- Review [Reward Mechanisms](/tokenomics/rewards)
+- Learn about [Data Validation Tools](data-validation-tools.md)
+- Understand [Privacy Compliance](privacy-compliance.md)
+- Review [Reward Mechanisms](tokenomics/rewards.md)
+- Explore [Architecture Overview](core-workflows/architecture.md)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai).

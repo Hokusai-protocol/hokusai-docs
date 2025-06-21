@@ -1,5 +1,138 @@
 ---
-description:
-globs:
+description: Anytime we are working with the smart contracts, referencing token minting or burning or governance. 
+globs: 
 alwaysApply: false
 ---
+# Smart Contracts
+
+<SmartContractSystem
+  network="Ethereum"
+  architecture="Hybrid"
+  description="On-chain token mechanics with off-chain evaluation and metering"
+>
+  <ContractSection
+    title="Key Elements"
+    type="core"
+    description="Core smart contract components of the Hokusai protocol"
+  >
+    <ContractComponent
+      name="ERC20 Token"
+      type="token"
+      importance="high"
+      description="Standard ERC20 implementation for each model"
+      implementation="On-chain"
+    />
+    <ContractComponent
+      name="Bonding Curve"
+      type="pricing"
+      importance="high"
+      description="Automated market maker for price discovery"
+      implementation="On-chain"
+    />
+    <ContractComponent
+      name="Minting Logic"
+      type="supply"
+      importance="high"
+      description="Token minting tied to model evaluation results"
+      implementation="On-chain"
+    />
+    <ContractComponent
+      name="Burning"
+      type="supply"
+      importance="high"
+      description="Token burning mechanism for model usage"
+      implementation="On-chain"
+    />
+  </ContractSection>
+
+  <OffChainComponents>
+    <OffChainComponent
+      name="Evaluation"
+      type="oracle"
+      importance="high"
+      description="Model performance evaluation and validation"
+      implementation="Off-chain"
+    />
+    <OffChainComponent
+      name="Usage Metering"
+      type="tracking"
+      importance="high"
+      description="Usage tracking and consumption monitoring"
+      implementation="Off-chain"
+    />
+  </OffChainComponents>
+</SmartContractSystem>
+
+## Component Documentation
+
+### SmartContractSystem
+The main container component for smart contract documentation.
+
+Props:
+- `network`: string - The blockchain network (e.g., "Ethereum")
+- `architecture`: string - The system architecture type
+- `description`: string - A brief description of the system
+
+### ContractSection
+Represents a major section of smart contract components.
+
+Props:
+- `title`: string - The section title
+- `type`: 'core' | 'auxiliary' | 'governance' - The type of contract section
+- `description`: string - A brief description of the section's purpose
+
+### ContractComponent
+Represents a specific smart contract component.
+
+Props:
+- `name`: string - The component name
+- `type`: 'token' | 'pricing' | 'supply' | 'governance' - The type of component
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the component's purpose
+- `implementation`: 'On-chain' | 'Off-chain' - Where the component is implemented
+
+### OffChainComponents
+Container for off-chain system components.
+
+### OffChainComponent
+Represents a specific off-chain component.
+
+Props:
+- `name`: string - The component name
+- `type`: 'oracle' | 'tracking' | 'computation' - The type of component
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the component's purpose
+- `implementation`: 'On-chain' | 'Off-chain' - Where the component is implemented
+
+## Usage Example
+
+```tsx
+<SmartContractSystem
+  network="Ethereum"
+  architecture="Hybrid"
+  description="Example smart contract system"
+>
+  <ContractSection
+    title="Example Section"
+    type="core"
+    description="Example contract section"
+  >
+    <ContractComponent
+      name="Example Component"
+      type="token"
+      importance="high"
+      description="Example component description"
+      implementation="On-chain"
+    />
+  </ContractSection>
+</SmartContractSystem>
+```
+
+## Notes
+- All on-chain components should be thoroughly audited
+- Off-chain components should have clear integration points
+- Maintain clear separation between on-chain and off-chain logic
+- Document all security considerations
+- Include gas optimization guidelines
+- Specify upgrade mechanisms where applicable
+- Document emergency procedures

@@ -6,6 +6,7 @@ const sidebars = {
       items: [
         'intro',
         'getting-started',
+        'configuration',
         'key-concepts',
       ],
     },
@@ -14,9 +15,12 @@ const sidebars = {
       label: 'Core Workflows',
       items: [
         'supplying-data',
+        'data-validation-tools',
+        'privacy-compliance',
         'creating-models',
         'improving-models',
         'using-models',
+        'core-workflows/architecture',
       ],
     },
     {

@@ -1,5 +1,108 @@
 ---
-description:
-globs:
+description: Anytime we are using the data pipeline, or referring to SDK or API usage. 
+globs: 
 alwaysApply: false
 ---
+# SDK and API Usage
+
+<DeveloperTools>
+  <ToolSection
+    title="SDK"
+    type="library"
+    description="Software Development Kit for Hokusai protocol integration"
+  >
+    <ToolFeature
+      feature="Validate format"
+      type="validation"
+      importance="high"
+      description="Ensures data meets protocol requirements"
+    />
+    <ToolFeature
+      feature="Run local tests to estimate potential DeltaOne"
+      type="testing"
+      importance="high"
+      description="Local performance estimation before submission"
+    />
+    <ToolFeature
+      feature="Package and submit data"
+      type="submission"
+      importance="high"
+      description="Data preparation and protocol submission"
+    />
+  </ToolSection>
+
+  <ToolSection
+    title="API"
+    type="interface"
+    description="Application Programming Interface for Hokusai protocol interaction"
+  >
+    <ToolFeature
+      feature="Submit data"
+      type="endpoint"
+      importance="high"
+      description="Data submission endpoint"
+    />
+    <ToolFeature
+      feature="Query token price"
+      type="endpoint"
+      importance="high"
+      description="Real-time token price information"
+    />
+    <ToolFeature
+      feature="Get access credentials (abstracts away crypto)"
+      type="authentication"
+      importance="high"
+      description="Simplified authentication and access management"
+    />
+  </ToolSection>
+</DeveloperTools>
+
+## Component Documentation
+
+### DeveloperTools
+The main container component for SDK and API documentation.
+
+### ToolSection
+Represents a major section of developer tools (SDK or API).
+
+Props:
+- `title`: string - The section title
+- `type`: 'library' | 'interface' - The type of developer tool
+- `description`: string - A brief description of the tool's purpose
+
+### ToolFeature
+Represents a specific feature or capability within a tool section.
+
+Props:
+- `feature`: string - The specific feature or capability
+- `type`: 'validation' | 'testing' | 'submission' | 'endpoint' | 'authentication' - The type of feature
+- `importance`: 'high' | 'medium' | 'low' - The importance level of the feature
+- `description`: string - A brief description of the feature's purpose
+
+## Usage Example
+
+```tsx
+<DeveloperTools>
+  <ToolSection
+    title="Example Tool"
+    type="library"
+    description="Example developer tool"
+  >
+    <ToolFeature
+      feature="Example feature"
+      type="validation"
+      importance="high"
+      description="Example feature description"
+    />
+  </ToolSection>
+</DeveloperTools>
+```
+
+## Notes
+- Each tool section should have a clear, specific focus
+- Features should be ordered by importance
+- All endpoints and capabilities should be clearly documented
+- Maintain consistency in feature types and importance levels
+- Update features as the SDK and API evolve
+- Include authentication and security considerations
+- Document rate limits and usage guidelines

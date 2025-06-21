@@ -1,5 +1,31 @@
 ---
-description:
-globs:
-alwaysApply: false
+description: 
+globs: 
+alwaysApply: true
 ---
+# Glossary Rules
+
+## Hokusai token
+- Definition: ERC20 token tied to a single model
+- Type: Technical term
+- Context: Used in discussions about token economics and model-specific tokens
+
+## DeltaOne
+- Definition: Verified 1 percentage point (pp) gain on a benchmark
+- Type: Performance metric
+- Context: Used in model performance evaluation and benchmarking
+
+## Bonding Curve
+- Definition: Price increases as more USDC is deposited
+- Type: Economic mechanism
+- Context: Used in token pricing and liquidity discussions
+
+## Performance-Based Inflation
+- Definition: Token supply grows with real value
+- Type: Economic mechanism
+- Context: Used in discussions about token economics and supply dynamics
+
+## Usage-Driven Deflation
+- Definition: Tokens burned for model usage
+- Type: Economic mechanism
+- Context: Used in discussions about token economics and supply dynamics

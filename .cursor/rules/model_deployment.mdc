@@ -1,5 +1,135 @@
 ---
-description:
-globs:
+description: 
+globs: *.md
 alwaysApply: false
 ---
+# Model Deployment & Improvement
+
+<ModelLifecycle>
+  <DeploymentPhase
+    title="Adding a New Model"
+    type="initialization"
+    description="Steps required to deploy a new model to the protocol"
+  >
+    <DeploymentStep
+      step="Define performance metric"
+      type="configuration"
+      importance="high"
+      description="Establish the primary performance metric (e.g., F1, accuracy)"
+      order={1}
+    />
+    <DeploymentStep
+      step="Deploy model endpoint"
+      type="infrastructure"
+      importance="high"
+      description="Set up the model serving infrastructure"
+      order={2}
+    />
+    <DeploymentStep
+      step="Launch ERC20"
+      type="tokenization"
+      importance="high"
+      description="Create and deploy the ERC20 token tied to the model's metric"
+      order={3}
+    />
+  </DeploymentPhase>
+
+  <ImprovementPhase
+    title="Improving a Model"
+    type="enhancement"
+    description="Process for improving existing models and rewarding contributors"
+  >
+    <ImprovementStep
+      step="Submit new training data"
+      type="contribution"
+      importance="high"
+      description="Provide new training data for model improvement"
+      order={1}
+    />
+    <ImprovementStep
+      step="Evaluate for DeltaOne"
+      type="validation"
+      importance="high"
+      description="Assess performance improvement using DeltaOne metric"
+      order={2}
+    />
+    <ImprovementStep
+      step="Mint new tokens"
+      type="reward"
+      importance="high"
+      description="Issue tokens to contributors based on improvement"
+      order={3}
+    />
+  </ImprovementPhase>
+</ModelLifecycle>
+
+## Component Documentation
+
+### ModelLifecycle
+The main container component for model deployment and improvement documentation.
+
+### DeploymentPhase
+Represents the initial deployment phase of a model.
+
+Props:
+- `title`: string - The phase title
+- `type`: 'initialization' | 'enhancement' | 'maintenance' - The type of phase
+- `description`: string - A brief description of the phase
+
+### DeploymentStep
+Represents a specific step in the deployment process.
+
+Props:
+- `step`: string - The step description
+- `type`: 'configuration' | 'infrastructure' | 'tokenization' - The type of step
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the step
+- `order`: number - The sequential order of the step
+
+### ImprovementPhase
+Represents the model improvement phase.
+
+Props:
+- `title`: string - The phase title
+- `type`: 'enhancement' | 'maintenance' | 'optimization' - The type of phase
+- `description`: string - A brief description of the phase
+
+### ImprovementStep
+Represents a specific step in the improvement process.
+
+Props:
+- `step`: string - The step description
+- `type`: 'contribution' | 'validation' | 'reward' - The type of step
+- `importance`: 'high' | 'medium' | 'low' - The importance level
+- `description`: string - A brief description of the step
+- `order`: number - The sequential order of the step
+
+## Usage Example
+
+```tsx
+<ModelLifecycle>
+  <DeploymentPhase
+    title="Example Phase"
+    type="initialization"
+    description="Example deployment phase"
+  >
+    <DeploymentStep
+      step="Example step"
+      type="configuration"
+      importance="high"
+      description="Example step description"
+      order={1}
+    />
+  </DeploymentPhase>
+</ModelLifecycle>
+```
+
+## Notes
+- Each phase should have clear entry and exit criteria
+- Steps should be performed in the specified order
+- Document all performance metrics and their calculation methods
+- Include validation requirements for each step
+- Specify token distribution rules
+- Document quality assurance procedures
+- Include rollback procedures for failed deployments
+- Specify monitoring and maintenance requirements

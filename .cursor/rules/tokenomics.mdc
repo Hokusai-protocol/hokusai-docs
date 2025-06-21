@@ -1,5 +1,105 @@
 ---
-description:
-globs:
+description: Any refeence to token minting, burning, token price, or bonding curves. Any reference to investors. 
+globs: 
 alwaysApply: false
 ---
+# Tokenomics
+
+<TokenomicsOverview>
+  <TokenomicsSection
+    title="Inflation"
+    type="mechanism"
+    description="Token supply increase mechanisms"
+  >
+    <TokenomicsRule
+      rule="Only occurs upon model performance improvement (DeltaOne = 1pp gain)"
+      type="condition"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Slows as models mature"
+      type="behavior"
+      importance="medium"
+    />
+  </TokenomicsSection>
+
+  <TokenomicsSection
+    title="Deflation"
+    type="mechanism"
+    description="Token supply reduction mechanisms"
+  >
+    <TokenomicsRule
+      rule="Tokens are burned to access model inference"
+      type="condition"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Continuous auction sets burn price"
+      type="mechanism"
+      importance="high"
+    />
+  </TokenomicsSection>
+
+  <TokenomicsSection
+    title="Bonding Curve"
+    type="mechanism"
+    description="Token price discovery and liquidity mechanisms"
+  >
+    <TokenomicsRule
+      rule="Contributors and investors can deposit USDC"
+      type="action"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Price of token increases with demand"
+      type="behavior"
+      importance="high"
+    />
+  </TokenomicsSection>
+</TokenomicsOverview>
+
+## Component Documentation
+
+### TokenomicsOverview
+The main container component for tokenomics documentation.
+
+### TokenomicsSection
+Represents a major section of tokenomics mechanics.
+
+Props:
+- `title`: string - The section title
+- `type`: 'mechanism' | 'policy' | 'rule' - The type of tokenomics section
+- `description`: string - A brief description of the section's purpose
+
+### TokenomicsRule
+Represents a specific rule or condition within a tokenomics section.
+
+Props:
+- `rule`: string - The specific rule or condition
+- `type`: 'condition' | 'behavior' | 'mechanism' | 'action' - The type of rule
+- `importance`: 'high' | 'medium' | 'low' - The importance level of the rule
+
+## Usage Example
+
+```tsx
+<TokenomicsOverview>
+  <TokenomicsSection
+    title="Example Section"
+    type="mechanism"
+    description="Example tokenomics mechanism"
+  >
+    <TokenomicsRule
+      rule="Example rule"
+      type="condition"
+      importance="high"
+    />
+  </TokenomicsSection>
+</TokenomicsOverview>
+```
+
+## Notes
+- Each section should have a clear, specific focus
+- Rules should be ordered by importance
+- All mechanisms should be clearly documented
+- Maintain consistency in rule types and importance levels
+- Update rules as tokenomics evolve
