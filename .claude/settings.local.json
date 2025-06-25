@@ -4,7 +4,12 @@
       "Bash(unzip:*)",
       "Bash(rg:*)",
       "Bash(grep:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(find:*)",
+      "Bash(npx tsx:*)",
+      "Bash(osascript:*)",
+      "Bash(git checkout:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
