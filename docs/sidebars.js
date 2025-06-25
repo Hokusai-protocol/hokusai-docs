@@ -6,6 +6,7 @@ const sidebars = {
       items: [
         'intro',
         'getting-started',
+        'getting-started/quick-start-pipeline',
         'configuration',
         'key-concepts',
       ],
@@ -21,6 +22,20 @@ const sidebars = {
         'improving-models',
         'using-models',
         'core-workflows/architecture',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Data Pipeline',
+      items: [
+        'data-pipeline/pipeline-architecture',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'ML Platform',
+      items: [
+        'ml-platform/ml-platform-overview',
       ],
     },
     {

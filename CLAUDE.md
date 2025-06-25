@@ -7,6 +7,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is the documentation website for the Hokusai Protocol - a decentralized marketplace that incentivizes high-quality data contributions to improve AI models. Built with Docusaurus 3.7.0.
 
 ## Common Commands
+Common prompts: 
+@~/.claude/my-common-prompts.md
+
+For this repo, use the "Hokusai docs" project in Linear to pull the backlog list. 
 
 Run all commands from the `docs/` directory:
 
