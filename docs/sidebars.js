@@ -26,16 +26,11 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Data Pipeline',
+      label: 'ML Infrastructure',
       items: [
-        'data-pipeline/pipeline-architecture',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'ML Platform',
-      items: [
-        'ml-platform/ml-platform-overview',
+        'ml-infrastructure/ml-infrastructure-overview',
+        'ml-infrastructure/pipeline-architecture',
+        'ml-infrastructure/platform-features',
       ],
     },
     {
