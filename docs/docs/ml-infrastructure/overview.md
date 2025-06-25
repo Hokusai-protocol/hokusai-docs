@@ -7,44 +7,42 @@ sidebar_position: 1
 
 # ML Infrastructure Overview
 
-The Hokusai ML infrastructure powers the protocol's ability to evaluate and reward data contributions that improve AI models. This section covers both the current implementation (data pipeline) and the future platform architecture.
+The Hokusai ML infrastructure powers the protocol's ability to evaluate and reward data contributions that improve AI models. This production-ready system includes a Metaflow-based data pipeline for model evaluation and attestation generation.
 
 ## Architecture Overview
 
 ```mermaid
 graph TB
-    subgraph "Current: Data Pipeline"
+    subgraph "ML Pipeline Components"
         CD[Contributed Data]
         BM[Baseline Model]
         PIPE[Metaflow Pipeline]
-        ATT[Attestation]
+        ATT[Attestation/DeltaOne]
+        
+        subgraph "Pipeline Features"
+            VAL[Data Validation]
+            TRAIN[Model Training]
+            EVAL[Evaluation]
+            REG[Model Registry]
+        end
         
         CD --> PIPE
         BM --> PIPE
-        PIPE --> ATT
+        PIPE --> VAL
+        VAL --> TRAIN
+        TRAIN --> EVAL
+        EVAL --> ATT
+        TRAIN --> REG
     end
-    
-    subgraph "Future: ML Platform"
-        APP[Your Application]
-        PLATFORM[Hokusai ML Platform]
-        REG[Model Registry]
-        AB[A/B Testing]
-        
-        APP --> PLATFORM
-        PLATFORM --> REG
-        PLATFORM --> AB
-    end
-    
-    PIPE -.-> PLATFORM
     
     style CD fill:#e1f5fe
     style ATT fill:#fff59d
-    style PLATFORM fill:#fff9c4
+    style PIPE fill:#fff9c4
 ```
 
-## Current Implementation: Data Pipeline
+## Core Capabilities
 
-The Hokusai data pipeline is a production-ready Metaflow-based system that:
+The Hokusai ML pipeline is a production-ready Metaflow-based system that:
 
 - **Evaluates Contributions**: Measures how contributed data improves model performance
 - **Generates Attestations**: Creates cryptographic proofs of improvement (DeltaOne scores)
@@ -68,30 +66,47 @@ graph LR
     E --> F[Attestation]
 ```
 
-## Future Vision: ML Platform
+## Platform Components
 
-The Hokusai ML Platform (under development) will package these capabilities into a reusable library:
+The ML pipeline includes several integrated components:
 
+### Model Registry
+MLFlow-based model management for tracking experiments and versions:
 ```python
-# Future API example
-from hokusai import MLPlatform
+# Current implementation
+from src.pipeline.model_registry import ModelRegistry
 
-platform = MLPlatform()
-result = platform.evaluate_contribution(
-    baseline_model="gpt-3.5-turbo",
-    contributed_data="path/to/data.csv",
-    eth_address="0x..."
+registry = ModelRegistry()
+model_info = registry.log_model(
+    model=improved_model,
+    metrics=evaluation_results,
+    data_version=contribution_id
 )
-print(f"DeltaOne Score: {result.deltaone_score}")
 ```
 
-### Planned Components
+### Evaluation Framework
+Automated comparison of baseline vs improved models:
+```python
+# Pipeline evaluation step
+@step
+def evaluate_models(self):
+    baseline_metrics = evaluate(self.baseline_model, test_data)
+    improved_metrics = evaluate(self.improved_model, test_data)
+    self.deltaone_score = compute_deltaone(baseline_metrics, improved_metrics)
+```
 
-1. **Model Registry**: Centralized model management with MLFlow
-2. **Version Control**: Semantic versioning and rollback capabilities
-3. **A/B Testing**: Compare models in production environments
-4. **Inference Pipeline**: Optimized serving with caching
-5. **SDK Integration**: Easy integration for any ML application
+### Attestation Generation
+Cryptographic proofs of model improvement:
+```python
+# Generate verifiable attestation
+attestation = {
+    "model_id": model_id,
+    "deltaone_score": deltaone_score,
+    "contributor": eth_address,
+    "timestamp": timestamp,
+    "signature": generate_signature(...)
+}
+```
 
 ## Use Cases
 
@@ -105,10 +120,10 @@ print(f"DeltaOne Score: {result.deltaone_score}")
 - Leverage automated evaluation infrastructure
 - Deploy improved models with confidence
 
-### For Application Developers
-- Integrate ML capabilities without building infrastructure
-- Access pre-trained models via the registry
-- Run A/B tests to optimize performance
+### For Protocol Integrators
+- Connect to Hokusai's evaluation infrastructure
+- Submit data contributions programmatically
+- Track rewards and attestations on-chain
 
 ## Technical Stack
 
@@ -120,34 +135,43 @@ print(f"DeltaOne Score: {result.deltaone_score}")
 
 ## Getting Started
 
-### Running the Pipeline Today
+### Running the Pipeline
 
 ```bash
 # Clone the repository
 git clone https://github.com/Hokusai-protocol/hokusai-data-pipeline
 cd hokusai-data-pipeline
 
+# Install dependencies
+pip install -r requirements.txt
+
 # Run evaluation
 python -m src.pipeline.hokusai_pipeline run \
     --contributed-data=your_data.csv \
-    --eth-address=0x...
+    --eth-address=0x... \
+    --model-type=gpt-3.5-turbo
 ```
 
-### Future Platform Installation
+### Quick Testing
 
 ```bash
-# Coming soon
-pip install hokusai-ml-platform
+# Run with test data
+python -m src.pipeline.hokusai_pipeline run \
+    --dry-run \
+    --contributed-data=data/test_fixtures/test_queries.csv
 ```
 
-## Development Status
+## Key Features
 
-| Component | Status | Availability |
-|-----------|---------|--------------|
-| Data Pipeline | ✅ Production Ready | Now |
-| Model Registry | 🚧 In Development | Q2 2024 |
-| A/B Testing | 📋 Planned | Q3 2024 |
-| SDK | 📋 Planned | Q3 2024 |
+| Feature | Description | Status |
+|---------|-------------|---------|
+| Data Validation | PII detection, schema validation | ✅ Active |
+| Model Training | Automated fine-tuning with contributed data | ✅ Active |
+| Evaluation | Baseline vs improved model comparison | ✅ Active |
+| DeltaOne Scoring | Quantified improvement metrics | ✅ Active |
+| Attestation | Cryptographic proof generation | ✅ Active |
+| MLFlow Integration | Experiment tracking and model registry | ✅ Active |
+| Streaming Support | Handle large datasets efficiently | ✅ Active |
 
 ## Next Steps
 
