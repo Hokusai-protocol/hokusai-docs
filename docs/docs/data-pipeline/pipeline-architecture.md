@@ -499,7 +499,7 @@ logger.info("Training started", extra={
 
 ## Next Steps
 
-- [Configuration Guide](./configuration.md) - Detailed configuration options
-- [Data Formats](./data-formats.md) - Supported data formats and schemas
-- [Attestation Details](./attestation.md) - Understanding attestation outputs
-- [API Reference](../developer-guide/api-reference.md) - Programmatic usage
+- [Configuration Guide](../configuration) - Detailed configuration options
+- [Data Validation](../data-validation-tools) - Data formats and validation
+- [Smart Contracts](../smart-contracts/verifier-and-contribution) - Attestation and verification
+- [API Reference](../api-reference) - API documentation

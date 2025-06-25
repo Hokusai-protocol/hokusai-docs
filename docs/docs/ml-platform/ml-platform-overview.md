@@ -307,16 +307,16 @@ with exp_manager.start_experiment("notebook-exp"):
 
 ## Getting Started
 
-1. **Install the Platform**: Follow our [installation guide](./installation.md)
-2. **Learn Core Concepts**: Understand the [key components](./core-concepts.md)
-3. **Try Examples**: Run the [example notebooks](./examples.md)
-4. **Read API Docs**: Explore the [API reference](./api-reference.md)
+1. **Install the Platform**: Follow our [getting started guide](../getting-started)
+2. **Learn Core Concepts**: Understand the [key concepts](../key-concepts)
+3. **Try Examples**: Run the [quick start guide](../getting-started/quick-start-pipeline)
+4. **Read API Docs**: Explore the [API reference](../api-reference)
 
 ## Community
 
 - **GitHub**: [hokusai-ml-platform](https://github.com/Hokusai-protocol/hokusai-data-pipeline)
 - **Discord**: [Join our community](https://discord.gg/hokusai)
-- **Contributing**: See our [contribution guide](../developer-guide/contributing.md)
+- **Contributing**: See our [GitHub repository](https://github.com/Hokusai-protocol/hokusai-data-pipeline)
 
 ---
 
