@@ -10,7 +10,12 @@ This is the documentation website for the Hokusai Protocol - a decentralized mar
 Common prompts: 
 @~/.claude/my-common-prompts.md
 
-For this repo, use the "Hokusai docs" project in Linear to pull the backlog list. 
+For this repo, use the "Hokusai docs" project in Linear to pull the backlog list.
+
+To fetch the Linear backlog, run:
+```bash
+npx tsx ~/.claude/tools/get-backlog.ts "Hokusai docs"
+``` 
 
 Run all commands from the `docs/` directory:
 
