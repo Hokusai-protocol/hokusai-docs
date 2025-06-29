@@ -6,7 +6,8 @@ const sidebars = {
       items: [
         'intro',
         'getting-started',
-        'getting-started/quick-start-pipeline',
+        'getting-started/quick-start',
+        'getting-started/first-contribution',
         'configuration',
         'key-concepts',
       ],

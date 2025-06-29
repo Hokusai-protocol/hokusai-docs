@@ -7,7 +7,7 @@ sidebar_position: 1
 
 # ML Infrastructure Overview
 
-The Hokusai ML infrastructure powers the protocol's ability to evaluate and reward data contributions that improve AI models. This production-ready system includes a Metaflow-based data pipeline for model evaluation and attestation generation.
+The Hokusai ML infrastructure powers the protocol's ability to evaluate and reward data contributions that improve AI models. This production-ready system includes a Metaflow-based data pipeline for model evaluation and attestation generation, with plans to expand into a reusable ML platform package.
 
 ## Architecture Overview
 
@@ -66,7 +66,7 @@ graph LR
     E --> F[Attestation]
 ```
 
-## Platform Components
+## Current Implementation
 
 The ML pipeline includes several integrated components:
 
@@ -173,9 +173,87 @@ python -m src.pipeline.hokusai_pipeline run \
 | MLFlow Integration | Experiment tracking and model registry | ✅ Active |
 | Streaming Support | Handle large datasets efficiently | ✅ Active |
 
+## Future: ML Platform Package
+
+> **Note**: The `hokusai-ml-platform` package is currently under development. This section describes the planned architecture and APIs.
+
+### Vision
+
+Transform the Hokusai data pipeline's ML infrastructure into a standalone platform that any project can use to:
+- Manage model versions and deployments
+- Run A/B tests between models
+- Track performance improvements
+- Generate attestations for contributions
+- Build inference pipelines with caching
+
+### Planned Components
+
+```mermaid
+graph TB
+    subgraph "Your Application"
+        APP[Your ML Application]
+    end
+    
+    subgraph "Hokusai ML Platform"
+        CORE[Core Components]
+        REG[Model Registry]
+        VER[Version Manager]
+        AB[A/B Testing]
+        INF[Inference Pipeline]
+        
+        CORE --> REG
+        CORE --> VER
+        CORE --> AB
+        CORE --> INF
+    end
+    
+    subgraph "Infrastructure"
+        MLF[MLFlow]
+        CACHE[Redis Cache]
+        STORE[Model Storage]
+    end
+    
+    APP --> CORE
+    REG --> MLF
+    INF --> CACHE
+    VER --> STORE
+    
+    style APP fill:#e1f5fe
+    style CORE fill:#fff9c4
+```
+
+### Key Platform Features (Coming Soon)
+
+#### 🚀 Production Ready
+- Battle-tested components from Hokusai data pipeline
+- Comprehensive error handling and logging
+- Performance optimized for high throughput
+- Built-in monitoring and metrics
+
+#### 🔄 Model Lifecycle Management
+- Version control for models
+- Automated rollback on performance degradation
+- Staging environments (dev, staging, production)
+- Model lineage tracking
+
+#### 📊 A/B Testing Framework
+```python
+# Future API example
+from hokusai.core.ab_testing import ModelTrafficRouter, ABTestConfig
+
+router = ModelTrafficRouter()
+test = ABTestConfig(
+    model_a="lead-scorer/1.0.0",
+    model_b="lead-scorer/1.1.0",
+    traffic_split={"a": 0.8, "b": 0.2},
+    metrics_to_track=["conversion_rate", "latency"]
+)
+router.create_test(test)
+```
+
 ## Next Steps
 
 - [Pipeline Architecture](./pipeline-architecture) - Deep dive into current implementation
-- [Platform Features](./platform-features) - Upcoming ML platform capabilities
-- [Quick Start Guide](../getting-started/quick-start-pipeline) - Run your first evaluation
+- [Platform Features](./platform-features) - Detailed platform capabilities
+- [Quick Start Guide](../getting-started/quick-start) - Run your first evaluation
 - [API Reference](../api-reference) - Programmatic usage
