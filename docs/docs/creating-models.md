@@ -27,6 +27,8 @@ Before registering a model, ensure you have:
 
 The easiest way to create a model is through the Hokusai website. This process guides you through all necessary steps without requiring SDK installation.
 
+**📚 Comprehensive Guide:** For detailed step-by-step instructions on launching your model, including tokenomics configuration and deployment, see our [Complete Model Launch Guide](guides/model-launch-guide).
+
 ### Step 1: Access the Model Creation Portal
 
 1. Visit [hokus.ai/create-model](https://hokus.ai/create-model)

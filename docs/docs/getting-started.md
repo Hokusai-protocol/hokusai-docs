@@ -22,6 +22,8 @@ Hokusai is a decentralized protocol that incentivizes high-quality data contribu
 3. Define performance metrics for DeltaOne token issuance
 4. Deploy and monitor model improvements
 
+**📖 New:** Check out our [Complete Model Launch Guide](guides/model-launch-guide) for step-by-step instructions on launching your model on Hokusai.
+
 ### For Token Investors
 1. Understand the bonding curve mechanism
 2. Participate in token auctions
