@@ -14,6 +14,13 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/model-launch-guide',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Core Workflows',
       items: [
         'supplying-data',
