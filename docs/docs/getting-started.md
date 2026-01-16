@@ -25,10 +25,16 @@ Hokusai is a decentralized protocol that incentivizes high-quality data contribu
 **📖 New:** Check out our [Complete Model Launch Guide](guides/model-launch-guide) for step-by-step instructions on launching your model on Hokusai.
 
 ### For Token Investors
-1. Understand the bonding curve mechanism
-2. Participate in token auctions
-3. Monitor token supply and burn rates
-4. Track model performance metrics
+1. Research models before launch period
+2. Buy tokens during seven-day bonding round or after
+3. Trade on CRR bonding curve AMM with USDC
+4. Monitor API fees flowing to reserves
+5. Track model performance and token metrics
+
+**📖 Complete Guides:**
+- [Investor Guide](/guides/investor-guide) - Investment strategies and due diligence
+- [Buying Tokens](/guides/buying-tokens) - Step-by-step buying guide
+- [Selling Tokens](/guides/selling-tokens) - Step-by-step selling guide (Day 7+)
 
 ## System Requirements
 

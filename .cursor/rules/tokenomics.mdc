@@ -41,17 +41,49 @@ alwaysApply: false
   </TokenomicsSection>
 
   <TokenomicsSection
-    title="Bonding Curve"
+    title="CRR Bonding Curve AMM"
     type="mechanism"
-    description="Token price discovery and liquidity mechanisms"
+    description="Constant Reserve Ratio automated market maker for token trading"
   >
     <TokenomicsRule
-      rule="Contributors and investors can deposit USDC"
+      rule="HokusaiAMM implements CRR bonding curve with formula: P = R / (w × S)"
+      type="mechanism"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Buy tokens with USDC, sell tokens for USDC (after 7-day launch)"
       type="action"
       importance="high"
     />
     <TokenomicsRule
-      rule="Price of token increases with demand"
+      rule="Seven-day buy-only launch period prevents manipulation"
+      type="behavior"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Always-available liquidity (no LPs needed)"
+      type="behavior"
+      importance="high"
+    />
+  </TokenomicsSection>
+
+  <TokenomicsSection
+    title="API Fee Flow"
+    type="mechanism"
+    description="Revenue distribution from model API usage"
+  >
+    <TokenomicsRule
+      rule="20% of API fees deposited to AMM USDC reserve"
+      type="mechanism"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="80% of API fees go to infrastructure costs"
+      type="mechanism"
+      importance="high"
+    />
+    <TokenomicsRule
+      rule="Fee deposits increase reserve without minting, raising token price"
       type="behavior"
       importance="high"
     />

@@ -17,6 +17,9 @@ const sidebars = {
       label: 'Guides',
       items: [
         'guides/model-launch-guide',
+        'guides/investor-guide',
+        'guides/buying-tokens',
+        'guides/selling-tokens',
       ],
     },
     {
@@ -47,7 +50,10 @@ const sidebars = {
       items: [
         'tokenomics',
         'tokenomics/token-value',
+        'tokenomics/amm-overview',
         'tokenomics/bonding-curve',
+        'tokenomics/launch-period',
+        'tokenomics/api-fee-flow',
         'tokenomics/deltaone-calculations',
       ],
     },
@@ -56,6 +62,8 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'smart-contracts/smart-contracts-overview',
+        'smart-contracts/hokusai-amm',
+        'smart-contracts/token-flow',
         'smart-contracts/model-tokens-and-token-manager',
         'smart-contracts/verifier-and-contribution',
         'smart-contracts/treasury-and-access',

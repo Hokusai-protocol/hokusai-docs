@@ -1,0 +1,62 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is the documentation website for the Hokusai Protocol - a decentralized marketplace that incentivizes high-quality data contributions to improve AI models. Built with Docusaurus 3.7.0.
+
+## Common Commands
+Common prompts: 
+@~/.claude/my-common-prompts.md
+
+For this repo, use the "Hokusai docs" project in Linear to pull the backlog list.
+
+To fetch the Linear backlog, run:
+```bash
+npx tsx ~/.claude/tools/get-backlog.ts "Hokusai docs"
+```
+
+Run all commands from the `docs/` directory:
+
+```bash
+# Development
+npm start          # Start dev server on port 3001
+npm run build      # Build production site
+npm run typecheck  # Run TypeScript type checking
+
+# Deployment
+npm run deploy     # Deploy to GitHub Pages (docs.hokus.ai)
+npm run serve      # Preview production build locally
+```
+
+## Architecture & Structure
+
+### Key Directories
+- `docs/docs/` - Documentation content in Markdown
+  - `licensing/` - Model licensing documentation
+  - `smart-contracts/` - Smart contract architecture
+  - `tokenomics/` - Token economics documentation
+- `docs/src/` - React components and custom styling
+- `.cursor/rules/` - AI context files with protocol details
+
+### Important Concepts
+- **DeltaOne Rewards**: Core reward unit where 1 DeltaOne = 1% performance improvement
+- **Three User Personas**: Data suppliers, model developers, and investors
+- **Verification**: All improvements verified through MegaAI benchmarking system
+
+### Development Notes
+- Docusaurus configuration is in `docs/docusaurus.config.js`
+- Custom theme with Tailwind CSS integration
+- Sidebar navigation configured in `docs/sidebars.js`
+- Deploy script available at root: `deploy-docs.sh`
+
+### Cursor Rules
+The `.cursor/rules/` directory contains detailed MDC files about:
+- Protocol overview and architecture
+- Tokenomics and bonding curves
+- Smart contract design
+- SDK/API reference
+- Glossary of terms
+
+When modifying documentation, maintain consistency with these established concepts and terminology.

@@ -11,7 +11,7 @@ Proprietary models are owned by a single owner. This is typically companies that
 ## Key License Features
 
 - One entity has exclusive usage of the model.  
-- There is no token buyback through ongoing usage. The DeltaOne reward payable to data suppliers for their contribution is the sole compensation. 
+- There is no AMM trading or API revenue generation. The DeltaOne reward payable to data suppliers for their contribution is funded directly by the model owner and is the sole compensation. 
 - Data suppliers will have no ongoing relationship with the model owner. 
 
 ## DeltaOne Reward Mechanism 

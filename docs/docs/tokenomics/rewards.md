@@ -37,17 +37,22 @@ Tokens per DeltaOne: 100 tokens
 Reward = 7 DeltaOnes * 100 tokens = 700 tokens
 ```
 
-### 2. Liquidity Rewards
-Incentives for providing liquidity:
+### 2. API Fee Rewards
+API usage generates fees that flow to token holders:
 
-#### Pool Rewards
-- Trading fee sharing
-- Protocol fee distribution
-- Staking bonuses
+#### Fee Distribution
+- **20% to AMM Reserve**: Deposited as USDC, increases token price
+- **80% to Infrastructure**: Covers operational costs
 
-#### Reward Rates
-- Base rate: 0.3% of trading volume
-- Special rates for enterprise pools
+#### How It Benefits Token Holders
+When API fees are deposited to the AMM reserve:
+```
+Reserve increases: R → R + Fees
+Supply unchanged: S → S
+Price increases: P = R / (w × S)
+```
+
+**Example**: $10,000 API fees → $2,000 to reserve → ~same % price increase for all holders
 
 ## Distribution Mechanisms
 
@@ -72,22 +77,26 @@ Key components:
 - `TokenManager`: Mints and distributes rewards
 - `ModelRegistry`: Tracks model performance and token addresses
 
-### 2. Liquidity Distribution
-The BondingCurveTreasury contract manages liquidity rewards:
+### 2. API Fee Distribution
+The UsageFeeRouter contract routes API usage fees:
 
 ```solidity
-function distributeLiquidityRewards(
-    address provider,
-    uint256 amount,
-    uint256 duration
-) external {
-    uint256 baseReward = calculateBaseReward(amount);
-    uint256 timeBonus = calculateTimeBonus(duration);
-    uint256 totalReward = baseReward + timeBonus;
-    
-    _mint(provider, totalReward);
+function distributeFees(
+    bytes32 modelId,
+    uint256 totalFees
+) external onlyFeeCollector {
+    uint256 ammAllocation = (totalFees * 2000) / 10000; // 20%
+    uint256 infrastructureAllocation = totalFees - ammAllocation; // 80%
+
+    // Deposit to AMM reserve (increases token price)
+    HokusaiAMM(ammAddress).depositFees(ammAllocation);
+
+    // Send to infrastructure
+    USDC.transfer(infrastructureAddress, infrastructureAllocation);
 }
 ```
+
+**Key Insight**: 20% of API fees increase USDC reserves without minting tokens, creating price appreciation for holders.
 
 ## Vesting Schedules
 

@@ -63,29 +63,77 @@ Model Developers are AI engineers or researchers who create, improve, or integra
 
 ## Investors
 
-Investors are individuals or organizations who provide liquidity and participate in the Hokusai token economy.
+Investors participate in model token launches, trade on the bonding curve AMM, and benefit from AI model performance and API revenue.
 
 ### Profile
-- **Who**: Individual investors, funds, or organizations interested in AI token economics
+- **Who**: Individual investors, crypto funds, or organizations seeking AI-backed assets
 - **Goals**:
-  - Participate in token economics
-  - Access high-performing AI models
-  - Support the growth of the ecosystem
+  - Invest in promising AI models during launch period
+  - Trade tokens on the CRR bonding curve AMM
+  - Benefit from API fee deposits to reserves
+  - Support ecosystem growth and innovation
 - **Technical Requirements**:
-  - Understanding of token economics
-  - Knowledge of bonding curves
-  - Familiarity with smart contracts
+  - Understanding of CRR bonding curves
+  - Knowledge of AMM mechanics (buy/sell dynamics)
+  - Familiarity with smart contracts and DeFi
+  - Crypto wallet and USDC holdings
 
 ### Use Cases
-1. **Token Participation**
-   - Provide liquidity to the ecosystem
-   - Participate in token auctions
-   - Monitor token economics
 
-2. **Model Access**
-   - Purchase tokens for model access
-   - Evaluate model performance
-   - Track token usage and value
+1. **Launch Period Participation**
+   - Research models before seven-day bonding round
+   - Buy tokens during buy-only period (Days 0-6)
+   - Dollar-cost average across launch period
+   - Monitor reserve growth and community engagement
+   - [Complete Guide →](/guides/investor-guide)
+
+2. **Secondary Trading**
+   - Buy tokens post-launch (Day 7+)
+   - Sell tokens on AMM for USDC
+   - Time entries/exits based on API fee deposits
+   - Monitor price dynamics and reserve changes
+   - [Buy Guide →](/guides/buying-tokens) | [Sell Guide →](/guides/selling-tokens)
+
+3. **Portfolio Management**
+   - Diversify across multiple model tokens
+   - Balance position sizes based on risk tolerance
+   - Take profits at predetermined targets
+   - Implement stop-loss strategies
+   - Track performance metrics
+
+4. **Fundamental Analysis**
+   - Evaluate model performance and improvement trajectory
+   - Assess API usage and revenue generation
+   - Monitor fee deposits to USDC reserves
+   - Track token minting and burning events
+   - Analyze community growth and engagement
+
+### Investment Strategies
+
+**Conservative**:
+- Invest in mature models with proven API revenue
+- Higher CRR tokens (35-50%) for stability
+- Hold long-term (90+ days)
+- 1-5% portfolio allocation
+
+**Moderate**:
+- Mix of launch and mature models
+- Medium CRR tokens (20-35%)
+- Medium-term holds (30-90 days)
+- 5-15% portfolio allocation
+
+**Aggressive**:
+- Focus on early launches and high-growth models
+- Lower CRR tokens (10-20%) for upside
+- Short to medium-term (7-30 days)
+- 15-30% portfolio allocation
+
+### Key Resources for Investors
+
+- [Investor Guide](/guides/investor-guide) - Complete investment playbook
+- [Launch Period](/tokenomics/launch-period) - Seven-day bonding round details
+- [AMM Overview](/tokenomics/amm-overview) - How the bonding curve works
+- [Bonding Curve Math](/tokenomics/bonding-curve) - Price formulas and examples
 
 ## Getting Started
 
