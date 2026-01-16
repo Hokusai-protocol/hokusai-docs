@@ -11,7 +11,7 @@ Open source model are freely available to use, study, modify, and share, promoti
 ## Key License Features
 
 - Freely available for usage, reuse, for any purpose.  
-- There is no token buyback or proprietary owner - open source models rely on donations to create incentives. 
+- There is no AMM trading or proprietary owner - open source models rely on donations to create incentives. 
 - The DeltaOne reward payable to data suppliers for their contribution is the sole compensation. 
 - Data suppliers should evaluate whether they would contribute their data to the model for free. Donors are hard to come by! 
 

@@ -18,8 +18,8 @@ Commercial models are the core Hokusai offering, representing an individual mark
 
 ## DeltaOne Reward Mechanism 
 
-- Commercial models are expected to derive their value from ongoing usage of the underlying models. The token buyback mechanism funds the reward pool.
-- In some cases, investors may pre-fund the reward pool to create incentives for early data suppliers to contribute their data.  
+- Commercial models derive their value from ongoing API usage. API fees flow to the AMM's USDC reserve pool, increasing the reserve backing per token and supporting token value.
+- Investors can participate during the seven-day launch period to provide initial liquidity and support early data suppliers.  
 
 ## Full License
 

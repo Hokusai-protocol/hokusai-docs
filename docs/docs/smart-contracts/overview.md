@@ -5,21 +5,24 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
 ```
 [Data Contributor]
     ↓ submits data
-[Verifier] → checks model performance
+[DeltaOneVerifier] → validates performance improvement
     ↓ confirms DeltaOne
 [TokenManager] → mints model tokens
     ↓
-[BondingCurveTreasury] → enables buy/sell
+[HokusaiAMM] → CRR bonding curve for buy/sell with USDC
     ↓
-[ModelAccessAuction] → enforces burn for usage
+[API Usage] → fees deposited to AMM reserve → price increases
+    ↓
+[ModelAccessController] → enforces burn for usage
 ```
 
-## Key Roles
+## Key Components
 - **Model-specific Hokusai tokens**: Earned via performance gains
-- **DeltaOneVerifier**: Validates performance improvement
-- **TokenManager**: Issues tokens, handles mint/burn logic
-- **Bonding Curve Treasury**: Enables trading between tokens and USDC
-- **DAO + HOK Token**: Coordinates protocol-wide incentives and funding
+- **DeltaOneVerifier**: Validates performance improvement off-chain
+- **TokenManager**: Issues tokens, handles mint/burn logic, distributes rewards
+- **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
+- **UsageFeeRouter**: Routes API fees (20% to AMM reserve, 80% to infrastructure)
+- **ModelAccessController**: Enforces token burning for model access
 
 ## ERC20 Implementation
 

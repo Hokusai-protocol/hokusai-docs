@@ -23,24 +23,38 @@ alwaysApply: false
       implementation="On-chain"
     />
     <ContractComponent
-      name="Bonding Curve"
+      name="HokusaiAMM"
       type="pricing"
       importance="high"
-      description="Automated market maker for price discovery"
+      description="Constant Reserve Ratio (CRR) bonding curve AMM for buying/selling tokens with USDC. Implements seven-day buy-only launch period, receives API fees (20%) to increase reserves."
       implementation="On-chain"
     />
     <ContractComponent
-      name="Minting Logic"
-      type="supply"
+      name="HokusaiAMMFactory"
+      type="factory"
       importance="high"
-      description="Token minting tied to model evaluation results"
+      description="Deploys new HokusaiAMM instances for each model token with initial parameters (CRR, fees, launch period)"
       implementation="On-chain"
     />
     <ContractComponent
-      name="Burning"
+      name="UsageFeeRouter"
+      type="treasury"
+      importance="high"
+      description="Routes API usage fees: 20% to AMM reserve (increases token backing), 80% to infrastructure costs"
+      implementation="On-chain"
+    />
+    <ContractComponent
+      name="TokenManager"
       type="supply"
       importance="high"
-      description="Token burning mechanism for model usage"
+      description="Token minting tied to DeltaOne performance improvements, issues rewards to data contributors"
+      implementation="On-chain"
+    />
+    <ContractComponent
+      name="ModelAccessController"
+      type="access"
+      importance="high"
+      description="Enforces token burning for model API access (pay-per-use, subscription, enterprise tiers)"
       implementation="On-chain"
     />
   </ContractSection>
@@ -86,7 +100,7 @@ Represents a specific smart contract component.
 
 Props:
 - `name`: string - The component name
-- `type`: 'token' | 'pricing' | 'supply' | 'governance' - The type of component
+- `type`: 'token' | 'pricing' | 'supply' | 'governance' | 'factory' | 'treasury' | 'access' - The type of component
 - `importance`: 'high' | 'medium' | 'low' - The importance level
 - `description`: string - A brief description of the component's purpose
 - `implementation`: 'On-chain' | 'Off-chain' - Where the component is implemented

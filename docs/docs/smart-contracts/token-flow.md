@@ -147,14 +147,76 @@ function distributeTreasuryRewards(
 
 ## Token Flow Diagram
 
+### Complete Token Lifecycle
+
 ```
-[Model Performance] → [Verifier] → [Token Manager]
-    ↓
-[Contributor Rewards] → [Vesting] → [Distribution]
-    ↓
-[Model Access] → [Burn] → [Treasury]
-    ↓
-[USDC Redemption] ← [Bonding Curve] ← [Liquidity Pool]
+[Performance Improvement] → [DeltaOneVerifier] → [TokenManager]
+           ↓
+    [Mint Tokens] → [Contributor Rewards]
+           ↓
+    [Token Holders]
+      ↙    ↓    ↘
+  [Hold] [Trade] [Use]
+     ↓      ↓      ↓
+  [AMM] ← → ←  [Burn for Access]
+     ↓           ↓
+ [USDC] ← → [API Usage]
+           ↓
+   [API Fees] → [depositFees()] → [Reserve ↑] → [Price ↑]
+```
+
+### Minting Flow
+
+```
+[Data Contribution] → [Model Improvement] → [Benchmark Testing]
+                              ↓
+                    [DeltaOne Verification]
+                              ↓
+                    [Token Minting (TokenManager)]
+                              ↓
+                    [Distribution to Contributors]
+                              ↓
+                    [Supply Increases]
+```
+
+### Burning Flow
+
+```
+Path A: Model Access
+[User] → [Burn Tokens] → [Access Model] → [Supply Decreases]
+
+Path B: AMM Selling (Post-Launch)
+[Holder] → [sell() on AMM] → [Burn Tokens] → [Receive USDC]
+                                    ↓
+                            [Supply Decreases]
+```
+
+### Fee Deposit Flow (No Minting)
+
+```
+[Model API Usage] → [Revenue Collection] → [Convert to USDC]
+                              ↓
+                    [UsageFeeRouter]
+                              ↓
+                    [depositFees() on AMM]
+                              ↓
+                    [Reserve Increases, Supply Unchanged]
+                              ↓
+                    [Spot Price = R/(w×S) Increases]
+```
+
+### AMM Trading Flow
+
+```
+Buying:
+[User] → [Deposit USDC] → [buy() on AMM] → [Mint Tokens] → [Receive Tokens]
+                                 ↓
+                    [Reserve ↑, Supply ↑, Price ↑]
+
+Selling (Day 7+):
+[Holder] → [Approve Tokens] → [sell() on AMM] → [Burn Tokens] → [Receive USDC]
+                                    ↓
+                    [Reserve ↓, Supply ↓, Price ↓]
 ```
 
 ## Monitoring and Analytics
@@ -176,10 +238,26 @@ function distributeTreasuryRewards(
 - Access frequency
 - Treasury health
 
+### 4. AMM Metrics
+- Reserve balance (USDC)
+- Token supply (circulating)
+- Spot price
+- Daily buy/sell volume
+- Fee deposits (API revenue)
+- Reserve growth rate
+
+### 5. Supply Dynamics
+- Minting events (performance rewards)
+- Burning events (model access + AMM sells)
+- Net supply change (minting - burning)
+- Dilution rate vs reserve growth
+
 ## Next Steps
 
-- Review [Security Measures](/smart-contracts/security)
-- Understand [Governance](/smart-contracts/governance)
-- Learn about [Tokenomics](/tokenomics)
+- **AMM Details**: [HokusaiAMM Contract](/smart-contracts/hokusai-amm)
+- **API Fee Flow**: [How Fees Increase Value](/tokenomics/api-fee-flow)
+- **AMM Overview**: [Bonding Curve Trading](/tokenomics/amm-overview)
+- **Security Measures**: [Contract Security](/smart-contracts/security)
+- **Governance**: [Token Holder Governance](/smart-contracts/governance)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

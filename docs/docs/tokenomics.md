@@ -4,23 +4,53 @@ title: Tokenomics Overview
 sidebar_label: Overview
 ---
 
-Hokusai's tokenomics are designed to align incentives across data suppliers, model developers, and users. Tokens are minted to rewards data contribution that improves the model performance. Usage of the model requires payments and the supply is reduced via a buyback mechanism. 
+Hokusai's tokenomics are designed to align incentives across data suppliers, model developers, and investors. Each model has dedicated tokens that can be traded on an automated market maker (AMM) using a Constant Reserve Ratio (CRR) bonding curve. API revenue flows into the USDC reserve pool, increasing token backing and price.
 
-**Important Concepts:**
+## Key Components
 
-- **DeltaOne Token Inflation**:
-  - Reward data suppliers for contributing datasets that improve accuracy. 
-  - Minted upon verified 1 percentage point improvements in model performance.
-  - Represent tangible contributions to AI model efficacy.
+### DeltaOne Performance Rewards
+- **1 DeltaOne = 1% model improvement** (e.g., accuracy increase from 80% → 81%)
+- Tokens minted to reward data suppliers for verified performance gains
+- Performance verified through MegaAI benchmarking system
+- Creates inflationary pressure when models improve
 
-- **Bonding Curve**:
-  - Determines token pricing based on supply and demand dynamics.
-  - Encourages early participation and reflects the value of contributions.
+### CRR Bonding Curve AMM
+- **Buy tokens** with USDC at deterministic bonding curve price
+- **Sell tokens** for USDC (enabled after 7-day launch period)
+- **No liquidity providers needed** - always-available liquidity
+- Price formula: `P = R / (w × S)` where R=reserves, S=supply, w=CRR
+- [Learn more about the AMM →](/tokenomics/amm-overview)
 
-- **Token Burning**:
-  - Tokens are burned when users access models, creating a deflationary mechanism.
+### Seven-Day Launch Period
+- Every new model starts with **buy-only period** (Days 0-6)
+- Selling enabled on Day 7
+- Prevents manipulation and enables fair price discovery
+- [Launch period details →](/tokenomics/launch-period)
 
-- **Auctions**:
-  - Regular auctions facilitate fair pricing for model access.
+### API Fee Flow
+- **20% of API fees** → deposited to AMM USDC reserve (increases price)
+- **80% of API fees** → infrastructure costs
+- Fee deposits increase reserves without minting tokens
+- Creates value accrual for token holders from model usage
+- [API fee mechanics →](/tokenomics/api-fee-flow)
 
-Explore the detailed mechanics and participate in the ecosystem through the subsequent sections.
+### Token Burning
+- Tokens burned when users access models (pay-per-use, subscriptions)
+- Creates deflationary pressure from usage
+- Reduces circulating supply over time
+
+## How to Participate
+
+| Role | How to Get Tokens | How to Benefit |
+|------|------------------|----------------|
+| **Data Supplier** | Earn DeltaOne rewards for improving models | Sell rewards on AMM or hold for appreciation |
+| **Investor** | Buy tokens on AMM during or after launch | API fees increase reserve → price increases |
+| **Model User** | Buy tokens to access model APIs | Use tokens to access AI model inference |
+
+## Next Steps
+
+- [AMM Overview](/tokenomics/amm-overview) - How the bonding curve works
+- [Bonding Curve Formulas](/tokenomics/bonding-curve) - Mathematical details
+- [Launch Period Guide](/tokenomics/launch-period) - Seven-day bonding round
+- [API Fee Flow](/tokenomics/api-fee-flow) - How revenue increases token value
+- [Investor Guide](/guides/investor-guide) - Complete investment playbook
