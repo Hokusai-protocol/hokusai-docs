@@ -4,7 +4,21 @@ sidebar_position: 2
 
 # Buying Tokens Guide
 
-This guide provides step-by-step instructions for buying Hokusai model tokens using the bonding curve AMM. Whether you're participating in a launch period or buying existing tokens, this guide covers everything you need to know.
+:::caution RISK WARNING
+
+**Buying model tokens is highly risky and speculative. You may lose 100% of your investment.**
+
+Before proceeding:
+- ✅ Read the [Investor Guide](/guides/investor-guide) including full risk disclosures
+- ✅ Verify contract addresses independently (do NOT trust unverified sources)
+- ✅ Only invest funds you can afford to lose completely
+- ✅ Understand that Hokusai Protocol does NOT endorse any specific tokens
+
+**This is a technical guide only, not investment advice.**
+
+:::
+
+This guide provides step-by-step instructions for buying Hokusai model tokens using the bonding curve AMM. Whether you're participating in a launch period or buying existing tokens, this guide covers the technical process.
 
 ## Prerequisites
 

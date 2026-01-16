@@ -6,6 +6,10 @@ keywords: [launch period, bonding round, buy-only period, token launch, price di
 
 # Seven-Day Launch Period
 
+:::warning LAUNCH PERIOD RISKS
+Participating in token launches is **extremely high risk**. During the buy-only period, you **cannot sell** for 7 days. Token prices can decline significantly when selling is enabled on Day 7. Only participate if you understand and accept these risks. This is **not investment advice** - see [Investor Guide](/guides/investor-guide) for full disclosures.
+:::
+
 Every new Hokusai model token begins with a **seven-day bonding round** where buying is enabled but selling is disabled. This launch period establishes initial price discovery, prevents manipulation, and allows early supporters to accumulate positions before full trading begins.
 
 ## Overview

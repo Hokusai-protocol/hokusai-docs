@@ -6,7 +6,21 @@ keywords: [investor guide, investment strategy, token investment, due diligence,
 
 # Investor Guide
 
-This guide helps investors understand how to evaluate, participate in, and profit from Hokusai model token launches. Whether you're an early-stage investor looking for high-growth opportunities or a conservative investor seeking AI-backed assets, this guide covers strategies and best practices.
+:::danger INVESTMENT DISCLAIMER
+
+**This documentation is for informational purposes only and does not constitute investment advice, financial advice, trading advice, or any other sort of advice.**
+
+- **No Endorsement**: Hokusai Protocol does NOT endorse investment in any specific model tokens. Each token represents an independent project with unique risks.
+- **High Risk**: Token investments are **highly speculative and risky**. You can lose **100% of your invested funds**. Never invest more than you can afford to lose.
+- **Do Your Own Research**: Nothing in this documentation should be taken for granted. **You must independently verify all claims, contract addresses, team credentials, and technical details** before investing.
+- **No Guarantees**: Past performance does not guarantee future results. API revenue, model performance, and token prices can change dramatically.
+- **Regulatory Risk**: Token regulations vary by jurisdiction. Ensure compliance with your local laws before participating.
+
+**BY PROCEEDING, YOU ACKNOWLEDGE THAT YOU UNDERSTAND THESE RISKS AND ACCEPT FULL RESPONSIBILITY FOR YOUR INVESTMENT DECISIONS.**
+
+:::
+
+This guide helps investors understand how to evaluate Hokusai model tokens and the associated risks. Whether you're researching your first token or evaluating multiple projects, this guide covers due diligence, risk assessment, and informed decision-making.
 
 ## Who is This Guide For?
 

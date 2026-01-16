@@ -4,6 +4,20 @@ sidebar_position: 3
 
 # Selling Tokens Guide
 
+:::caution RISK WARNING
+
+**Token sales may result in significant losses. Market conditions can change rapidly.**
+
+Before selling:
+- ✅ Verify current market price and liquidity
+- ✅ Understand slippage and price impact
+- ✅ Check for any selling restrictions or lock-up periods
+- ✅ Be aware of tax implications in your jurisdiction
+
+**This is a technical guide only, not financial advice. Consult professionals for tax and legal guidance.**
+
+:::
+
 This guide provides step-by-step instructions for selling Hokusai model tokens on the bonding curve AMM. Learn how to check if selling is enabled, get quotes, set slippage protection, and execute sales.
 
 ## Important Prerequisites

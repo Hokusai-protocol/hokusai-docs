@@ -4,7 +4,18 @@ title: Tokenomics Overview
 sidebar_label: Overview
 ---
 
-Hokusai's tokenomics are designed to align incentives across data suppliers, model developers, and investors. Each model has dedicated tokens that can be traded on an automated market maker (AMM) using a Constant Reserve Ratio (CRR) bonding curve. API revenue flows into the USDC reserve pool, increasing token backing and price.
+:::caution IMPORTANT NOTICE
+**This documentation is for educational and informational purposes only.**
+
+- Hokusai Protocol does **NOT endorse** investment in any specific model tokens
+- Token trading is **highly risky** - you may lose 100% of invested funds
+- **Always verify** contract addresses, team credentials, and claims independently
+- Nothing here constitutes financial, investment, or legal advice
+
+See [Investor Guide](/guides/investor-guide) for complete risk disclosures before participating.
+:::
+
+Hokusai's tokenomics are designed to align incentives across data suppliers, model developers, and token holders. Each model has dedicated tokens that can be traded on an automated market maker (AMM) using a Constant Reserve Ratio (CRR) bonding curve. API revenue flows into the USDC reserve pool, increasing token backing and price.
 
 ## Key Components
 

@@ -6,6 +6,10 @@ keywords: [AMM, bonding curve, CRR, constant reserve ratio, automated market mak
 
 # Automated Market Maker (AMM) Overview
 
+:::info INFORMATIONAL ONLY
+This documentation explains the technical mechanics of the Hokusai AMM system. **It is not investment advice.** Trading tokens involves significant risk of loss. See the [Investor Guide](/guides/investor-guide) for complete risk disclosures.
+:::
+
 The Hokusai AMM is a **Constant Reserve Ratio (CRR) bonding curve** that enables continuous buying and selling of model tokens using USDC. Each model has its own dedicated AMM pool, providing predictable pricing and always-available liquidity.
 
 ## What is the Hokusai AMM?
