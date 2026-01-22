@@ -181,26 +181,30 @@ Market Cap: 0.55 × 1,000,000 = 550,000 USDC (+10%)
 
 ### Allocation Breakdown
 
+The `UsageFeeRouter` contract splits API usage fees between two destinations:
+
 **Standard Fee Split**:
 
 ```
 100% API Revenue ($1,000 daily)
 ├── 80% to Infrastructure ($800)
-│   └── Covers compute, hosting, and operational costs
+│   └── Covers compute, hosting, and operational costs (AWS, servers, etc.)
 └── 20% to AMM Reserve ($200)
-    └── Increases token backing and price
+    └── Increases token backing and price (no new tokens minted)
 ```
 
-**Key Point**: The 20% flowing to the AMM reserve directly increases token value by raising the USDC backing without minting new tokens.
+**Key Point**: This is the ONLY automated fee routing in the system. The 20% flowing to the AMM reserve directly increases token value by raising the USDC backing without minting new tokens. There are no staking fees, governance fees, or other automated fee mechanisms beyond this two-way split.
 
 ### Fee Distribution Contract
+
+The `UsageFeeRouter` performs a simple two-way split:
 
 ```solidity
 contract UsageFeeRouter {
     uint256 public constant PRECISION = 10000;
 
-    uint256 public ammAllocation = 2000;          // 20%
-    uint256 public infrastructureAllocation = 8000; // 80%
+    uint256 public ammAllocation = 2000;          // 20% to AMM reserve
+    uint256 public infrastructureAllocation = 8000; // 80% to infrastructure
 
     function distributeFees(
         bytes32 modelId,
@@ -210,16 +214,25 @@ contract UsageFeeRouter {
         uint256 toAMM = (totalAmount * ammAllocation) / PRECISION;
         uint256 toInfrastructure = (totalAmount * infrastructureAllocation) / PRECISION;
 
-        // Deposit to AMM reserve
+        // Deposit to AMM reserve (increases token price)
         _depositToAMM(modelId, toAMM);
 
-        // Send to infrastructure fund
+        // Send to infrastructure fund (covers operational costs)
         usdc.transfer(infrastructureFund, toInfrastructure);
 
         emit FeesDistributed(modelId, toAMM, toInfrastructure);
     }
 }
 ```
+
+**What this contract does:**
+- Routes 20% of API fees to the AMM reserve to increase token backing
+- Routes 80% of API fees to cover direct infrastructure costs (compute, hosting, bandwidth)
+
+**What this contract does NOT do:**
+- Does NOT distribute fees to stakers (no staking mechanism exists)
+- Does NOT distribute fees for governance (separate mechanism)
+- Does NOT create multiple fee streams beyond these two destinations
 
 ## Revenue Examples
 

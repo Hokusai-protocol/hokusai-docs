@@ -252,21 +252,23 @@ Learn more: [API Fee Flow](/tokenomics/api-fee-flow)
 
 ## Fee Structure
 
-The AMM charges two types of fees:
+The system has two separate fee mechanisms - don't confuse them:
 
-### Trade Fees
+### 1. AMM Trading Fees (when buying/selling tokens on AMM)
+
+**Trade Fees:**
 - **Default**: 0.25% per trade
 - **Maximum**: 10% (governance-controlled)
-- **Applied to**: Both buys and sells
-- **Purpose**: Protocol sustainability
+- **Applied to**: Both buys and sells on the AMM
+- **Purpose**: AMM sustainability
 
-### Protocol Fees
+**Protocol Fees:**
 - **Default**: 5% of trade fees
 - **Maximum**: 50% of trade fees (governance-controlled)
-- **Applied to**: Portion of trade fees
-- **Purpose**: Treasury funding, governance, staking rewards
+- **Applied to**: Portion of trade fees only
+- **Purpose**: Treasury funding, future governance incentives
 
-**Example Trade**:
+**Example AMM Trade**:
 ```
 Buy: 1,000 USDC
 Trade Fee (0.25%): 2.50 USDC
@@ -274,6 +276,14 @@ Protocol Fee (5% of 2.50): 0.125 USDC
 Net Deposited to Reserve: 997.50 USDC
 Tokens Received: ~1,985 (calculated from buy formula)
 ```
+
+### 2. API Usage Fees (when using model API)
+
+Separate from AMM trading fees, routed by `UsageFeeRouter`:
+- **20% to AMM Reserve**: Increases token backing, raises price
+- **80% to Infrastructure**: Covers compute, hosting, bandwidth
+
+See [API Fee Flow](/tokenomics/api-fee-flow) for complete details.
 
 ## Security Features
 

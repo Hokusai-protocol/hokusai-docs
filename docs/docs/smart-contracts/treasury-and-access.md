@@ -16,9 +16,16 @@ The HokusaiAMM contract implements a **Constant Reserve Ratio (CRR)** bonding cu
 - **Purpose**: Fair price discovery and prevent manipulation
 
 ### Fee Structure
+
+**AMM Trading Fees** (when buying/selling tokens on the AMM):
 - **Trade fee**: 0.25% default (max 10%, governance-controlled)
 - **Protocol fee**: 5% of trade fee (max 50%, governance-controlled)
-- **API fees**: 20% flows to reserve, 80% to infrastructure
+- These fees are deducted from AMM trades
+
+**API Usage Fees** (when using the model API):
+- **20% to AMM Reserve**: Increases token backing and price
+- **80% to Infrastructure**: Covers operational costs (compute, hosting, bandwidth)
+- Routed by `UsageFeeRouter` contract
 
 ### Key Features
 - **Slippage protection**: minTokens/minUSDC parameters
@@ -40,15 +47,28 @@ Deploys new AMM contracts for each model token.
 
 ## UsageFeeRouter
 
-Routes API usage fees to correct destinations.
+Routes API usage fees between two destinations only.
 
-### Fee Distribution
-- **20% to AMM Reserve**: Increases token backing and price
-- **80% to Infrastructure**: Covers operational costs
+### Two-Way Fee Distribution
+
+The `UsageFeeRouter` performs a simple split of API usage fees:
+
+1. **20% to AMM Reserve**:
+   - Increases USDC backing of tokens
+   - Raises token price without minting
+   - Benefits all token holders proportionally
+
+2. **80% to Infrastructure Fund**:
+   - Covers direct operational costs
+   - Pays for compute resources (GPU/CPU)
+   - Covers hosting and bandwidth
+   - Maintains API infrastructure
+
+**Important**: This is the ONLY automated fee routing. There are no additional fee streams for staking, governance rewards, or other purposes from API usage fees.
 
 ### Functions
-- `distributeFees()`: Splits fees and routes to destinations
-- `depositToAMM()`: Deposits fees to specific model's AMM reserve
+- `distributeFees()`: Splits fees between AMM reserve (20%) and infrastructure (80%)
+- `depositToAMM()`: Deposits the 20% portion to specific model's AMM reserve
 - Access controlled by `FEE_COLLECTOR_ROLE`
 
 ## ModelAccessController
