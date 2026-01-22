@@ -471,23 +471,23 @@ Speculative: < 0.5% of crypto portfolio
 
 ## Advanced Strategies
 
-### Yield Farming (Future)
+### How Token Holders Benefit
 
-Once protocol matures, potential yield opportunities:
+**Current Revenue Mechanism:**
+- API fee deposits increase AMM reserve → token price rises
+- Hold tokens and benefit from reserve growth (passive appreciation)
+- Sell tokens on AMM after launch period (Day 7+)
+- No active participation or staking required
 
-```
-Staking Model Tokens:
-- Lock tokens for period
-- Earn portion of protocol fees
-- Receive governance rights
-- APY: TBD
+**What Does NOT Exist:**
+- No staking mechanisms
+- No yield farming
+- No liquidity mining
+- No dividend distributions
+- No governance token rewards
 
-Providing Liquidity:
-- Pair model tokens with USDC
-- Earn trading fees
-- Get LP token rewards
-- Risk: Impermanent loss
-```
+**External Opportunities:**
+If tokens get listed on external DEXs, you could provide liquidity there, but this would be entirely separate from the Hokusai protocol and comes with impermanent loss risk.
 
 ### Arbitrage
 

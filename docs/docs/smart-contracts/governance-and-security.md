@@ -2,8 +2,8 @@
 
 ## HOK Token
 - Meta-token for ecosystem governance
-- Used for staking, rewards, and DAO proposals
-- Earns protocol fees and supports LPs
+- Used for DAO proposals and protocol governance
+- Details of HOK token mechanisms to be determined
 
 ## Privacy: ZKOracle / AttestationBridge
 - Supports proof-based evaluation without raw data exposure

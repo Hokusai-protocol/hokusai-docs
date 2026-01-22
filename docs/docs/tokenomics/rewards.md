@@ -1,8 +1,14 @@
 # Reward Mechanisms
 
-This document details how rewards are distributed in the Hokusai ecosystem for contributions and participation.
+This document details how contributors earn tokens and how token holders benefit from API usage.
 
-## Reward Types
+## Token Distribution & Benefits
+
+There are two ways value flows to participants:
+1. **Performance Rewards**: Contributors earn new tokens for improving models
+2. **API Fee Benefits**: Token holders benefit from price appreciation as API fees increase reserves
+
+**Important**: There are no staking rewards, dividend distributions, or governance token rewards currently available.
 
 ### 1. Performance Rewards
 Rewards for improving model performance:
@@ -37,22 +43,31 @@ Tokens per DeltaOne: 100 tokens
 Reward = 7 DeltaOnes * 100 tokens = 700 tokens
 ```
 
-### 2. API Fee Rewards
-API usage generates fees that flow to token holders:
+### 2. API Fee Benefits
+API usage generates fees that benefit token holders indirectly:
 
-#### Fee Distribution
+#### Fee Distribution via UsageFeeRouter
+The `UsageFeeRouter` contract splits API usage fees two ways:
 - **20% to AMM Reserve**: Deposited as USDC, increases token price
-- **80% to Infrastructure**: Covers operational costs
+- **80% to Infrastructure**: Covers operational costs (compute, hosting, bandwidth)
+
+**Note**: These are NOT direct rewards to token holders. Instead, the 20% increases the USDC reserve backing all tokens, which raises the token price proportionally.
 
 #### How It Benefits Token Holders
 When API fees are deposited to the AMM reserve:
 ```
-Reserve increases: R → R + Fees
+Reserve increases: R → R + Fees (20% of API fees)
 Supply unchanged: S → S
 Price increases: P = R / (w × S)
 ```
 
-**Example**: $10,000 API fees → $2,000 to reserve → ~same % price increase for all holders
+**Example**: $10,000 API fees → $2,000 to reserve (20%) → ~2% price increase for all holders
+
+**This is NOT**:
+- Staking rewards
+- Dividend payments
+- Direct distributions to holders
+- Governance token rewards
 
 ## Distribution Mechanisms
 

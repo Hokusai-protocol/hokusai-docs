@@ -407,9 +407,9 @@ console.log(`Wait ${hoursRemaining.toFixed(1)} more hours`);
 
 **Solution**:
 ```
-1. Check actual balance
-2. Reduce sell amount
-3. Account for any locked/staked tokens
+1. Check actual balance in your wallet
+2. Reduce sell amount to match available balance
+3. Ensure tokens are not pending in another transaction
 ```
 
 ### Issue 5: Transaction Pending Too Long

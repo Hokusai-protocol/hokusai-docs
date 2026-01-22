@@ -97,16 +97,17 @@ function burnForAccess(uint256 amount) external {
    - Volume-based burn rate adjustments
    - Special rates for enterprise users
 
-### Voluntary Burning
-1. **Treasury Integration**
-   - Burn tokens for USDC through bonding curve
-   - Price impact based on burn amount
+### Voluntary Burning via AMM
+1. **Selling on AMM (After Day 7)**
+   - Sell tokens for USDC through bonding curve
+   - Price impact based on sell amount
    - Slippage protection
+   - Tokens are burned when sold
 
-2. **Governance Incentives**
-   - Burn tokens for governance power
-   - Staking rewards for burned tokens
-   - Protocol fee distribution
+2. **Direct Burning (Future)**
+   - Voluntary token burning mechanisms may be added
+   - Potential governance incentives for burning
+   - Not currently implemented
 
 ## System Interaction
 
