@@ -4,11 +4,10 @@ sidebar_position: 1
 
 # Licensing Overview
 
-Hokusai allows a wide variety of licensing types. Selecting the appropriate license depends on your specific use case and requirements. Each license type offers different benefits and restrictions. 
+Hokusai offers three distinct licensing models for AI models, each designed to serve different use cases and governance structures. Selecting the appropriate license depends on your specific requirements for access, ownership, and control.
 
 ## Available License Types
 
-- [Open Source License](./open-source)
-- [Commercial License](./commercial)
-- [Co-op License](./co-op)
-- [Proprietary License](./proprietary)
+- [Decentralized License](./decentralized) - Community-owned models with token governance
+- [Open Source License](./open-source) - Publicly accessible models with open weights
+- [Proprietary License](./proprietary) - Private models with restricted access

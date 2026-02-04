@@ -75,9 +75,8 @@ const sidebars = {
       label: 'Licensing',
       items: [
         'licensing/overview',
+        'licensing/decentralized',
         'licensing/open-source',
-        'licensing/commercial',
-        'licensing/co-op',
         'licensing/proprietary',
       ],
     },
