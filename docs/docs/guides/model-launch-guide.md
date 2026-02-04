@@ -98,7 +98,7 @@ With a decentralized license:
 - Token holders participate in governance decisions
 - Automatic reward distribution for improvements
 
-[Learn more about Decentralized Licensing →](../licensing/co-op)
+[Learn more about Decentralized Licensing →](../licensing/decentralized)
 
 ### Proprietary License
 **Best for:** Models with restricted access or enterprise use cases
