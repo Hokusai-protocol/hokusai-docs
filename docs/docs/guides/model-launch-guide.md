@@ -8,9 +8,9 @@ sidebar_label: Model Launch Guide
 
 ## Introduction
 
-Launching a model on the Hokusai Protocol enables you to monetize your AI model while contributing to the decentralized AI ecosystem. This guide walks you through the entire process, from initial model creation to deployment on the blockchain.
+Launching a model on Hokusai enables you to monetize your AI model while contributing to the decentralized AI ecosystem. This guide walks you through the entire process, from initial model creation to deployment on the blockchain.
 
-The Hokusai Protocol provides a unique tokenization mechanism that aligns incentives between model builders and data contributors. When you launch a model, you create a digital asset that can be traded, governed, and improved by the community.
+The protocol implements a unique tokenization mechanism that aligns incentives between model builders and data contributors. When you launch a model, you create a digital asset that can be traded, governed, and improved by the community.
 
 ### Key Benefits
 

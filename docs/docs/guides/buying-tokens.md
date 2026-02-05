@@ -12,7 +12,7 @@ Before proceeding:
 - ✅ Read the [Investor Guide](/guides/investor-guide) including full risk disclosures
 - ✅ Verify contract addresses independently (do NOT trust unverified sources)
 - ✅ Only invest funds you can afford to lose completely
-- ✅ Understand that Hokusai Protocol does NOT endorse any specific tokens
+- ✅ Understand there is no endorsement of any specific tokens
 
 **This is a technical guide only, not investment advice.**
 

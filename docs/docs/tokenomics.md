@@ -7,7 +7,7 @@ sidebar_label: Overview
 :::caution IMPORTANT NOTICE
 **This documentation is for educational and informational purposes only.**
 
-- Hokusai Protocol does **NOT endorse** investment in any specific model tokens
+- There is **no endorsement** of investment in any specific model tokens
 - Token trading is **highly risky** - you may lose 100% of invested funds
 - **Always verify** contract addresses, team credentials, and claims independently
 - Nothing here constitutes financial, investment, or legal advice

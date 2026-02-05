@@ -23,7 +23,7 @@ module.exports = {
         blog: {
           showReadingTime: true,
           blogTitle: 'Hokusai Blog',
-          blogDescription: 'Updates and insights from the Hokusai Protocol team',
+          blogDescription: 'Updates and insights about the Hokusai protocol',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -144,7 +144,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} Hokusai Protocol. All rights reserved.`,
+      copyright: `© ${new Date().getFullYear()} Hokusai Protocol Contributors`,
     },
     colorMode: {
       defaultMode: 'dark',

@@ -10,7 +10,7 @@ keywords: [investor guide, investment strategy, token investment, due diligence,
 
 **This documentation is for informational purposes only and does not constitute investment advice, financial advice, trading advice, or any other sort of advice.**
 
-- **No Endorsement**: Hokusai Protocol does NOT endorse investment in any specific model tokens. Each token represents an independent project with unique risks.
+- **No Endorsement**: There is no endorsement of investment in any specific model tokens. Each token represents an independent project with unique risks.
 - **High Risk**: Token investments are **highly speculative and risky**. You can lose **100% of your invested funds**. Never invest more than you can afford to lose.
 - **Do Your Own Research**: Nothing in this documentation should be taken for granted. **You must independently verify all claims, contract addresses, team credentials, and technical details** before investing.
 - **No Guarantees**: Past performance does not guarantee future results. API revenue, model performance, and token prices can change dramatically.
