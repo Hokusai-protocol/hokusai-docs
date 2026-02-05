@@ -1,10 +1,13 @@
 module.exports = {
   title: 'Hokusai Docs',
+  tagline: 'Fair Incentives for Training Smarter AI',
   url: 'https://docs.hokus.ai',
   baseUrl: '/',
   organizationName: 'Hokusai-protocol',
   projectName: 'hokusai-docs',
   favicon: 'img/favicon.ico',
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
 
   // Add presets configuration
   presets: [
@@ -15,9 +18,12 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           showLastUpdateTime: true,
+          breadcrumbs: true,
         },
         blog: {
           showReadingTime: true,
+          blogTitle: 'Hokusai Blog',
+          blogDescription: 'Updates and insights from the Hokusai Protocol team',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -28,20 +34,31 @@ module.exports = {
 
   stylesheets: [
     {
-      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
       type: 'text/css',
     },
   ],
 
   themeConfig: {
+    // Announcement bar for important updates
+    // announcementBar: {
+    //   id: 'mainnet_launch',
+    //   content: '🚀 Hokusai Protocol is now live on mainnet! <a href="https://hokus.ai">Learn more</a>',
+    //   backgroundColor: '#2851e3',
+    //   textColor: '#ffffff',
+    //   isCloseable: true,
+    // },
+
     navbar: {
       title: 'Hokusai',
+      hideOnScroll: false,
       logo: {
-        alt: 'Hokusai',
+        alt: 'Hokusai Protocol',
         src: 'img/logo.svg',
         srcDark: 'img/logo.svg',
+        width: 40,
+        height: 40,
       },
-      style: 'primary',
       items: [
         {
           to: '/',
@@ -50,18 +67,18 @@ module.exports = {
           activeBaseRegex: '^/$|^/(?!api|community|blog)',
         },
         {
-          to: '/api-reference',
-          label: 'API',
+          to: '/tokenomics',
+          label: 'Tokenomics',
           position: 'left',
         },
         {
-          to: '/community',
-          label: 'Community',
+          to: '/smart-contracts/smart-contracts-overview',
+          label: 'Smart Contracts',
           position: 'left',
         },
         {
-          to: '/blog',
-          label: 'Blog',
+          to: '/guides/investor-guide',
+          label: 'Guides',
           position: 'left',
         },
         {
@@ -69,49 +86,79 @@ module.exports = {
           position: 'right',
         },
         {
-          href: 'https://hokus.ai',
-          label: 'Back to Main Site',
+          href: 'https://github.com/Hokusai-protocol',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
+        },
+        {
+          href: 'https://hokus.ai',
+          label: 'Main Site →',
+          position: 'right',
+          className: 'navbar__link--main-site',
         },
       ],
     },
     footer: {
       style: 'dark',
+      logo: {
+        alt: 'Hokusai Protocol',
+        src: 'img/logo.svg',
+        width: 40,
+        height: 40,
+        href: 'https://hokus.ai',
+      },
       links: [
+        {
+          title: 'Protocol',
+          items: [
+            { label: 'How It Works', href: 'https://hokus.ai/how-it-works' },
+            { label: 'Explore Models', href: 'https://hokus.ai/explore-models' },
+            { label: 'Data Suppliers', href: 'https://hokus.ai/data-suppliers' },
+            { label: 'AI Developers', href: 'https://hokus.ai/ai-developers' },
+          ],
+        },
         {
           title: 'Documentation',
           items: [
             { label: 'Getting Started', to: '/' },
-            { label: 'API Reference', to: '/api-reference' },
             { label: 'Tokenomics', to: '/tokenomics' },
+            { label: 'Smart Contracts', to: '/smart-contracts/smart-contracts-overview' },
+            { label: 'API Reference', to: '/api-reference' },
           ],
         },
         {
           title: 'Community',
           items: [
-            { label: 'GitHub', href: 'https://github.com/Hokusai-protocol/hokusai-docs/' },
+            { label: 'GitHub', href: 'https://github.com/Hokusai-protocol' },
             { label: 'Discord', href: 'https://discord.gg/hokusai' },
             { label: 'Twitter', href: 'https://twitter.com/hokusai_protocol' },
           ],
         },
         {
-          title: 'More',
+          title: 'Resources',
           items: [
-            { label: 'Blog', to: '/blog' },
+            { label: 'Investor Guide', to: '/guides/investor-guide' },
+            { label: 'Contact Us', href: 'https://hokus.ai/contact' },
             { label: 'Main Site', href: 'https://hokus.ai' },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Hokusai Protocol. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} Hokusai Protocol. All rights reserved.`,
     },
     colorMode: {
-      defaultMode: 'light',
+      defaultMode: 'dark',
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
     tableOfContents: {
       minHeadingLevel: 2,
-      maxHeadingLevel: 5,
+      maxHeadingLevel: 4,
+    },
+    prism: {
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.dracula,
+      additionalLanguages: ['solidity', 'bash', 'json', 'typescript'],
     },
   },
 
