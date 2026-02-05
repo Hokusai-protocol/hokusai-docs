@@ -46,7 +46,7 @@ Hokusai model tokens represent a new asset class backed by AI model performance 
 **Value Drivers**:
 1. **Performance Improvements** → More tokens minted → Rewards distributed
 2. **API Usage** → Revenue generated → Fees deposited to reserves → Price increases
-3. **Supply Dynamics** → Burning for access → Deflationary pressure
+3. **Supply Dynamics** → Controlled minting balanced by AMM mechanics
 4. **Network Effects** → More usage → More fees → Higher token value
 
 **Comparison to Traditional Assets**:

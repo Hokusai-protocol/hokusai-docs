@@ -45,10 +45,10 @@ Hokusai's tokenomics are designed to align incentives across data suppliers, mod
 - Creates value accrual for token holders from model usage
 - [API fee mechanics →](/tokenomics/api-fee-flow)
 
-### Token Burning
-- Tokens burned when users access models (pay-per-use, subscriptions)
-- Creates deflationary pressure from usage
-- Reduces circulating supply over time
+### Token Supply Dynamics
+- Tokens can be sold back to the AMM for USDC (after launch period)
+- Selling tokens on the AMM burns them and returns USDC from reserves
+- Supply adjusts based on minting (rewards) and selling (burns)
 
 ## How to Participate
 

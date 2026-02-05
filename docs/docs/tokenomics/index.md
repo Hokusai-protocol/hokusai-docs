@@ -12,9 +12,9 @@ Hokusai's tokenomics are designed to create a sustainable ecosystem that rewards
 
 ### 1. Token Value
 - Performance-based minting
-- Usage-driven burning
+- API fee revenue to AMM reserves
 - Supply dynamics
-- Price discovery
+- Price discovery via CRR bonding curve
 
 [Learn more about Token Value](/tokenomics/token-value)
 
@@ -43,9 +43,9 @@ Hokusai's tokenomics are designed to create a sustainable ecosystem that rewards
 - Value accrual
 
 ### Economic Model
-- Deflationary design
-- Usage-based burning
+- API fees increase token reserve backing
 - Performance-based minting
+- CRR bonding curve pricing
 - Governance controls
 
 ## Next Steps

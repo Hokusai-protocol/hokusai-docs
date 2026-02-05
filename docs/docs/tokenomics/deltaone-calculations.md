@@ -14,7 +14,7 @@ A DeltaOne token represents a unit of model improvement, where:
 The total supply of DeltaOne tokens is determined by:
 - Base supply from model registration
 - Performance improvement rewards
-- Burn rate from model access
+- AMM trading activity (sells reduce supply)
 - Treasury operations
 
 ## Mathematical Formulas
@@ -42,16 +42,18 @@ Where:
 - Improvement_Bonus = Additional reward for significant improvements
 - Time_Factor = Time-based multiplier (0.8 - 1.2)
 
-### 3. Burn Rate Calculation
+### 3. API Fee Impact on Price
 
 ```
-Burn_Rate = Base_Rate * (1 + Usage_Intensity) * Model_Complexity
+Fee_To_Reserve = API_Fee * Reserve_Rate
+Price_Impact = Fee_To_Reserve / (CRR * Supply)
 ```
 
 Where:
-- Base_Rate = Standard burn rate
-- Usage_Intensity = Usage frequency multiplier
-- Model_Complexity = Model resource factor
+- API_Fee = Fee collected from model usage
+- Reserve_Rate = Percentage to AMM reserve (20%)
+- CRR = Constant Reserve Ratio
+- Supply = Current token supply
 
 ## Calculation Examples
 
@@ -78,14 +80,16 @@ Reward = 100 * (1 + 0.2) * 1.1
        = 132 DeltaOnes
 ```
 
-### 3. Burn Calculation
+### 3. Fee Impact Calculation
 ```
-Base_Rate = 0.1 DeltaOnes
-Usage_Intensity = 1.5
-Model_Complexity = 1.2
+API_Fee = $100 USDC
+Reserve_Rate = 0.20 (20%)
+CRR = 0.20
+Supply = 1,000,000 tokens
 
-Burn_Rate = 0.1 * (1 + 1.5) * 1.2
-          = 0.3 DeltaOnes per use
+Fee_To_Reserve = 100 * 0.20 = $20 USDC
+Price_Impact = 20 / (0.20 * 1,000,000)
+            = 0.0001 USDC per token increase
 ```
 
 ## Implementation Details
@@ -113,19 +117,19 @@ function calculateReward(
 ### Oracle Integration
 - Performance score verification
 - Improvement attestation
-- Burn rate monitoring
+- Fee flow monitoring
 
 ## Monitoring and Analytics
 
 ### Key Metrics
 - Total DeltaOne supply
 - Improvement distribution
-- Burn rate trends
+- API fee accumulation
 - Reward efficiency
 
 ### Health Indicators
 - Improvement rate
-- Burn velocity
+- Reserve growth rate
 - Reward distribution
 - Model performance
 

@@ -1,6 +1,6 @@
 # Token Flow
 
-This document details the complete lifecycle of model tokens in the Hokusai ecosystem, from minting to burning.
+This document details the complete lifecycle of model tokens in the Hokusai ecosystem, from minting through trading on the AMM.
 
 ## Token Lifecycle
 
@@ -9,9 +9,9 @@ This document details the complete lifecycle of model tokens in the Hokusai ecos
     ↓
 [Token Distribution]
     ↓
-[Token Usage]
+[Token Usage: Hold / Trade / API Revenue]
     ↓
-[Burning Triggers]
+[AMM Trading or Fee Revenue]
 ```
 
 ## Minting Triggers
@@ -56,45 +56,37 @@ function mintInitialSupply(
 - Maximum initial supply
 - Vesting schedule for team tokens
 
-## Burning Triggers
+## Supply Reduction (AMM Selling)
 
-### 1. Model Access
+### Selling Tokens on AMM
+After the 7-day launch period, token holders can sell tokens back to the AMM for USDC:
+
 ```solidity
-function burnForAccess(
-    bytes32 modelId,
-    uint256 amount
-) external {
-    require(balanceOf(msg.sender) >= amount, "Insufficient balance");
-    _burn(msg.sender, amount);
-    emit AccessGranted(modelId, msg.sender, amount);
-}
-```
-
-#### Access Burn Rates
-- Standard rate: 1 token per request
-- Batch discount: Up to 25% off
-- Enterprise rates: Custom agreements
-
-### 2. Treasury Redemption
-```solidity
-function burnForUSDC(
+function sell(
     uint256 tokenAmount,
-    uint256 minUSDC
-) external {
+    uint256 minUSDC,
+    uint256 deadline
+) external nonReentrant returns (uint256 usdcAmount) {
+    require(!isBuyOnlyPeriod(), "Selling not yet enabled");
     require(tokenAmount > 0, "Amount must be > 0");
-    uint256 usdcAmount = calculateUSDCAmount(tokenAmount);
+
+    usdcAmount = getSellQuote(tokenAmount);
     require(usdcAmount >= minUSDC, "Slippage too high");
+    require(block.timestamp <= deadline, "Transaction expired");
+
     _burn(msg.sender, tokenAmount);
+    reserve -= usdcAmount;
     usdc.transfer(msg.sender, usdcAmount);
-    emit TokensRedeemed(msg.sender, tokenAmount, usdcAmount);
+
+    emit TokensSold(msg.sender, tokenAmount, usdcAmount);
 }
 ```
 
-#### Redemption Rules
-- Price impact calculation
-- Slippage protection
-- Minimum redemption amount
-- Cooldown periods
+#### Selling Mechanics
+- Tokens are burned when sold
+- USDC returned from reserve
+- Price determined by CRR bonding curve
+- Slippage and deadline protection
 
 ## Token Distribution
 
@@ -156,13 +148,15 @@ function distributeTreasuryRewards(
            ↓
     [Token Holders]
       ↙    ↓    ↘
-  [Hold] [Trade] [Use]
-     ↓      ↓      ↓
-  [AMM] ← → ←  [Burn for Access]
-     ↓           ↓
- [USDC] ← → [API Usage]
-           ↓
-   [API Fees] → [depositFees()] → [Reserve ↑] → [Price ↑]
+  [Hold] [Trade] [Benefit from API Revenue]
+     ↓      ↓              ↓
+   [AMM Buy/Sell]    [Model Usage]
+         ↓                 ↓
+     [USDC]          [API Fees Collected]
+                           ↓
+              [UsageFeeRouter: 20% to Reserve]
+                           ↓
+              [Reserve ↑] → [Price ↑]
 ```
 
 ### Minting Flow
@@ -179,16 +173,13 @@ function distributeTreasuryRewards(
                     [Supply Increases]
 ```
 
-### Burning Flow
+### Supply Reduction Flow
 
 ```
-Path A: Model Access
-[User] → [Burn Tokens] → [Access Model] → [Supply Decreases]
-
-Path B: AMM Selling (Post-Launch)
-[Holder] → [sell() on AMM] → [Burn Tokens] → [Receive USDC]
+AMM Selling (Day 7+):
+[Holder] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
-                            [Supply Decreases]
+                [Reserve ↓, Supply ↓, Price Adjusts]
 ```
 
 ### Fee Deposit Flow (No Minting)
@@ -214,9 +205,9 @@ Buying:
                     [Reserve ↑, Supply ↑, Price ↑]
 
 Selling (Day 7+):
-[Holder] → [Approve Tokens] → [sell() on AMM] → [Burn Tokens] → [Receive USDC]
+[Holder] → [Approve Tokens] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
-                    [Reserve ↓, Supply ↓, Price ↓]
+                    [Reserve ↓, Supply ↓, Price Adjusts]
 ```
 
 ## Monitoring and Analytics
@@ -248,7 +239,7 @@ Selling (Day 7+):
 
 ### 5. Supply Dynamics
 - Minting events (performance rewards)
-- Burning events (model access + AMM sells)
+- Burning events (AMM sells)
 - Net supply change (minting - burning)
 - Dilution rate vs reserve growth
 

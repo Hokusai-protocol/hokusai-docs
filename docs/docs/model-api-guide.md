@@ -152,7 +152,7 @@ try:
     print(f"Prediction: {result.prediction}")
     print(f"Confidence: {result.confidence}")
     print(f"Latency: {result.latency}ms")
-    print(f"Tokens Burned: {result.tokens_burned}")
+    print(f"Fee Charged: {result.fee_charged} USDC")
     
     # Handle attribution for open source models
     if model.license_type == 'Open Source':
@@ -202,7 +202,7 @@ print(f"Total Requests: {stats.total_requests}")
 print(f"Successful Requests: {stats.successful_requests}")
 print(f"Failed Requests: {stats.failed_requests}")
 print(f"Average Latency: {stats.avg_latency}ms")
-print(f"Total Tokens Burned: {stats.tokens_burned}")
+print(f"Total Fees Paid: {stats.fees_paid} USDC")
 ```
 
 #### Cost Estimation

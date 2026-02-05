@@ -15,7 +15,7 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
     ↓
 [API Usage] → fees deposited to AMM reserve → price increases
     ↓
-[ModelAccessController] → enforces burn for usage
+[ModelAccessController] → enforces access control and fee collection
 ```
 
 ## Key Components
@@ -32,7 +32,7 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
 - **UsageFeeRouter**: Routes API fees to AMM reserves (20%) and infrastructure (80%)
 
 ### Access Control
-- **ModelAccessController**: Enforces token burning for model usage
+- **ModelAccessController**: Enforces access control and fee collection for model usage
 - **Governance**: Token holder voting on parameters
 
 ## Key Features

@@ -370,7 +370,7 @@ Learn more: [Investor Guide](/guides/investor-guide)
 ### Formulas
 - **Bonding Curve Math**: [Detailed Formulas](/tokenomics/bonding-curve)
 - **Price Impact**: [DeltaOne Calculations](/tokenomics/deltaone-calculations)
-- **Token Flow**: [Mint/Burn Mechanics](/smart-contracts/token-flow)
+- **Token Flow**: [Token Lifecycle](/smart-contracts/token-flow)
 
 ## FAQ
 

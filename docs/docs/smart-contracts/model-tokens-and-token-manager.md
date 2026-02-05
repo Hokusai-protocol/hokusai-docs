@@ -3,7 +3,8 @@
 ## HokusaiToken (ERC-20)
 Each model has its own token:
 - Minted only when performance improves
-- Burned to access the model
+- Tradeable on the CRR bonding curve AMM
+- API usage fees flow to the token's USDC reserve
 - Controller is the `TokenManager`
 
 ## TokenManager

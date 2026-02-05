@@ -42,9 +42,9 @@ The DeltaOne system is the foundation of Hokusai's reward mechanism:
 
 2. **Token Distribution**
    - Performance-based minting
-   - Usage-based burning
+   - AMM trading (buy/sell with USDC)
    - Governance controls
-   - Economic incentives
+   - API fee revenue to reserves
 
 ### Model Access
 Understanding how to access and use Hokusai models:

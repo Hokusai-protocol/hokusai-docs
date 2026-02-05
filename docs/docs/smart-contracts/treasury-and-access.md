@@ -73,22 +73,22 @@ The `UsageFeeRouter` performs a simple split of API usage fees:
 
 ## ModelAccessController
 
-Enforces token burning for model API access.
+Controls model API access and fee collection.
 
 ### Access Mechanisms
-- **Direct burn**: Users burn tokens to access model
-- **Subscription model**: Monthly burn for unlimited access
-- **Pay-per-use**: Burn tokens per API call
-- **Enterprise tiers**: Custom burn rates
+- **Pay-per-use**: USDC fees per API call (routed via UsageFeeRouter)
+- **Subscription model**: Monthly USDC fee for unlimited access
+- **Enterprise tiers**: Custom pricing agreements
+- **Token holder perks**: Potential fee discounts for token holders (model-specific)
 
-### Burn Rates
-- **Standard**: 1 token per request (example)
-- **Batch discount**: Up to 25% off for bulk usage
-- **Enterprise**: Custom negotiated rates
+### Fee Routing
+- All API usage fees are collected in USDC
+- Fees routed through UsageFeeRouter (20% to AMM reserve, 80% to infrastructure)
+- No direct token burning required for API access
 
 ## Next Steps
 
 - [HokusaiAMM Contract](/smart-contracts/hokusai-amm) - Complete technical reference
-- [Token Flow](/smart-contracts/token-flow) - Mint/burn mechanics
+- [Token Flow](/smart-contracts/token-flow) - Mint and trade mechanics
 - [API Fee Flow](/tokenomics/api-fee-flow) - How fees increase value
 - [AMM Overview](/tokenomics/amm-overview) - High-level bonding curve explanation

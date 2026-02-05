@@ -13,7 +13,7 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
     ↓
 [API Usage] → fees deposited to AMM reserve → price increases
     ↓
-[ModelAccessController] → enforces burn for usage
+[ModelAccessController] → enforces API access control
 ```
 
 ## Key Components
@@ -22,7 +22,7 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
 - **TokenManager**: Issues tokens, handles mint/burn logic, distributes rewards
 - **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
 - **UsageFeeRouter**: Routes API fees (20% to AMM reserve, 80% to infrastructure)
-- **ModelAccessController**: Enforces token burning for model access
+- **ModelAccessController**: Enforces access control and fee collection for model usage
 
 ## ERC20 Implementation
 
@@ -76,38 +76,33 @@ struct MintingConfig {
 - Controlled through governance parameters
 - Regular supply audits
 
-## Burn Mechanisms
+## Token Supply Mechanisms
 
-### Access-Based Burning
-1. **Model Usage**
-   - Tokens burned to access model
-   - Burn rate determined by governance
-   - Automatic burning on access
+### API Fee Value Accrual
+Model usage generates API fees that flow to the token's USDC reserve:
 
-```solidity
-function burnForAccess(uint256 amount) external {
-    require(balanceOf(msg.sender) >= amount, "Insufficient balance");
-    _burn(msg.sender, amount);
-    emit AccessGranted(msg.sender, amount);
-}
-```
+1. **Fee Collection**
+   - API usage fees collected in USDC
+   - 20% routed to AMM reserve via UsageFeeRouter
+   - 80% covers infrastructure costs
+   - Reserve increase raises token price (P = R / (w × S))
 
-2. **Batch Processing**
-   - Discounted burn rates for bulk access
-   - Volume-based burn rate adjustments
-   - Special rates for enterprise users
+2. **Price Impact**
+   - Fees deposited without minting tokens
+   - Reserve grows, supply stays constant
+   - Direct price appreciation for token holders
 
-### Voluntary Burning via AMM
+### Token Burning via AMM
 1. **Selling on AMM (After Day 7)**
    - Sell tokens for USDC through bonding curve
    - Price impact based on sell amount
    - Slippage protection
-   - Tokens are burned when sold
+   - Tokens are burned when sold, USDC returned
 
-2. **Direct Burning (Future)**
-   - Voluntary token burning mechanisms may be added
-   - Potential governance incentives for burning
-   - Not currently implemented
+2. **Supply Reduction**
+   - Selling reduces both supply and reserves
+   - Price adjusts according to CRR formula
+   - Always-available liquidity
 
 ## System Interaction
 
@@ -129,9 +124,9 @@ function burnForAccess(uint256 amount) external {
    - Registry updates model status
 
 2. **Access Control**
-   - AccessController verifies balance
-   - Tokens burned on access
-   - Treasury handles liquidity
+   - AccessController verifies access rights
+   - API fees collected and routed
+   - AMM provides liquidity
 
 3. **Governance**
    - Parameter updates

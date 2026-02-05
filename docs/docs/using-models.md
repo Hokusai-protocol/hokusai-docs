@@ -49,8 +49,7 @@ Consider these factors when choosing a model:
    - Use case fit
 
 3. **Cost Considerations**
-   - Usage-based pricing
-   - Token burn rates
+   - Usage-based pricing (USDC fees)
    - Volume discounts
    - Budget constraints
 
@@ -190,7 +189,7 @@ usage = client.get_usage_stats(
 )
 
 print(f"Total Requests: {usage.total_requests}")
-print(f"Token Burned: {usage.tokens_burned}")
+print(f"Total Fees Paid: {usage.fees_paid} USDC")
 print(f"Average Latency: {usage.avg_latency}ms")
 ```
 
@@ -204,8 +203,8 @@ cost_estimate = client.estimate_cost(
     input_size='medium'
 )
 
-print(f"Estimated Token Burn: {cost_estimate.tokens}")
-print(f"Estimated Cost: {cost_estimate.cost}")
+print(f"Estimated Cost: {cost_estimate.cost} USDC")
+print(f"Cost Per Request: {cost_estimate.cost_per_request} USDC")
 ```
 
 ## Best Practices
@@ -245,9 +244,8 @@ Common issues and solutions:
    - Check network latency
 
 3. **Cost Issues**
-   - Monitor token balance
-   - Check burn rates
-   - Verify pricing
+   - Monitor USDC balance for API payments
+   - Verify pricing tiers
    - Review usage patterns
 
 ## Next Steps

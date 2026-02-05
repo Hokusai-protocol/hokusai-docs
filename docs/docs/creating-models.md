@@ -11,7 +11,7 @@ This guide explains how to create and register models in the Hokusai ecosystem, 
 
 ## Overview
 
-Hokusai allows model developers to register their AI models and earn rewards when the models are improved through data contributions. Each model has its own ERC-20 token that is minted when performance improves and burned for model access. This guide covers both the web-based creation process and programmatic integration using our SDK.
+Hokusai allows model developers to register their AI models and earn rewards when the models are improved through data contributions. Each model has its own ERC-20 token that is minted when performance improves and can be traded on a dedicated AMM. API usage fees flow to the token's USDC reserve, increasing its price. This guide covers both the web-based creation process and programmatic integration using our SDK.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ Set up your model's token parameters:
    - Minimum improvement threshold
 
 2. **Access Control**
-   - Burn rate for model access
+   - API fee rates
    - Usage restrictions
    - Access tiers
 
@@ -230,7 +230,7 @@ token_settings = client.configure_token_manager(
     model_id=registration.model_id,
     settings={
         'mint_threshold': 0.01,  # Minimum improvement to mint tokens
-        'burn_rate': 0.1,  # Tokens burned per model access
+        'api_fee_rate': 0.001,  # USDC fee per API call
         'reward_distribution': {
             'contributors': 0.7,  # 70% to data contributors
             'model_owner': 0.3    # 30% to model owner
@@ -308,7 +308,7 @@ print(f"DeltaOne Verifier: {contract_verification.verifier}")
    - Set appropriate thresholds
    - Configure fair rewards
    - Monitor token supply
-   - Track burn rates
+   - Track API fee rates
    - Manage liquidity
 
 ## Troubleshooting
@@ -332,7 +332,7 @@ Common issues and solutions:
 3. **Token Problems**
    - Check token creation
    - Verify minting rights
-   - Monitor burn events
+   - Monitor fee deposits to reserve
    - Review distribution
    - Check balances
 
