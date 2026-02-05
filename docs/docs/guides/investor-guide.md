@@ -53,12 +53,12 @@ Hokusai model tokens represent a new asset class backed by AI model performance 
 
 | Feature | Hokusai Model Token | Startup Equity | Public Stock | Cryptocurrency |
 |---------|---------------------|----------------|--------------|----------------|
-| **Backing** | USDC reserves + API revenue | Company assets | Company assets | Protocol value |
-| **Cash Flow** | 20% API fees → reserves | Variable | Dividends | Variable |
+| **Backing** | USDC reserves + API profit share | Company assets | Company assets | Protocol value |
+| **Cash Flow** | Profit share (0-50%) → reserves | Variable | Dividends | Variable |
 | **Liquidity** | Always (AMM) | Illiquid | Market hours | 24/7 |
 | **Exit Strategy** | Sell anytime (after Day 7) | Acquisition/IPO | Sell anytime | Sell anytime |
 | **Price Discovery** | CRR formula | Valuation rounds | Market price | Market price |
-| **Governance** | Token votes | Shareholder votes | Shareholder votes | Variable |
+| **Governance** | Token votes (incl. infra rate) | Shareholder votes | Shareholder votes | Variable |
 | **Volatility** | High | Very High | Medium | Very High |
 | **Minimum Investment** | Any amount | $10k-100k+ | Any amount | Any amount |
 

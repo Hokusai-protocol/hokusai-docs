@@ -24,18 +24,28 @@ graph LR
 - Hokusai models are uniquely focused on maximizing their performance against their defined performance benchmark. This is likely a touch myopic, but is designed for simplicity and clarity.
 
 ### 2. Usage Demand
-Token value is directly tied to model usage through the AMM reserve mechanism. As models are used, gross profit from API fees flows into the token's USDC reserve, increasing the token price via the bonding curve:
+Token value is directly tied to model usage through the AMM reserve mechanism. As models are used, **profit after infrastructure costs** flows into the token's USDC reserve, increasing the token price via the bonding curve:
 
 #### Value Accrual Flow
 
 ```
-API Usage → Fees Collected → 20% to AMM Reserve → Price Increase
+API Usage → Fees Collected → UsageFeeRouter
+                                    ↓
+                    ┌───────────────┴───────────────┐
+                    ↓                               ↓
+        Infrastructure Accrual              Profit Residual
+          (50-100%, per model)             (0-50%, to AMM)
+                    ↓                               ↓
+        InfrastructureReserve             Reserve Increases
+          (pays providers)                   → Price ↑
 ```
 
-When API fees are deposited into the reserve:
+When profit share is deposited into the reserve:
 - Reserve (R) increases
 - Supply (S) stays constant
 - Spot price P = R / (w × S) increases proportionally
+
+**Key distinction**: Token holders benefit from **genuine profit** (revenue minus infrastructure costs), not gross revenue. Each model's `infrastructureAccrualBps` parameter determines the split.
 
 See [API Fee Flow](/tokenomics/api-fee-flow) for complete details.
 
@@ -67,15 +77,16 @@ Where:
 
 The CRR model ensures that API fees deposited into the reserve directly increase the token price, since supply remains constant while reserves grow.
 
-### Price Impact of API Fees
+### Price Impact of Profit Share
 
-When API fees are deposited (without minting new tokens):
+When profit share is deposited (without minting new tokens):
 
 | Event | Reserve | Supply | Price Impact |
 |-------|---------|--------|--------------|
-| $10,000 fee deposit | +$10,000 | No change | +10% (if reserve was $100k) |
+| $50,000 API revenue (80% infra, 20% profit) | +$10,000 | No change | +10% (if reserve was $100k) |
+| $50,000 API revenue (60% infra, 40% profit) | +$20,000 | No change | +20% (if reserve was $100k) |
 
-This mechanism creates a direct link between model usage and token value.
+Models with lower infrastructure costs (governance-optimized accrual rate) provide higher profit share to token holders. This mechanism creates a direct link between model usage, operational efficiency, and token value.
 
 ## Value Metrics
 

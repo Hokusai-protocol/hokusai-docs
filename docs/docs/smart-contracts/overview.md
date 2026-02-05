@@ -11,17 +11,20 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
     ↓
 [HokusaiAMM] → CRR bonding curve for buy/sell with USDC
     ↓
-[API Usage] → fees deposited to AMM reserve → price increases
+[API Usage] → UsageFeeRouter → InfrastructureReserve (costs)
+                           → AMM reserve (profit) → price increases
     ↓
 [ModelAccessController] → enforces API access control
 ```
 
 ## Key Components
 - **Model-specific Hokusai tokens**: Earned via performance gains
+- **HokusaiParams**: Per-model parameters including infrastructure accrual rate
 - **DeltaOneVerifier**: Validates performance improvement off-chain
 - **TokenManager**: Issues tokens, handles mint/burn logic, distributes rewards
 - **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
-- **UsageFeeRouter**: Routes API fees (20% to AMM reserve, 80% to infrastructure)
+- **UsageFeeRouter**: Routes API fees based on per-model infrastructure accrual rate
+- **InfrastructureReserve**: Holds accrued infrastructure costs, pays providers
 - **ModelAccessController**: Enforces access control and fee collection for model usage
 
 ## ERC20 Implementation
@@ -79,18 +82,19 @@ struct MintingConfig {
 ## Token Supply Mechanisms
 
 ### API Fee Value Accrual
-Model usage generates API fees that flow to the token's USDC reserve:
+Model usage generates API fees that are split between infrastructure costs and profit:
 
-1. **Fee Collection**
+1. **Fee Collection & Routing**
    - API usage fees collected in USDC
-   - 20% routed to AMM reserve via UsageFeeRouter
-   - 80% covers infrastructure costs
+   - Each model has configurable `infrastructureAccrualBps` (50-100%) in HokusaiParams
+   - Infrastructure portion → `InfrastructureReserve` contract (for provider payments)
+   - Profit portion (residual) → AMM reserve via UsageFeeRouter
    - Reserve increase raises token price (P = R / (w × S))
 
 2. **Price Impact**
-   - Fees deposited without minting tokens
+   - Profit share deposited without minting tokens
    - Reserve grows, supply stays constant
-   - Direct price appreciation for token holders
+   - Token holders benefit from genuine profit after infrastructure costs
 
 ### Token Burning via AMM
 1. **Selling on AMM (After Day 7)**

@@ -39,10 +39,11 @@ Hokusai's tokenomics are designed to align incentives across data suppliers, mod
 - [Launch period details →](/tokenomics/launch-period)
 
 ### API Fee Flow
-- **20% of API fees** → deposited to AMM USDC reserve (increases price)
-- **80% of API fees** → infrastructure costs
-- Fee deposits increase reserves without minting tokens
-- Creates value accrual for token holders from model usage
+- **Per-model configurable split** via `infrastructureAccrualBps` in HokusaiParams
+- **Infrastructure accrual (50-100%)** → sent to `InfrastructureReserve` contract
+- **Profit share (0-50%, residual)** → deposited to AMM USDC reserve (increases price)
+- Profit deposits increase reserves without minting tokens
+- Token holders benefit from genuine profit after infrastructure costs
 - [API fee mechanics →](/tokenomics/api-fee-flow)
 
 ### Token Supply Dynamics

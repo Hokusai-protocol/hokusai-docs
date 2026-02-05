@@ -1,14 +1,23 @@
 ---
 sidebar_position: 5
-description: How API usage fees flow to the AMM reserve pool. 20% of fees deposited to USDC reserves increases token price without minting. Complete revenue flow documentation.
-keywords: [API fees, revenue flow, fee distribution, AMM reserve, token value, usage fees, 20%, infrastructure]
+description: How API usage fees are split between infrastructure costs and profit share. Per-model configurable rates ensure infrastructure is funded while residual profit flows to token holders via the AMM reserve.
+keywords: [API fees, revenue flow, fee distribution, AMM reserve, token value, infrastructure accrual, profit share, InfrastructureReserve]
 ---
 
 # API Fee Flow
 
-One of the most important value accrual mechanisms in the Hokusai protocol is how API usage fees flow into the AMM's USDC reserve pool. This document explains how model usage generates revenue, how fees are collected and deposited, and how this increases token value for holders.
+One of the most important value accrual mechanisms in the Hokusai protocol is how API usage fees are split between **infrastructure costs** and **profit share**. This document explains how model usage generates revenue, how fees are routed through the `UsageFeeRouter`, and how the profit portion increases token value for holders.
 
 ## Overview
+
+### The Two-Reserve System
+
+The Hokusai protocol uses a **two-reserve system** to ensure infrastructure providers are paid first, with residual profit flowing to token holders:
+
+1. **Infrastructure Reserve** — Accrues expected costs, pays providers (AWS, Together AI, etc.)
+2. **Profit Share** — Residual after infrastructure → AMM pool (benefits token holders via price appreciation)
+
+**Key Principle**: Infrastructure is an **obligation** (must be paid first), profit is **residual** (what remains).
 
 ### The Value Loop
 
@@ -19,21 +28,25 @@ graph TB
     C --> D[Fees Accumulated Off-Chain]
     D --> E[Convert to USDC if needed]
     E --> F[UsageFeeRouter Contract]
-    F --> G[20% to AMM Reserve]
-    F --> H[80% to Infrastructure Costs]
-    G --> J[depositFees on HokusaiAMM]
-    J --> K[Reserve Balance Increases]
-    K --> L[Spot Price Increases]
-    L --> M[Token Holders Benefit]
+    F --> G{Read Model's infraAccrualBps}
+    G --> H[Infrastructure Accrual]
+    G --> I[Profit Residual]
+    H --> J[InfrastructureReserve Contract]
+    I --> K[depositFees on HokusaiAMM]
+    K --> L[Reserve Balance Increases]
+    L --> M[Spot Price Increases]
+    M --> N[Token Holders Benefit]
+    J --> O[Manual Payout to Providers]
 
     style A fill:#e1f5ff
     style C fill:#ffe1e1
-    style G fill:#e1ffe1
-    style K fill:#ffe1f5
-    style M fill:#f5ffe1
+    style H fill:#fff3e1
+    style I fill:#e1ffe1
+    style L fill:#ffe1f5
+    style N fill:#f5ffe1
 ```
 
-**Key Insight**: API fees increase the USDC reserve **without minting new tokens**, which raises the spot price proportionally.
+**Key Insight**: Profit share increases the USDC reserve **without minting new tokens**, which raises the spot price proportionally. Infrastructure costs are tracked separately and paid from accrued reserves.
 
 ## How It Works
 
@@ -90,14 +103,15 @@ await db.accumulateFees(usage);
 
 Fees are accumulated over a period (e.g., hourly, daily):
 
-**Example Daily Accumulation**:
+**Example Daily Accumulation** (model with 80% infrastructure accrual):
 ```
 Model X - Day 15:
 - API Requests: 10,000
 - Total Revenue: $150 USDC
+- Infrastructure Accrual Rate: 80% (from HokusaiParams)
 - Fee Distribution:
-  - 80% to Infrastructure: $120
-  - 20% to AMM Reserve: $30
+  - Infrastructure Reserve: $120 (80%)
+  - AMM Profit Share: $30 (20% residual)
 ```
 
 ### Step 4: USDC Acquisition
@@ -115,28 +129,33 @@ if (feeToken !== USDC) {
 const totalUSDC = 120; // $120 USDC
 ```
 
-### Step 5: Deposit to AMM
+### Step 5: Route Through UsageFeeRouter
 
-The `UsageFeeRouter` contract deposits USDC to the AMM:
+The `UsageFeeRouter` contract reads the model's parameters and routes fees:
 
 ```solidity
 // UsageFeeRouter.sol
-function depositFeesToAMM(bytes32 modelId, uint256 amount) external onlyAuthorized {
-    // Get AMM for this model
-    address ammAddress = registry.getAMM(modelId);
-    HokusaiAMM amm = HokusaiAMM(ammAddress);
+function depositFee(string memory modelId, uint256 amount) external onlyAuthorized {
+    // Get model's infrastructure accrual rate from HokusaiParams
+    IHokusaiParams params = getParamsForModel(modelId);
+    uint16 infraBps = params.infrastructureAccrualBps(); // e.g., 8000 = 80%
 
-    // Approve USDC
-    usdc.approve(ammAddress, amount);
+    // Calculate split
+    uint256 infrastructureAmount = (amount * infraBps) / 10000;  // 80%
+    uint256 profitAmount = amount - infrastructureAmount;         // 20%
 
-    // Deposit fees (no token minting!)
-    amm.depositFees(amount);
+    // Route to infrastructure reserve
+    infraReserve.deposit(modelId, infrastructureAmount);
 
-    emit FeesDeposited(modelId, amount, block.timestamp);
+    // Route profit to AMM
+    HokusaiAMM amm = HokusaiAMM(registry.getAMM(modelId));
+    amm.depositFees(profitAmount);
+
+    emit FeeDeposited(modelId, amount, infrastructureAmount, profitAmount);
 }
 ```
 
-**HokusaiAMM receives the deposit**:
+**HokusaiAMM receives the profit share**:
 ```solidity
 // HokusaiAMM.sol
 function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant {
@@ -155,9 +174,9 @@ function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant {
 
 ### Step 6: Price Impact
 
-The spot price automatically increases:
+The spot price automatically increases from the **profit share** deposit:
 
-**Before Fee Deposit**:
+**Before Profit Deposit**:
 ```
 Reserve (R): 100,000 USDC
 Supply (S): 1,000,000 tokens
@@ -166,8 +185,12 @@ Spot Price: P = 100,000 / (0.2 × 1,000,000) = 0.5 USDC/token
 Market Cap: 0.5 × 1,000,000 = 500,000 USDC
 ```
 
-**After Depositing $10,000 USDC**:
+**After $50,000 API Revenue** (with 80% infrastructure accrual):
 ```
+Total Revenue: $50,000
+Infrastructure Accrual: $40,000 (80%) → InfrastructureReserve
+Profit Share: $10,000 (20%) → AMM Reserve
+
 Reserve (R): 110,000 USDC (+10%)
 Supply (S): 1,000,000 tokens (unchanged)
 CRR (w): 0.2 (20%)
@@ -175,149 +198,229 @@ Spot Price: P = 110,000 / (0.2 × 1,000,000) = 0.55 USDC/token (+10%)
 Market Cap: 0.55 × 1,000,000 = 550,000 USDC (+10%)
 ```
 
-**Key Takeaway**: A 10% reserve increase = 10% price increase (when supply is constant).
+**Key Takeaway**: A 10% reserve increase from profit = 10% price increase. Token holders benefit from **genuine profit** after infrastructure costs are accounted for.
 
 ## Fee Distribution
 
-### Allocation Breakdown
+### Per-Model Configuration
 
-The `UsageFeeRouter` contract splits API usage fees between two destinations:
+Each model has its own `infrastructureAccrualBps` parameter stored in `HokusaiParams`, which determines what percentage of API revenue accrues for infrastructure costs. The profit share is calculated as the **residual** (what remains after infrastructure).
 
-**Standard Fee Split**:
+**Configurable Range:**
+- **Infrastructure Accrual**: 50% to 100% (5000-10000 bps)
+- **Profit Share**: 0% to 50% (calculated as `10000 - infrastructureAccrualBps`)
 
+### Example Fee Splits
+
+**High-Cost Model** (GPU-intensive inference):
 ```
 100% API Revenue ($1,000 daily)
-├── 80% to Infrastructure ($800)
-│   └── Covers compute, hosting, and operational costs (AWS, servers, etc.)
-└── 20% to AMM Reserve ($200)
-    └── Increases token backing and price (no new tokens minted)
+├── 90% to Infrastructure Reserve ($900)
+│   └── Accrues for compute costs (high GPU usage)
+└── 10% to AMM Reserve ($100)
+    └── Residual profit increases token backing
 ```
 
-**Key Point**: This is the ONLY automated fee routing in the system. The 20% flowing to the AMM reserve directly increases token value by raising the USDC backing without minting new tokens. There are no staking fees, governance fees, or other automated fee mechanisms beyond this two-way split.
+**Efficient Model** (optimized inference):
+```
+100% API Revenue ($1,000 daily)
+├── 60% to Infrastructure Reserve ($600)
+│   └── Accrues for compute costs (lower requirements)
+└── 40% to AMM Reserve ($400)
+    └── Larger profit share benefits token holders
+```
 
-### Fee Distribution Contract
+**Key Point**: This is the ONLY automated fee routing in the system. The profit share flowing to the AMM reserve directly increases token value by raising the USDC backing without minting new tokens. Infrastructure costs are paid separately from accrued reserves.
 
-The `UsageFeeRouter` performs a simple two-way split:
+### Fee Distribution Contracts
+
+The system uses two contracts for fee management:
+
+#### UsageFeeRouter
+
+Routes API fees based on each model's governance-controlled parameters:
 
 ```solidity
 contract UsageFeeRouter {
-    uint256 public constant PRECISION = 10000;
+    InfrastructureReserve public immutable infraReserve;
 
-    uint256 public ammAllocation = 2000;          // 20% to AMM reserve
-    uint256 public infrastructureAllocation = 8000; // 80% to infrastructure
+    function depositFee(string memory modelId, uint256 amount)
+        external
+        nonReentrant
+        onlyRole(FEE_DEPOSITOR_ROLE)
+    {
+        // Get model's infrastructure accrual rate from HokusaiParams
+        address paramsAddress = pool.tokenManager().getParamsAddress(modelId);
+        IHokusaiParams params = IHokusaiParams(paramsAddress);
+        uint16 infraBps = params.infrastructureAccrualBps();
 
-    function distributeFees(
-        bytes32 modelId,
-        uint256 totalAmount
-    ) external onlyCollector {
-        // Calculate splits
-        uint256 toAMM = (totalAmount * ammAllocation) / PRECISION;
-        uint256 toInfrastructure = (totalAmount * infrastructureAllocation) / PRECISION;
+        // Calculate split: infrastructure first, profit is residual
+        uint256 infrastructureAmount = (amount * infraBps) / 10000;
+        uint256 profitAmount = amount - infrastructureAmount;
 
-        // Deposit to AMM reserve (increases token price)
-        _depositToAMM(modelId, toAMM);
+        // Route to infrastructure reserve (accrues for provider payments)
+        if (infrastructureAmount > 0) {
+            infraReserve.deposit(modelId, infrastructureAmount);
+        }
 
-        // Send to infrastructure fund (covers operational costs)
-        usdc.transfer(infrastructureFund, toInfrastructure);
+        // Route profit to AMM (increases reserve, benefits token holders)
+        if (profitAmount > 0) {
+            pool.depositFees(profitAmount);
+        }
 
-        emit FeesDistributed(modelId, toAMM, toInfrastructure);
+        emit FeeDeposited(modelId, amount, infrastructureAmount, profitAmount);
     }
 }
 ```
 
-**What this contract does:**
-- Routes 20% of API fees to the AMM reserve to increase token backing
-- Routes 80% of API fees to cover direct infrastructure costs (compute, hosting, bandwidth)
+#### InfrastructureReserve
 
-**What this contract does NOT do:**
-- Does NOT distribute fees to stakers (no staking mechanism exists)
-- Does NOT distribute fees for governance (separate mechanism)
-- Does NOT create multiple fee streams beyond these two destinations
+Holds accrued infrastructure costs and tracks per-model accounting:
+
+```solidity
+contract InfrastructureReserve {
+    // Per-model accounting
+    mapping(string => uint256) public accrued;  // Total accrued for infrastructure
+    mapping(string => uint256) public paid;     // Total paid to providers
+
+    function deposit(string memory modelId, uint256 amount)
+        external
+        onlyRole(DEPOSITOR_ROLE)
+    {
+        accrued[modelId] += amount;
+        emit InfrastructureDeposited(modelId, amount, accrued[modelId]);
+    }
+
+    function payInfrastructureCost(
+        string memory modelId,
+        address payee,
+        uint256 amount,
+        bytes32 invoiceHash,
+        string memory memo
+    ) external onlyRole(PAYER_ROLE) {
+        require(amount <= accrued[modelId], "Exceeds accrued balance");
+
+        accrued[modelId] -= amount;
+        paid[modelId] += amount;
+
+        reserveToken.transfer(payee, amount);
+
+        emit InfrastructureCostPaid(modelId, payee, amount, invoiceHash, memo);
+    }
+}
+```
+
+**What these contracts do:**
+- Route infrastructure accrual to a dedicated reserve contract
+- Route profit residual to the AMM reserve to increase token backing
+- Track per-model infrastructure costs and payments with invoice references
+- Enable transparent on-chain accounting for all provider payments
+
+**What these contracts do NOT do:**
+- Do NOT distribute fees to stakers (no staking mechanism exists)
+- Do NOT distribute fees for governance (separate mechanism)
+- Do NOT automatically pay providers (manual payouts with invoice tracking)
 
 ## Revenue Examples
 
 ### Example 1: Growing Model
+
+**Model Configuration**: 70% infrastructure accrual, 30% profit share
 
 **Model Performance**:
 ```
 Month 1:
 - API Calls: 100,000
 - Revenue: $1,000
-- To Reserve (20%): $200
-- Reserve: $10,000 → $10,200 (+2%)
-- Price: $0.05 → $0.051 (+2%)
+- Infrastructure Accrual (70%): $700 → InfrastructureReserve
+- Profit Share (30%): $300 → AMM Reserve
+- Reserve: $10,000 → $10,300 (+3%)
+- Price: $0.05 → $0.0515 (+3%)
 
 Month 2:
 - API Calls: 250,000 (+150%)
 - Revenue: $2,500 (+150%)
-- To Reserve (20%): $500
-- Reserve: $10,200 → $10,700 (+4.9%)
-- Price: $0.051 → $0.0535 (+4.9%)
+- Infrastructure Accrual (70%): $1,750
+- Profit Share (30%): $750
+- Reserve: $10,300 → $11,050 (+7.3%)
+- Price: $0.0515 → $0.0553 (+7.3%)
 
 Month 3:
 - API Calls: 500,000 (+100%)
 - Revenue: $5,000 (+100%)
-- To Reserve (20%): $1,000
-- Reserve: $10,700 → $11,700 (+9.3%)
-- Price: $0.0535 → $0.0585 (+9.3%)
+- Infrastructure Accrual (70%): $3,500
+- Profit Share (30%): $1,500
+- Reserve: $11,050 → $12,550 (+13.6%)
+- Price: $0.0553 → $0.0628 (+13.6%)
 
 Quarter Total:
 - Revenue: $8,500
-- To Reserve: $1,700 (20%)
-- Reserve Growth: +17%
-- Price Growth: +17%
+- Infrastructure Accrued: $5,950 (70%)
+- Profit to Reserve: $2,550 (30%)
+- Reserve Growth: +25.5%
+- Price Growth: +25.5%
 ```
 
-**Observation**: Consistent API usage drives steady price appreciation.
+**Observation**: Consistent API usage drives steady price appreciation. Infrastructure costs are fully funded from accrued reserves.
 
 ### Example 2: Viral Model
+
+**Model Configuration**: 80% infrastructure accrual, 20% profit share
 
 **Sudden Spike**:
 ```
 Day 1-30: Steady
 - API Calls: 10k/day
 - Revenue: $100/day × 30 days = $3,000
-- To Reserve (20%): $600
+- Infrastructure Accrued (80%): $2,400
+- Profit Share (20%): $600
 - Reserve: $50k → $50.6k (+1.2%)
 
 Day 31: Goes Viral
 - API Calls: 500k (50x spike!)
 - Revenue: $5,000
-- To Reserve (20%): $1,000
+- Infrastructure Accrued (80%): $4,000
+- Profit Share (20%): $1,000
 - Reserve: $50.6k → $51.6k (+2%)
 
 Day 32-60: High Usage
 - API Calls: 100k/day × 29 days = $29,000
-- To Reserve (20%): $5,800
+- Infrastructure Accrued (80%): $23,200
+- Profit Share (20%): $5,800
 - Reserve: $51.6k → $57.4k (+11.2%)
 
 Result:
 - Reserve: $50k → $57.4k (+14.8%)
 - Price: $0.25 → $0.287 (+14.8%)
+- Infrastructure Reserve: $29,600 available for provider payments
 ```
 
-**Observation**: Viral moments can rapidly increase token value.
+**Observation**: Viral moments can rapidly increase token value while ensuring infrastructure costs are covered.
 
-### Example 3: Mature Model
+### Example 3: Mature Model with Governance Optimization
 
-**Steady State**:
+**Governance Adjusts Configuration**: Costs lower than expected, reduce accrual from 80% to 60%
+
+**Steady State** (after governance adjustment):
 ```
 Established Model (Month 12+):
 - API Calls: 1M/month
 - Revenue: $10k/month
-- To Reserve (20%): $2k/month
-- Reserve: $200k → $202k/month (+1%)
-- Price: $1.00 → $1.01/month (+1%)
+- Infrastructure Accrued (60%): $6k/month
+- Profit Share (40%): $4k/month
+- Reserve: $200k → $204k/month (+2%)
+- Price: $1.00 → $1.02/month (+2%)
 
 Annual Projection:
 - Revenue: $120k/year
-- To Reserve: $24k/year (20%)
-- Reserve Growth: +12%
-- Price Growth: +12%
-- APY for holders: ~12% (from fees alone)
+- Infrastructure Accrued: $72k/year (60%)
+- Profit to Reserve: $48k/year (40%)
+- Reserve Growth: +24%
+- Price Growth: +24%
+- APY for holders: ~24% (from profit share alone)
 ```
 
-**Observation**: Mature models provide predictable returns.
+**Observation**: Governance can optimize the split as actual costs become clearer, increasing returns for token holders while maintaining infrastructure funding.
 
 ## Impact on Token Holders
 
@@ -589,21 +692,40 @@ If API usage is zero:
 - Price only affected by minting/burning
 - Token value depends on performance improvements
 
-### Q: Do fees offset minting dilution?
+### Q: Do profit shares offset minting dilution?
 
-Yes! Example:
+Yes! Example (with 70% infrastructure accrual):
 ```
+Revenue: $50,000
+Infrastructure Accrued (70%): $35,000
+Profit Share (30%): $15,000
+
 Minting: +20% supply = -16.7% price
-Fees: +25% reserve = +25% price
-Net: +25% - 16.7% = +8.3% price increase
+Profit Deposit: +15% reserve = +15% price
+Net: +15% - 16.7% = -1.7% (offset most dilution)
 ```
 
-### Q: Can model developers change fee allocation?
+With more efficient models (lower infrastructure costs), profit share increases.
 
-Potentially, depending on governance model:
-- Some models: Developer-controlled
-- Others: Token holder governance
-- Check specific model's governance docs
+### Q: Can the infrastructure accrual rate be changed?
+
+Yes, through governance:
+- Each model has its own `infrastructureAccrualBps` parameter in `HokusaiParams`
+- Governance can adjust between 50% and 100%
+- Lower accrual = higher profit share for token holders
+- Should only be reduced when actual costs are lower than accrued
+
+### Q: How are infrastructure costs actually paid?
+
+Manual payouts with full transparency:
+```
+1. Costs accrue in InfrastructureReserve contract
+2. When AWS/provider invoice arrives:
+   - Admin calls payInfrastructureCost()
+   - Invoice hash recorded on-chain
+   - USDC transferred to provider
+3. All payments visible on-chain for auditing
+```
 
 ### Q: What prevents developers from not depositing fees?
 

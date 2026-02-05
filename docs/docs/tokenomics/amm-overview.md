@@ -279,9 +279,12 @@ Tokens Received: ~1,985 (calculated from buy formula)
 
 ### 2. API Usage Fees (when using model API)
 
-Separate from AMM trading fees, routed by `UsageFeeRouter`:
-- **20% to AMM Reserve**: Increases token backing, raises price
-- **80% to Infrastructure**: Covers compute, hosting, bandwidth
+Separate from AMM trading fees, routed by `UsageFeeRouter` based on per-model parameters:
+
+- **Infrastructure Accrual (50-100%)**: Sent to `InfrastructureReserve` contract, covers compute costs
+- **Profit Share (0-50%, residual)**: Deposited to AMM Reserve, increases token backing and price
+
+Each model has its own `infrastructureAccrualBps` parameter in `HokusaiParams` that determines the split. Governance can adjust this rate as actual costs become clearer. Token holders benefit from genuine profit after infrastructure costs.
 
 See [API Fee Flow](/tokenomics/api-fee-flow) for complete details.
 

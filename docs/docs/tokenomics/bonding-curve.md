@@ -612,8 +612,8 @@ FDV = (R / (w × S_current)) × S_max
 1. **Verify bonding round ended**: `amm.isBuyOnlyPeriod() == false`
 2. **Check sell quote**: `amm.getSellQuote(tokenAmount)`
 3. **Set slippage protection**: `minUSDC` parameter
-4. **Consider fee deposits**: Has reserve grown from API fees?
-5. **Time exits strategically**: After fee deposits = higher prices
+4. **Consider profit share deposits**: Has reserve grown from API profit share?
+5. **Time exits strategically**: After profit deposits = higher prices
 
 ### For Model Developers
 
@@ -621,7 +621,8 @@ FDV = (R / (w × S_current)) × S_max
    - Low w (10-20%): High growth potential, volatile
    - Medium w (20-35%): Balanced growth and stability
    - High w (35-50%): Stable, conservative
-2. **Monitor API fee deposits**: Ensure they flow to reserves
+2. **Monitor profit share deposits**: Ensure profit portion flows to reserves
+3. **Set appropriate infrastructure accrual**: Balance cost coverage with profit share
 3. **Communicate minting events**: Transparency prevents surprises
 4. **Set reasonable trade fees**: 0.25% is market standard
 

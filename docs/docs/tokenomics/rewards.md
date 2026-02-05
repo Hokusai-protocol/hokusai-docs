@@ -47,21 +47,27 @@ Reward = 7 DeltaOnes * 100 tokens = 700 tokens
 API usage generates fees that benefit token holders indirectly:
 
 #### Fee Distribution via UsageFeeRouter
-The `UsageFeeRouter` contract splits API usage fees two ways:
-- **20% to AMM Reserve**: Deposited as USDC, increases token price
-- **80% to Infrastructure**: Covers operational costs (compute, hosting, bandwidth)
+The `UsageFeeRouter` contract routes API usage fees based on each model's governance-controlled parameters:
+- **Infrastructure Accrual (50-100%)**: Sent to `InfrastructureReserve` contract for provider payments
+- **Profit Share (0-50%, residual)**: Deposited to AMM Reserve as USDC, increases token price
 
-**Note**: These are NOT direct rewards to token holders. Instead, the 20% increases the USDC reserve backing all tokens, which raises the token price proportionally.
+Each model has its own `infrastructureAccrualBps` parameter in `HokusaiParams`. Governance can adjust this rate as actual costs become clearer.
+
+**Note**: These are NOT direct rewards to token holders. Instead, the profit share increases the USDC reserve backing all tokens, which raises the token price proportionally.
 
 #### How It Benefits Token Holders
-When API fees are deposited to the AMM reserve:
+When profit share is deposited to the AMM reserve:
 ```
-Reserve increases: R → R + Fees (20% of API fees)
+Example: $10,000 API revenue with 70% infrastructure accrual
+Infrastructure Accrual: $7,000 → InfrastructureReserve (for AWS/compute costs)
+Profit Share: $3,000 → AMM Reserve
+
+Reserve increases: R → R + $3,000
 Supply unchanged: S → S
 Price increases: P = R / (w × S)
 ```
 
-**Example**: $10,000 API fees → $2,000 to reserve (20%) → ~2% price increase for all holders
+**Example**: $10,000 API fees with 70% infra accrual → $3,000 profit share to reserve → ~3% price increase for all holders
 
 **This is NOT**:
 - Staking rewards
@@ -93,25 +99,30 @@ Key components:
 - `ModelRegistry`: Tracks model performance and token addresses
 
 ### 2. API Fee Distribution
-The UsageFeeRouter contract routes API usage fees:
+The UsageFeeRouter contract routes API usage fees based on per-model parameters:
 
 ```solidity
-function distributeFees(
-    bytes32 modelId,
+function depositFee(
+    string memory modelId,
     uint256 totalFees
-) external onlyFeeCollector {
-    uint256 ammAllocation = (totalFees * 2000) / 10000; // 20%
-    uint256 infrastructureAllocation = totalFees - ammAllocation; // 80%
+) external onlyFeeDepositor {
+    // Get model's infrastructure accrual rate from HokusaiParams
+    IHokusaiParams params = getParamsForModel(modelId);
+    uint16 infraBps = params.infrastructureAccrualBps(); // e.g., 7000 = 70%
 
-    // Deposit to AMM reserve (increases token price)
-    HokusaiAMM(ammAddress).depositFees(ammAllocation);
+    // Calculate split
+    uint256 infrastructureAmount = (totalFees * infraBps) / 10000;
+    uint256 profitAmount = totalFees - infrastructureAmount;
 
-    // Send to infrastructure
-    USDC.transfer(infrastructureAddress, infrastructureAllocation);
+    // Send to infrastructure reserve (for provider payments)
+    infraReserve.deposit(modelId, infrastructureAmount);
+
+    // Deposit profit to AMM reserve (increases token price)
+    HokusaiAMM(ammAddress).depositFees(profitAmount);
 }
 ```
 
-**Key Insight**: 20% of API fees increase USDC reserves without minting tokens, creating price appreciation for holders.
+**Key Insight**: The profit share (after infrastructure accrual) increases USDC reserves without minting tokens, creating price appreciation for holders. Models with lower infrastructure costs generate higher profit share.
 
 ## Vesting Schedules
 

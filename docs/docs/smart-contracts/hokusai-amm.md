@@ -207,16 +207,18 @@ event Sell(
 
 ### depositFees()
 
-Deposit API usage fees directly to reserves (no token minting).
+Deposit profit share from API usage fees directly to reserves (no token minting).
 
 ```solidity
 function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant;
 ```
 
 **Parameters**:
-- `amount`: USDC amount to deposit
+- `amount`: USDC amount to deposit (profit share after infrastructure accrual)
 
-**Access**: Only addresses with `FEE_DEPOSITOR_ROLE`
+**Access**: Only addresses with `FEE_DEPOSITOR_ROLE` (typically `UsageFeeRouter`)
+
+**Context**: The `UsageFeeRouter` calculates the profit share based on each model's `infrastructureAccrualBps` parameter. For example, if a model has 80% infrastructure accrual, only 20% of API revenue reaches this function.
 
 **Effect**:
 - Increases reserve (R ↑)
@@ -225,14 +227,18 @@ function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant;
 
 **Example**:
 ```javascript
-// Called by UsageFeeRouter contract
+// Called by UsageFeeRouter contract after splitting fees
+// If $10,000 API revenue with 80% infrastructure accrual:
+// - $8,000 → InfrastructureReserve.deposit()
+// - $2,000 → HokusaiAMM.depositFees() (this function)
+
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 const usdc = await ethers.getContractAt("IERC20", usdcAddress);
 
-// Approve and deposit
-const feeAmount = ethers.parseUnits("5000", 6);
-await usdc.approve(ammAddress, feeAmount);
-await amm.depositFees(feeAmount);
+// Approve and deposit profit share
+const profitAmount = ethers.parseUnits("2000", 6);
+await usdc.approve(ammAddress, profitAmount);
+await amm.depositFees(profitAmount);
 
 // Price increased without minting tokens
 ```
