@@ -17,6 +17,7 @@ const sidebars = {
       label: 'Guides',
       items: [
         'guides/model-launch-guide',
+        'guides/choosing-crr',
         'guides/investor-guide',
         'guides/buying-tokens',
         'guides/selling-tokens',
