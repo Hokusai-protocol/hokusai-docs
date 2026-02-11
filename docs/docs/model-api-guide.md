@@ -15,15 +15,17 @@ The Hokusai Model API provides programmatic access to models in the Hokusai ecos
 
 ## Authentication
 
-### API Keys
+All API requests require authentication using an API key. See the [Authentication documentation](/authentication/overview) for the full guide, including key creation, rotation, and security best practices.
 
-All API requests require authentication using an API key:
+### Quick Setup
 
 ```python
 from hokusai import HokusaiClient
 
 client = HokusaiClient(api_key='your_api_key')
 ```
+
+For detailed instructions on obtaining and managing API keys, see the [Authentication Quickstart](/authentication/quickstart).
 
 ### Wallet Connection
 
