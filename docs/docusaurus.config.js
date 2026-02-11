@@ -82,6 +82,11 @@ module.exports = {
           position: 'left',
         },
         {
+          to: '/authentication/overview',
+          label: 'Authentication',
+          position: 'left',
+        },
+        {
           type: 'search',
           position: 'right',
         },
@@ -158,7 +163,7 @@ module.exports = {
     prism: {
       theme: require('prism-react-renderer').themes.github,
       darkTheme: require('prism-react-renderer').themes.dracula,
-      additionalLanguages: ['solidity', 'bash', 'json', 'typescript'],
+      additionalLanguages: ['solidity', 'bash', 'json', 'typescript', 'python', 'go'],
     },
   },
 

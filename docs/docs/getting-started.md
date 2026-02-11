@@ -235,7 +235,8 @@ Now that you have Hokusai running:
 1. **[Configuration Guide](configuration.md)** - Detailed configuration options
 2. **[Supplying Data](supplying-data.md)** - Learn about data contribution process
 3. **[Architecture Overview](core-workflows/architecture.md)** - Understand the system design
-4. **[API Reference](api-reference.md)** - Integrate with your systems
+4. **[Authentication](/authentication/quickstart)** - Set up API keys for accessing Hokusai services
+5. **[API Reference](api-reference.md)** - Integrate with your systems
 
 ## Getting Help
 

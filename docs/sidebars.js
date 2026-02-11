@@ -47,6 +47,19 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Authentication',
+      items: [
+        'authentication/overview',
+        'authentication/quickstart',
+        'authentication/api-keys',
+        'authentication/validation',
+        'authentication/usage-billing',
+        'authentication/security',
+        'authentication/troubleshooting',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Tokenomics',
       items: [
         'tokenomics',
