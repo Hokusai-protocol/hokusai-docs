@@ -50,6 +50,7 @@ const sidebars = {
       label: 'Authentication',
       items: [
         'authentication/overview',
+        'authentication/registration',
         'authentication/quickstart',
         'authentication/api-keys',
         'authentication/validation',

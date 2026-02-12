@@ -187,6 +187,32 @@ Configure rate limits appropriate to each key's use case:
 }
 ```
 
+## Security Headers
+
+The auth service applies security headers to all responses:
+
+| Header | Value | Purpose |
+|--------|-------|---------|
+| `Content-Security-Policy` | Restrictive policy | Prevents XSS and injection attacks |
+| `X-Content-Type-Options` | `nosniff` | Prevents MIME type sniffing |
+| `X-Frame-Options` | `DENY` | Prevents clickjacking |
+| `Strict-Transport-Security` | `max-age=31536000` | Enforces HTTPS |
+| `X-XSS-Protection` | `1; mode=block` | Legacy XSS protection |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Controls referrer information |
+
+These headers are set automatically — no configuration is needed.
+
+## Registration Protections
+
+The registration system includes multiple layers of protection:
+
+- **reCAPTCHA verification** — Prevents automated bot registrations
+- **Rate limiting** — Per-IP, per-domain, and global limits with automatic temporary bans
+- **Fraud detection** — Automated screening for disposable emails, suspicious patterns, IP/domain velocity
+- **Admin review** — All registrations require manual approval before API access is granted
+
+For details, see [Registration](/authentication/registration).
+
 ## Security Checklist
 
 Use this checklist when deploying a Hokusai integration:
@@ -201,9 +227,11 @@ Use this checklist when deploying a Hokusai integration:
 - [ ] Admin token access restricted to administrators
 - [ ] Separate admin tokens per environment
 - [ ] Monitoring and alerting on auth failures
+- [ ] Organization RBAC roles follow least-privilege principle
+- [ ] SIWE nonce expiry configured appropriately (default: 5 minutes)
 
 ## Next Steps
 
 - **[Troubleshooting](/authentication/troubleshooting)** — Debug authentication issues
 - **[API Keys](/authentication/api-keys)** — Key management endpoints
-- **[Validation](/authentication/validation)** — How key validation works
+- **[Validation](/authentication/validation)** — How key and token validation works
