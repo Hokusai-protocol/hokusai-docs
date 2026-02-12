@@ -19,6 +19,7 @@ Get up and running with Hokusai authentication in 5 minutes. This guide walks yo
 If you have an Ethereum wallet, you can authenticate via [Sign-In with Ethereum (SIWE)](/authentication/validation#sign-in-with-ethereum-siwe) to get a JWT token without needing an admin token.
 :::
 
+
 ## Step 1: Create an API Key
 
 Use your admin token to create a new API key:
