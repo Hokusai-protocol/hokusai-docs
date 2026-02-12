@@ -49,7 +49,7 @@ Set calendar reminders before key expiration dates. Use the `expires_at` field f
 
 **Symptom**: `{"is_valid": false, "error": "Key not authorized for this service"}`
 
-**Cause**: The key was created for a different service than the one being accessed. For example, a key created with `"service_id": "website"` cannot be used to access the prediction API.
+**Cause**: The key was created for a different service than the one being accessed. For example, a key created with `"service_id": "platform"` cannot be used to access the prediction API.
 
 **Resolution**: Create a new key for the correct service:
 

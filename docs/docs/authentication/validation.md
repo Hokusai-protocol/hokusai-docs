@@ -225,8 +225,129 @@ async function validateApiKey(req) {
 | `401` | Key is invalid, expired, revoked, or fails scope/IP checks |
 | `500` | Internal server error |
 
+---
+
+## JWT Token Validation
+
+**`POST /api/v1/tokens/validate`**
+
+Downstream services (e.g., the Contract Deployer API) use this endpoint to verify JWT tokens issued by the auth service via SIWE authentication.
+
+:::info
+This endpoint is **public** — it does not require an admin token.
+:::
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `token` | string | Yes | The JWT token to validate |
+| `service` | string | No | Verify the token grants access to this service |
+
+### Example
+
+```bash
+curl -X POST https://auth.hokus.ai/api/v1/tokens/validate \
+  -H "Content-Type: application/json" \
+  -d '{"token": "eyJhbGciOiJIUzI1NiIs...", "service": "prediction"}'
+```
+
+### Response
+
+```json
+{
+  "valid": true,
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "wallet_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
+  "permissions": ["predict", "read"]
+}
+```
+
+A failed validation returns `401` with:
+
+```json
+{
+  "valid": false,
+  "error": "Token expired"
+}
+```
+
+---
+
+## Sign-In with Ethereum (SIWE)
+
+SIWE allows users to authenticate using an Ethereum wallet. The flow issues a JWT token that can be used with protected endpoints including organization management.
+
+### Step 1: Request a Challenge
+
+**`POST /auth/siwe/challenge`**
+
+```bash
+curl -X POST https://auth.hokus.ai/auth/siwe/challenge \
+  -H "Content-Type: application/json" \
+  -d '{"wallet_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18"}'
+```
+
+Returns a message to sign and a nonce:
+
+```json
+{
+  "message": "auth.hokus.ai wants you to sign in with your Ethereum account:\n0x742d35Cc...\n\nSign in to Hokusai\n\nNonce: abc123...",
+  "nonce": "abc123..."
+}
+```
+
+### Step 2: Sign and Verify
+
+Sign the message with your wallet, then submit the signature:
+
+**`POST /auth/siwe/verify`**
+
+```bash
+curl -X POST https://auth.hokus.ai/auth/siwe/verify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "auth.hokus.ai wants you to sign in with...",
+    "signature": "0x..."
+  }'
+```
+
+Returns a JWT access token:
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "wallet_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
+  "is_new_user": false
+}
+```
+
+:::tip
+If the wallet address is not yet registered, a new user account is created automatically. Set `is_new_user` in the response to detect first-time logins.
+:::
+
+### SIWE Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant W as Wallet/dApp
+    participant A as Auth Service
+    participant R as Redis
+
+    W->>A: POST /auth/siwe/challenge
+    A->>R: Store nonce (5 min TTL)
+    A-->>W: Challenge message + nonce
+    W->>W: User signs message
+    W->>A: POST /auth/siwe/verify
+    A->>R: Verify & consume nonce
+    A->>A: Recover address from signature
+    A->>A: Create/lookup user
+    A-->>W: JWT access token
+```
+
 ## Next Steps
 
 - **[Usage & Billing](/authentication/usage-billing)** — Track API usage per key
-- **[Security](/authentication/security)** — IP allowlisting and scope management
+- **[Security](/authentication/security)** — IP allowlisting, security headers, and scope management
 - **[Troubleshooting](/authentication/troubleshooting)** — Debug validation failures

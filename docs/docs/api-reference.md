@@ -13,7 +13,23 @@ This page lists all API endpoints across the Hokusai platform. For detailed requ
 
 Base URL: `https://auth.hokus.ai`
 
-The authentication service manages API keys, validation, and usage tracking for the entire Hokusai platform.
+The authentication service manages registration, authentication, API keys, organizations, and usage tracking for the entire Hokusai platform.
+
+### Registration
+
+| Method | Endpoint | Auth Required | Description | Docs |
+|--------|----------|---------------|-------------|------|
+| `GET` | `/register` | No | Registration web form | [Registration](/authentication/registration) |
+| `POST` | `/register` | No | Submit a registration request | [Registration](/authentication/registration#submit-a-registration) |
+| `POST` | `/registration/status` | No | Check registration status by email | [Registration](/authentication/registration#check-registration-status) |
+| `GET` | `/register/rate-limit-status` | No | Check rate limit before submitting | [Registration](/authentication/registration#rate-limiting) |
+
+### Sign-In with Ethereum (SIWE)
+
+| Method | Endpoint | Auth Required | Description | Docs |
+|--------|----------|---------------|-------------|------|
+| `POST` | `/auth/siwe/challenge` | No | Generate a wallet authentication challenge | [SIWE](/authentication/validation#sign-in-with-ethereum-siwe) |
+| `POST` | `/auth/siwe/verify` | No | Verify a signed message and get JWT | [SIWE](/authentication/validation#sign-in-with-ethereum-siwe) |
 
 ### Key Management
 
@@ -32,6 +48,29 @@ All key management endpoints require admin authentication via `Authorization: Be
 | Method | Endpoint | Auth Required | Description | Docs |
 |--------|----------|---------------|-------------|------|
 | `POST` | `/api/v1/keys/validate` | No (public) | Validate an API key | [Validation](/authentication/validation) |
+| `POST` | `/api/v1/tokens/validate` | No (public) | Validate a JWT token | [Validation](/authentication/validation#jwt-token-validation) |
+
+### Organizations
+
+Organization endpoints require JWT authentication. Required roles are noted per endpoint.
+
+| Method | Endpoint | Min Role | Description | Docs |
+|--------|----------|----------|-------------|------|
+| `POST` | `/api/v1/organizations` | Authenticated | Create an organization | [API Keys](/authentication/api-keys#organization-scoped-keys) |
+| `GET` | `/api/v1/organizations/{org_id}` | Viewer | Get organization details | — |
+| `PATCH` | `/api/v1/organizations/{org_id}` | Admin | Update organization | — |
+| `DELETE` | `/api/v1/organizations/{org_id}` | Owner | Delete organization | — |
+| `GET` | `/api/v1/organizations/{org_id}/members` | Viewer | List members | — |
+| `PATCH` | `/api/v1/organizations/{org_id}/members/{user_id}` | Admin | Update member role | — |
+| `DELETE` | `/api/v1/organizations/{org_id}/members/{user_id}` | Admin | Remove member | — |
+| `POST` | `/api/v1/organizations/{org_id}/invitations` | Admin | Send invitation | — |
+| `GET` | `/api/v1/organizations/{org_id}/invitations` | Admin | List pending invitations | — |
+| `DELETE` | `/api/v1/organizations/{org_id}/invitations/{id}` | Admin | Revoke invitation | — |
+| `POST` | `/api/v1/invitations/accept` | Authenticated | Accept an invitation | — |
+| `POST` | `/api/v1/organizations/{org_id}/api-keys` | Developer | Create org API key | [API Keys](/authentication/api-keys#organization-scoped-keys) |
+| `GET` | `/api/v1/organizations/{org_id}/api-keys` | Viewer | List org API keys | [API Keys](/authentication/api-keys#organization-scoped-keys) |
+| `DELETE` | `/api/v1/organizations/{org_id}/api-keys/{key_id}` | Developer | Revoke org API key | [API Keys](/authentication/api-keys#organization-scoped-keys) |
+| `GET` | `/api/v1/organizations/{org_id}/audit-logs` | Admin | List audit logs | — |
 
 ### Usage & Billing
 
@@ -41,6 +80,20 @@ All key management endpoints require admin authentication via `Authorization: Be
 | `GET` | `/api/v1/usage/{key_id}/stats` | Admin | Get usage statistics | [Usage & Billing](/authentication/usage-billing#get-usage-statistics) |
 | `GET` | `/api/v1/usage/{key_id}/billing` | Admin | Get billing information | [Usage & Billing](/authentication/usage-billing#get-billing-info) |
 | `GET` | `/api/v1/usage/aggregate` | Admin | Aggregate usage across all keys | [Usage & Billing](/authentication/usage-billing#aggregate-usage) |
+
+### Admin — Registration Management
+
+| Method | Endpoint | Auth Required | Description |
+|--------|----------|---------------|-------------|
+| `GET` | `/api/v1/admin/registrations` | Admin | List registration requests (paginated, filterable) |
+| `GET` | `/api/v1/admin/registrations/{id}` | Admin | Get registration details |
+| `PATCH` | `/api/v1/admin/registrations/{id}` | Admin | Approve or reject a registration |
+| `GET` | `/api/v1/admin/registration/whitelist` | Admin | List rate-limit whitelist entries |
+| `POST` | `/api/v1/admin/registration/whitelist` | Admin | Add whitelist entry (IP or domain) |
+| `PATCH` | `/api/v1/admin/registration/whitelist/{id}` | Admin | Enable/disable whitelist entry |
+| `DELETE` | `/api/v1/admin/registration/whitelist/{id}` | Admin | Delete whitelist entry |
+| `GET` | `/api/v1/admin/registration/bans/{ip}` | Admin | Check ban status for an IP |
+| `DELETE` | `/api/v1/admin/registration/bans/{ip}` | Admin | Remove temporary IP ban |
 
 ### Health & Monitoring
 

@@ -24,7 +24,7 @@ Creates a new API key and returns the full key value. The key is only shown once
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `name` | string | Yes | — | Human-readable name (1–100 characters) |
-| `service_id` | string | Yes | — | Target service: `website`, `prediction`, or `platform` |
+| `service_id` | string | Yes | — | Target service: `prediction` or `platform` |
 | `scopes` | string[] | No | `[]` | Permission scopes (e.g., `["predict", "read"]`) |
 | `environment` | string | No | `production` | `production`, `test`, or `development` |
 | `expires_in_days` | integer | No | `null` | Auto-expire after N days (1–365) |
@@ -303,9 +303,54 @@ Error response format:
 }
 ```
 
+---
+
+## Organization-Scoped Keys
+
+If you belong to an organization, you can create API keys scoped to that organization. Organization keys are visible to all org members and are managed via RBAC roles.
+
+### Create an Organization Key
+
+**`POST /api/v1/organizations/{org_id}/api-keys`**
+
+Requires JWT authentication and at least the **Developer** role within the organization.
+
+```bash
+curl -X POST https://auth.hokus.ai/api/v1/organizations/$ORG_ID/api-keys \
+  -H "Authorization: Bearer $JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Team Prediction Key",
+    "service_id": "prediction",
+    "scopes": ["predict"],
+    "environment": "production"
+  }'
+```
+
+### List Organization Keys
+
+**`GET /api/v1/organizations/{org_id}/api-keys`**
+
+Any organization member can list the org's API keys.
+
+### Revoke an Organization Key
+
+**`DELETE /api/v1/organizations/{org_id}/api-keys/{key_id}`**
+
+Requires at least the **Developer** role.
+
+### RBAC Roles
+
+| Role | Create Keys | List Keys | Revoke Keys |
+|------|:-----------:|:---------:|:-----------:|
+| Owner | Yes | Yes | Yes |
+| Admin | Yes | Yes | Yes |
+| Developer | Yes | Yes | Own keys |
+| Viewer | No | Yes | No |
+
 ## Next Steps
 
-- **[Validation](/authentication/validation)** — How services validate API keys
+- **[Validation](/authentication/validation)** — How services validate API keys and JWT tokens
 - **[Usage & Billing](/authentication/usage-billing)** — Track key usage and costs
 - **[Security](/authentication/security)** — Key management best practices
 - **[Troubleshooting](/authentication/troubleshooting)** — Common errors and fixes

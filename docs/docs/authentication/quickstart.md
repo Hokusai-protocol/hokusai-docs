@@ -10,8 +10,13 @@ sidebar_position: 2
 Get up and running with Hokusai authentication in 5 minutes. This guide walks you through creating your first API key and validating it.
 
 :::info Prerequisites
-- An admin token for the Hokusai auth service (provided by your platform administrator)
+- A registered and approved Hokusai account (see [Registration](/authentication/registration))
+- An admin token for the Hokusai auth service (provided after approval, or by your platform administrator)
 - `curl` or Python 3.8+ installed
+:::
+
+:::tip Alternative: Wallet Authentication
+If you have an Ethereum wallet, you can authenticate via [Sign-In with Ethereum (SIWE)](/authentication/validation#sign-in-with-ethereum-siwe) to get a JWT token without needing an admin token.
 :::
 
 ## Step 1: Create an API Key
