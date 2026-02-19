@@ -91,8 +91,6 @@ const sidebars = {
       items: [
         'licensing/overview',
         'licensing/decentralized',
-        'licensing/open-source',
-        'licensing/proprietary',
       ],
     },
     {

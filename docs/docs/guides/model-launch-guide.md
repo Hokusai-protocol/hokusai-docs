@@ -90,7 +90,6 @@ A DeltaOne represents a 1 percentage point improvement in your chosen metric. Fo
 The license type determines how your model can be accessed and who can contribute to its improvement.
 
 ### Decentralized License
-**Best for:** Models intended for broad adoption and community improvement
 
 With a decentralized license:
 - Model is available via API at market-determined prices
@@ -99,28 +98,6 @@ With a decentralized license:
 - Automatic reward distribution for improvements
 
 [Learn more about Decentralized Licensing →](../licensing/decentralized)
-
-### Proprietary License
-**Best for:** Models with restricted access or enterprise use cases
-
-With a proprietary license:
-- You maintain exclusive control over the model
-- Access is limited to whitelisted addresses
-- Custom pricing and access terms
-- Requires funding a treasury address
-
-[Learn more about Proprietary Licensing →](../licensing/proprietary)
-
-### Open Source License
-**Best for:** Research models and community projects
-
-With an open source license:
-- Model weights and code are publicly available
-- Free to use, modify, and deploy
-- Community-driven development
-- Optional donation-based support
-
-[Learn more about Open Source Licensing →](../licensing/open-source)
 
 ## Step 4: Token Supply Configuration
 
@@ -387,7 +364,7 @@ Congratulations! Your model is now live on the Hokusai Protocol. Here's what to 
 
 - [Token Economics Deep Dive →](../tokenomics)
 - [Performance Metrics Guide →](../tokenomics/deltaone-calculations)
-- [License Comparison →](../licensing/overview)
+- [Licensing →](../licensing/decentralized)
 - [API Reference →](../api-reference)
 - [Smart Contract Documentation →](../smart-contracts/smart-contracts-overview)
 - [Community Guidelines →](../community)

@@ -20,7 +20,7 @@ These docs will help you understand how Hokusai tokens work, how you can contrib
 - [Getting Started as a Data Supplier](/supplying-data)
 - [Getting Started as a AI Developer](/using-models)
 - [Investors should understand Tokenomics](/tokenomics)
-- [Understanding the various Model Licenses](/licensing/overview)
+- [Understanding Model Licensing](/licensing/decentralized)
 - [Smart Contract Architecture](/smart-contracts/smart-contracts-overview)
 
 For further assistance, refer to the FAQs or join our community discussions.

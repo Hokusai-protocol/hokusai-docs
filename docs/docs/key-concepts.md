@@ -55,11 +55,8 @@ Understanding how to access and use Hokusai models:
    - Rate limits
    - API access
 
-2. **Licensing Options**
-   - Open source
-   - Commercial
-   - Co-op
-   - Proprietary
+2. **Licensing**
+   - Decentralized (community-owned with token governance)
 
 ### Smart Contracts
 The technical foundation of the protocol:
@@ -93,7 +90,7 @@ The technical foundation of the protocol:
 ### For End Users
 - Access improved AI models
 - Benefit from continuous updates
-- Choose from various licensing options
+- Benefit from decentralized licensing
 - Participate in governance
 
 ## Next Steps
