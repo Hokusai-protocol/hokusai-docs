@@ -54,16 +54,8 @@ models = client.list_models()
 # Filter models
 filtered_models = client.list_models(
     category='Medical',
-    model_type='Open Source',
     min_reward=10000
 )
-
-# Filter by license type
-# For detailed information about license types and their restrictions, see [License Types](/using-models#license-types)
-open_source_models = client.list_models(license_type='Open Source')
-commercial_models = client.list_models(license_type='Commercial')
-coop_models = client.list_models(license_type='Co-Op')
-# Note: Proprietary models are not listed as they are not accessible via API
 ```
 
 #### Get Model Details
@@ -76,51 +68,8 @@ model = client.get_model('model_id')
 print(f"Name: {model.name}")
 print(f"Category: {model.category}")
 print(f"Type: {model.type}")
-print(f"License Type: {model.license_type}")  # See [License Types](/using-models#license-types) for details
 print(f"Current Benchmark: {model.benchmark}")
 print(f"DeltaOne Reward: {model.reward}")
-
-# Check access requirements
-if model.license_type == 'Co-Op':
-    if not client.is_whitelisted('model_id'):
-        raise Exception("You must be whitelisted to use this model")
-elif model.license_type == 'Proprietary':
-    raise Exception("This model is not available via API")
-```
-
-### License Management
-
-For a comprehensive overview of license types and their restrictions, see [License Types](/using-models#license-types).
-
-#### Check License Status
-
-```python
-# Check license compliance
-license_status = client.check_license_status('model_id')
-
-# Available properties
-print(f"License Type: {license_status.license_type}")
-print(f"Compliance Status: {license_status.compliant}")
-print(f"Attribution Required: {license_status.requires_attribution}")
-print(f"Whitelist Status: {license_status.whitelisted}")
-```
-
-#### Co-Op Management
-
-```python
-# Check co-op membership
-membership = client.get_coop_membership('model_id')
-
-# Available properties
-print(f"Member Status: {membership.status}")
-print(f"Join Date: {membership.join_date}")
-print(f"Access Level: {membership.access_level}")
-
-# Request whitelist access
-if model.license_type == 'Co-Op':
-    request = client.request_whitelist_access('model_id')
-    print(f"Request Status: {request.status}")
-    print(f"Request ID: {request.request_id}")
 ```
 
 ### Predictions
@@ -128,17 +77,8 @@ if model.license_type == 'Co-Op':
 #### Single Prediction
 
 ```python
-# Basic prediction with license check
+# Basic prediction
 try:
-    model = client.get_model('model_id')
-    
-    # Verify access based on license type
-    if model.license_type == 'Co-Op' and not client.is_whitelisted('model_id'):
-        raise Exception("You must be whitelisted to use this model")
-    elif model.license_type == 'Proprietary':
-        raise Exception("This model is not available via API")
-    
-    # Proceed with prediction
     result = client.predict(
         model_id='model_id',
         input_data={
@@ -155,17 +95,8 @@ try:
     print(f"Confidence: {result.confidence}")
     print(f"Latency: {result.latency}ms")
     print(f"Fee Charged: {result.fee_charged} USDC")
-    
-    # Handle attribution for open source models
-    if model.license_type == 'Open Source':
-        print(f"Attribution Required: {result.attribution}")
 except HokusaiError as e:
-    if e.code == 'LICENSE_VIOLATION':
-        print("License violation detected")
-    elif e.code == 'WHITELIST_REQUIRED':
-        print("Whitelist access required")
-    else:
-        print(f"Error: {e.message}")
+    print(f"Error: {e.message}")
 ```
 
 #### Batch Prediction
@@ -321,12 +252,6 @@ except HokusaiError as e:
         print("Invalid input format")
     elif e.code == 'MODEL_UNAVAILABLE':
         print("Model is currently unavailable")
-    elif e.code == 'LICENSE_VIOLATION':
-        print("License violation detected")
-    elif e.code == 'WHITELIST_REQUIRED':
-        print("Whitelist access required")
-    elif e.code == 'PROPRIETARY_MODEL':
-        print("This model is not available via API")
     else:
         print(f"Unexpected error: {e.message}")
 ```

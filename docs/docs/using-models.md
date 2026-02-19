@@ -21,7 +21,7 @@ Visit the [Explore Models](https://hokus.ai/explore-models/) page to browse avai
 
 1. **Filtering Options**
    - Model category (Medical, Legal, Sales, Finance, Agriculture, Industrial)
-   - Model type (Open Source, Commercial, Co-Op, Proprietary)
+   - Model type (Decentralized)
    - Performance metrics (varies by model type)
    - DeltaOne reward amount
    - Current benchmark scores
@@ -36,11 +36,8 @@ Visit the [Explore Models](https://hokus.ai/explore-models/) page to browse avai
 
 Consider these factors when choosing a model:
 
-1. **License Types and Access**
-   - **Open Source**: Available to all users with proper attribution
-   - **Commercial**: Available to all users with token-based access
-   - **Co-Op**: Only available to whitelisted members of the cooperative
-   - **Proprietary**: Only available to the model owner, not accessible via API
+1. **License and Access**
+   - **Decentralized**: Available to all users via API with token-based access and community governance
 
 2. **Performance Requirements**
    - Accuracy thresholds
@@ -53,71 +50,23 @@ Consider these factors when choosing a model:
    - Volume discounts
    - Budget constraints
 
-## License Types
+## License Type
 
-### Open Source Models
+### Decentralized Models
 
-Open source models are freely available to all users:
-
-1. **Access Requirements**
-   - No whitelist required
-   - Standard token-based access
-   - Must provide attribution
-   - Must comply with open source license
-
-2. **Usage Rights**
-   - Can be used commercially
-   - Can be modified and redistributed
-   - Must maintain license compliance
-   - Must credit original authors
-
-### Commercial Models
-
-Commercial models are available to all users with token-based access:
+All Hokusai models use the decentralized license, making them community-owned and available via API:
 
 1. **Access Requirements**
+   - Pay the API usage fee (set by token holders)
    - No whitelist required
-   - Must have sufficient token balance
-   - Must comply with usage terms
    - Must respect rate limits
 
 2. **Usage Rights**
-   - Can be used commercially
-   - Cannot be modified or redistributed
-   - Must comply with API terms
-   - Must respect usage restrictions
+   - Available to all users via API
+   - Token holders participate in governance
+   - Pricing set transparently by community
 
-### Co-Op Models
-
-Co-op models are only available to whitelisted members:
-
-1. **Access Requirements**
-   - Must be whitelisted
-   - Must be a co-op member
-   - Must have sufficient token balance
-   - Must comply with co-op rules
-
-2. **Usage Rights**
-   - Usage limited to co-op members
-   - Cannot be redistributed
-   - Must comply with co-op terms
-   - May have additional restrictions
-
-### Proprietary Models
-
-Proprietary models are only available to their owners:
-
-1. **Access Restrictions**
-   - Not available via API
-   - Only accessible to model owner
-   - Cannot be used by other parties
-   - No public access
-
-2. **Owner Rights**
-   - Full control over model usage
-   - Can be used internally only
-   - No public distribution
-   - No API access
+[Learn more about Decentralized Licensing →](/licensing/decentralized)
 
 ## API Integration
 
@@ -134,9 +83,6 @@ client.connect_wallet('your_wallet_address')
 
 # Check model access
 model = client.get_model('model_id')
-if model.type == 'Co-Op':
-    if not client.is_whitelisted('model_id'):
-        raise Exception("You must be whitelisted to use this model")
 ```
 
 ### 2. Model Access
