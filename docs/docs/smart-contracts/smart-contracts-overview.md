@@ -2,21 +2,16 @@
 
 Hokusai's smart contract system is modular, designed to support decentralized AI model development and tokenization. Here's a simplified flow:
 
-```
-[Data Contributor]
-    ↓ submits data
-[DeltaOneVerifier] → validates performance improvement
-    ↓ confirms DeltaOne
-[TokenManager] → mints model tokens
-    ↓ distributes rewards
-[Token Holders]
-    ↓
-[HokusaiAMM] ← buy/sell with USDC (CRR bonding curve)
-    ↓
-[API Usage] → UsageFeeRouter → InfrastructureReserve (costs)
-                           → AMM Reserve (profit) → price increases
-    ↓
-[ModelAccessController] → enforces access control and fee collection
+```mermaid
+graph TD
+    DC["Data Contributor"] -->|submits data| DOV["DeltaOneVerifier"]
+    DOV -->|confirms DeltaOne| TM["TokenManager"]
+    TM -->|distributes rewards| TH["Token Holders"]
+    TH <-->|"buy/sell with USDC<br/>(CRR bonding curve)"| AMM["HokusaiAMM"]
+    API["API Usage"] --> UFR["UsageFeeRouter"]
+    UFR -->|costs| IR["InfrastructureReserve"]
+    UFR -->|"profit → price increases"| AMM
+    MAC["ModelAccessController"] -->|"access control<br/>& fee collection"| API
 ```
 
 ## Key Components
