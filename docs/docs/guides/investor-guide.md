@@ -140,7 +140,7 @@ const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
 // Get key parameters
 const reserveRatio = await amm.reserveRatio(); // CRR (w)
-const tradeFee = await amm.tradeFee(); // e.g., 0.25%
+const tradeFee = await amm.tradeFee(); // e.g., 0.30%
 const protocolFee = await amm.protocolFee(); // e.g., 5%
 const buyOnlyUntil = await amm.buyOnlyUntil(); // Launch end time
 

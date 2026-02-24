@@ -134,7 +134,7 @@ console.log(`Current spot price: ${ethers.formatUnits(price, 18)} USDC/token`);
 
 **Important**: Spot price is BEFORE your sell. Your actual price will be slightly lower due to:
 - Price impact (your sell pushes price down)
-- Trading fees (0.25% default)
+- Trading fees (0.30% default)
 - Slippage
 
 ### Step 3: Get a Sell Quote

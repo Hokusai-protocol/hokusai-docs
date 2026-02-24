@@ -27,96 +27,55 @@ Before registering a model, ensure you have:
 
 The easiest way to create a model is through the Hokusai website. This process guides you through all necessary steps without requiring SDK installation.
 
-**📚 Comprehensive Guide:** For detailed step-by-step instructions on launching your model, including tokenomics configuration and deployment, see our [Complete Model Launch Guide](guides/model-launch-guide).
+**Comprehensive Guide:** For detailed step-by-step instructions on launching your model, including tokenomics configuration and deployment, see our [Complete Model Launch Guide](guides/model-launch-guide).
 
 ### Step 1: Access the Model Creation Portal
 
 1. Visit [hokus.ai/create-model](https://hokus.ai/create-model)
-2. Connect your wallet
-3. Review the model creation requirements
+2. Review the model creation requirements
 
-### Step 2: Provide Model Information
+### Step 2: Model Overview
 
-Fill out the model registration form with:
+Fill out the basic information about your AI model:
 
-1. **Basic Information**
-   - Model name
-   - Description
-   - Version
-   - Category/type
-   - Use case
+- **Model Name** - A descriptive name indicating your model's purpose and domain
+- **Token Ticker** - A 3-6 character uppercase symbol for your model's token (e.g., "CHEST")
+- **Description** - Describe your model's capabilities and use cases
+- **Category** - Select the domain category (Healthcare, Finance, NLP, etc.)
+- **Tags** - Add relevant tags for discoverability
 
-2. **Technical Details**
-   - Framework (PyTorch, TensorFlow, etc.)
-   - Input/output formats
-   - Performance metrics
-   - Hardware requirements
+### Step 3: Performance Metrics
 
-3. **Performance Data**
-   - Baseline metrics
-   - Test results
-   - Validation data
-   - Performance benchmarks
+Configure how your model's performance is measured. The DeltaOne system ties token rewards to 1 percentage point improvements in your chosen metric.
 
-### Step 3: Upload Model Files
+- **Performance Metric** - Select a metric type (Accuracy, F1 Score, AUC-ROC, or custom)
+- **Current Benchmark Value** - Your model's current performance baseline (e.g., 0.884 for 88.4% accuracy)
+- **Metric Direction** - Whether higher is better (Maximize) or lower is better (Minimize)
 
-Upload your model files through the web interface:
+### Step 4: License & Distribution
 
-1. **Model Artifacts**
-   - Model weights
-   - Configuration files
-   - Dependencies list
-   - Version information
+Choose how your model will be licensed:
 
-2. **Documentation**
-   - Architecture overview
-   - Training methodology
-   - Usage examples
-   - API documentation
+- **Decentralized** - Generally available API at a market-determined price. Anyone can contribute data and earn tokens.
+- **Proprietary** - Exclusive rights for the model builder. Requires funding a treasury address and whitelisting approved addresses.
+- **Open Source** - Free to use, modify, and deploy. Community-driven development.
 
-### Step 4: Configure Token Economics
+### Step 5: Token Supply Configuration (Decentralized only)
 
-Set up your model's token parameters:
+For decentralized models, configure token economics using a preset template or custom values:
 
-1. **Reward Distribution**
-   - Contributor rewards (default: 70%)
-   - Model owner rewards (default: 30%)
-   - Minimum improvement threshold
+- **Initial Token Supply** - Number of tokens created at launch
+- **Tokens Minted per DeltaOne** - New tokens created for each 1pp performance improvement
+- **Expected DeltaOnes** - Projected number of improvements over 2 years
 
-2. **Access Control**
-   - API fee rates
-   - Usage restrictions
-   - Access tiers
+Three preset templates are available: Experimental (high inflation), Growth (balanced), and Mature (low inflation).
 
-### Step 5: Review and Deploy
+### Step 6: Review and Create
 
-1. **Review Process**
-   - Automated validation checks
-   - Performance verification
-   - Smart contract integration
-   - Gas fee estimation
+Review all settings and click "Create Model". After creation, you'll be guided through next steps:
 
-2. **Deployment**
-   - Smart contract deployment
-   - Token creation
-   - Model registration
-   - Initial setup
-
-### Step 6: Post-Deployment
-
-After deployment, you'll receive:
-
-1. **Access Information**
-   - Model ID
-   - Token address
-   - API endpoints
-   - Documentation links
-
-2. **Management Tools**
-   - Performance dashboard
-   - Token management
-   - Access control
-   - Analytics
+1. **Register Base Model** - Connect your model to the Hokusai ML registry
+2. **Deploy Token to Blockchain** - Deploy your model's ERC-20 token contract (requires a Web3 wallet and ETH for gas)
 
 ## Programmatic Model Creation
 

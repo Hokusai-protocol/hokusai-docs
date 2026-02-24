@@ -18,7 +18,7 @@ The HokusaiAMM contract implements a **Constant Reserve Ratio (CRR)** bonding cu
 ### Fee Structure
 
 **AMM Trading Fees** (when buying/selling tokens on the AMM):
-- **Trade fee**: 0.25% default (max 10%, governance-controlled)
+- **Trade fee**: 0.30% default (max 10%, governance-controlled)
 - **Protocol fee**: 5% of trade fee (max 50%, governance-controlled)
 - These fees are deducted from AMM trades
 

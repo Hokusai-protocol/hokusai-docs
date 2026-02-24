@@ -439,29 +439,29 @@ Average Price = 5,880 / 10,000 = 0.588 USDC/token
 Both buy and sell operations incur a trade fee:
 
 ```
-Trade Fee % = 0.25% (default, max 10%)
+Trade Fee % = 0.30% (default, max 10%)
 Protocol Fee % = 5% of trade fee (default, max 50%)
 ```
 
 **Buy Transaction**:
 ```
 User deposits: 1,000 USDC
-Trade fee (0.25%): 2.50 USDC
-Protocol fee (5% of 2.50): 0.125 USDC
-To reserve: 997.50 USDC
-To protocol treasury: 0.125 USDC
-To AMM operations: 2.375 USDC
+Trade fee (0.30%): 3.00 USDC
+Protocol fee (5% of 3.00): 0.15 USDC
+To reserve: 997.00 USDC
+To protocol treasury: 0.15 USDC
+To AMM operations: 2.85 USDC
 
-Tokens calculated from: 997.50 USDC
+Tokens calculated from: 997.00 USDC
 ```
 
 **Sell Transaction**:
 ```
 Tokens burned: 1,990
 USDC from formula: 999.9 USDC
-Trade fee (0.25%): 2.50 USDC
-Protocol fee (5% of 2.50): 0.125 USDC
-User receives: 997.40 USDC
+Trade fee (0.30%): 3.00 USDC
+Protocol fee (5% of 3.00): 0.15 USDC
+User receives: 996.90 USDC
 ```
 
 ### Fee Impact on Price
@@ -472,11 +472,11 @@ Fees create a **bid-ask spread**:
 Buy Price ≈ Spot Price × (1 + Trade Fee %)
 Sell Price ≈ Spot Price × (1 - Trade Fee %)
 
-With 0.25% fee:
+With 0.30% fee:
 Spot = 0.5 USDC
-Buy ≈ 0.50125 USDC
-Sell ≈ 0.49875 USDC
-Spread = 0.25 basis points
+Buy ≈ 0.5015 USDC
+Sell ≈ 0.4985 USDC
+Spread = 0.30 basis points
 ```
 
 ## Price Stability Features
@@ -624,7 +624,7 @@ FDV = (R / (w × S_current)) × S_max
 2. **Monitor profit share deposits**: Ensure profit portion flows to reserves
 3. **Set appropriate infrastructure accrual**: Balance cost coverage with profit share
 3. **Communicate minting events**: Transparency prevents surprises
-4. **Set reasonable trade fees**: 0.25% is market standard
+4. **Set reasonable trade fees**: 0.30% is the default
 
 ## Tools and Resources
 

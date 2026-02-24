@@ -257,7 +257,7 @@ The system has two separate fee mechanisms - don't confuse them:
 ### 1. AMM Trading Fees (when buying/selling tokens on AMM)
 
 **Trade Fees:**
-- **Default**: 0.25% per trade
+- **Default**: 0.30% per trade
 - **Maximum**: 10% (governance-controlled)
 - **Applied to**: Both buys and sells on the AMM
 - **Purpose**: AMM sustainability
@@ -271,10 +271,10 @@ The system has two separate fee mechanisms - don't confuse them:
 **Example AMM Trade**:
 ```
 Buy: 1,000 USDC
-Trade Fee (0.25%): 2.50 USDC
-Protocol Fee (5% of 2.50): 0.125 USDC
-Net Deposited to Reserve: 997.50 USDC
-Tokens Received: ~1,985 (calculated from buy formula)
+Trade Fee (0.30%): 3.00 USDC
+Protocol Fee (5% of 3.00): 0.15 USDC
+Net Deposited to Reserve: 997.00 USDC
+Tokens Received: ~1,984 (calculated from buy formula)
 ```
 
 ### 2. API Usage Fees (when using model API)
