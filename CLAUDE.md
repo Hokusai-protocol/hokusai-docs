@@ -276,7 +276,7 @@ npm run deploy
 
 #### DeltaOne Rewards
 - Core reward unit where 1 DeltaOne = 1% performance improvement
-- Verification through MegaAI benchmarking system
+- Verification through DeltaVerifier (on-chain) using HEM (Hokusai Evaluation Manifest) eval artifacts
 - Distribution mechanisms
 - Calculation methodology
 
