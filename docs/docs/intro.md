@@ -81,6 +81,7 @@ Hokusai tokens serve multiple purposes in the ecosystem:
 - [Getting Started as a AI Developer](/using-models)
 - [Understanding Tokenomics](/tokenomics)
 - [Understanding Reward Mechanisms](/tokenomics/rewards)
+- [Custom Scorers & Sales Outcome Metrics](/core-workflows/custom-scorers-and-sales-metrics)
 - [Understanding Token Value](/tokenomics/token-value)
 - [Understanding Model Licenses](/licensing/overview)
 - [Smart Contract Architecture](/smart-contracts/overview)
