@@ -131,6 +131,26 @@ For detailed Model API documentation, see the [Model API Guide](/model-api-guide
 |--------|----------|-------------|
 | `GET` | `/v1/models/{model_id}/license` | Check license status |
 
+### Benchmark Datasets
+
+All benchmark dataset endpoints require a valid API key. See [Uploading Datasets via API](/supplying-data#uploading-a-dataset-file-directly) for a full walkthrough.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/benchmarks/upload/{model_id}` | Upload a CSV or Parquet benchmark dataset (multipart, ≤ 500 MB); creates a `BenchmarkSpec` record |
+| `GET` | `/api/v1/dataset-arrivals` | List recent S3 dataset arrivals; optional `?model_id=&limit=` query params |
+
+### Evaluation Schedules
+
+All evaluation schedule endpoints require a valid API key. A `BenchmarkSpec` must exist for the model before a schedule can be created. See [Automating Evaluations with Schedules](/supplying-data#automating-evaluations-with-schedules).
+
+| Method | Endpoint | Status | Description |
+|--------|----------|--------|-------------|
+| `POST` | `/api/v1/models/{model_id}/evaluation-schedule` | 201 | Create an evaluation schedule; 409 if one already exists |
+| `GET` | `/api/v1/models/{model_id}/evaluation-schedule` | 200 | Retrieve the current schedule |
+| `PUT` | `/api/v1/models/{model_id}/evaluation-schedule` | 200 | Update the `cron_expression` or `enabled` flag |
+| `DELETE` | `/api/v1/models/{model_id}/evaluation-schedule` | 204 | Remove the schedule |
+
 ## Common Response Formats
 
 ### Success Response
@@ -159,6 +179,9 @@ For detailed Model API documentation, see the [Model API Guide](/model-api-guide
 | `401` | Missing or invalid authentication |
 | `403` | Valid auth but insufficient permissions |
 | `404` | Resource not found |
+| `409` | Conflict (e.g. duplicate evaluation schedule) |
+| `413` | Payload too large (file exceeds size limit) |
+| `422` | Validation failed (schema, PII, or column errors) |
 | `429` | Rate limit exceeded |
 | `500` | Internal server error |
 | `503` | Service unavailable (dependency down) |
