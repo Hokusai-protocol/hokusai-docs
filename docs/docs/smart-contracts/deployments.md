@@ -27,6 +27,10 @@ Deployed on 2026-04-28. All new integrations should target these addresses.
 | HLEAD params | [`0xc7325cB1f179f404Bad7FE62B83B708181FAaD6d`](https://sepolia.etherscan.io/address/0xc7325cB1f179f404Bad7FE62B83B708181FAaD6d) |
 | HLEAD pool | [`0x726f46e15cb8F05F291C6337F497da9D5A2738ff`](https://sepolia.etherscan.io/address/0x726f46e15cb8F05F291C6337F497da9D5A2738ff) |
 
+#### Reference apps
+
+The HLEAD addresses above belong to the [HLEAD reference model](/reference-apps/hlead) — Hokusai's first deployed model token on Sepolia v2 (Pipeline Win Predictor / Model 25). HLEAD is a model token, not protocol infrastructure. Future reference deployments will appear in the [Reference Apps](/reference-apps) section.
+
 ### Verifying addresses
 
 Each address links to Sepolia Etherscan. Verify deployed bytecode and metadata there before integrating.
