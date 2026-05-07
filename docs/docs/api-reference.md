@@ -130,7 +130,6 @@ For detailed Model API documentation, see the [Model API Guide](/model-api-guide
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/v1/models/{model_id}/license` | Check license status |
-| `POST` | `/v1/models/{model_id}/whitelist` | Request whitelist access (Co-Op models) |
 
 ## Common Response Formats
 

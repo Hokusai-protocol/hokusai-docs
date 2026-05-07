@@ -57,7 +57,6 @@ Configure how your model's performance is measured. The DeltaOne system ties tok
 Choose how your model will be licensed:
 
 - **Decentralized** - Generally available API at a market-determined price. Anyone can contribute data and earn tokens.
-- **Proprietary** - Exclusive rights for the model builder. Requires funding a treasury address and whitelisting approved addresses.
 - **Open Source** - Free to use, modify, and deploy. Community-driven development.
 
 ### Step 5: Token Supply Configuration (Decentralized only)
