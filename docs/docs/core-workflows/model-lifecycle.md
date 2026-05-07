@@ -124,3 +124,4 @@ Before graduation is announced, investors can withdraw their committed USDC from
 - [Smart Contract Overview](../smart-contracts/overview)
 - [HokusaiAMM](../smart-contracts/hokusai-amm)
 - [Seven-Day Launch Period](../tokenomics/launch-period)
+- [Custom Scorers & Sales Metrics](./custom-scorers-and-sales-metrics)

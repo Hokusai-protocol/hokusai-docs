@@ -28,6 +28,7 @@ const sidebars = {
       label: 'Core Workflows',
       items: [
         'core-workflows/model-lifecycle',
+        'core-workflows/custom-scorers-and-sales-metrics',
         'supplying-data',
         'data-validation-tools',
         'privacy-compliance',
