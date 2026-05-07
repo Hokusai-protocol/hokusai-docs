@@ -262,18 +262,12 @@ The system has two separate fee mechanisms - don't confuse them:
 - **Applied to**: Both buys and sells on the AMM
 - **Purpose**: AMM sustainability
 
-**Protocol Fees:**
-- **Default**: 5% of trade fees
-- **Maximum**: 50% of trade fees (governance-controlled)
-- **Applied to**: Portion of trade fees only
-- **Purpose**: Treasury funding, future governance incentives
-
 **Example AMM Trade**:
 ```
 Buy: 1,000 USDC
 Trade Fee (0.30%): 3.00 USDC
-Protocol Fee (5% of 3.00): 0.15 USDC
 Net Deposited to Reserve: 997.00 USDC
+Trade Fee Recipient: 3.00 USDC
 Tokens Received: ~1,984 (calculated from buy formula)
 ```
 
@@ -289,12 +283,13 @@ Tokens Received: ~1,984 (calculated from buy formula)
 
 ### 2. API Usage Fees (when using model API)
 
-Separate from AMM trading fees, routed by `UsageFeeRouter` based on per-model parameters:
+Separate from AMM trading fees, API usage fees are routed by `UsageFeeRouter` using cost-plus splitting first and `infrastructureAccrualBps` fallback second:
 
-- **Infrastructure Accrual (50-100%)**: Sent to `InfrastructureReserve` contract, covers compute costs
-- **Profit Share (0-50%, residual)**: Deposited to AMM Reserve, increases token backing and price
+- **Primary path**: `InfrastructureCostOracle` estimates cost per 1000 calls, and that cost accrues to `InfrastructureReserve`
+- **Fallback path**: If no oracle entry exists, `infrastructureAccrualBps` determines the split
+- **Profit residual**: Whatever remains is deposited to the AMM reserve and increases token backing
 
-Each model has its own `infrastructureAccrualBps` parameter in `HokusaiParams` that determines the split. Governance can adjust this rate as actual costs become clearer. Token holders benefit from genuine profit after infrastructure costs.
+See [Usage Fee Routing](/smart-contracts/usage-fee-routing) and [API Fee Flow](/tokenomics/api-fee-flow) for details.
 
 See [API Fee Flow](/tokenomics/api-fee-flow) for complete details.
 
@@ -325,7 +320,6 @@ Contract owner can pause trading in emergency situations while preserving user f
 ### Parameter Bounds
 - CRR (w): 5% to 100%
 - Trade Fee: 0% to 10%
-- Protocol Fee: 0% to 50%
 
 All parameters are governance-controlled with strict bounds.
 

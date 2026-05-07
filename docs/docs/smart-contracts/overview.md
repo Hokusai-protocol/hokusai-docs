@@ -12,7 +12,7 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
 [HokusaiAMM] → CRR bonding curve for buy/sell with USDC
     ↓
 [API Usage] → UsageFeeRouter → InfrastructureReserve (costs)
-                           → AMM reserve (profit) → price increases
+                           → HokusaiAMM reserve (profit) → price increases
     ↓
 [ModelAccessController] → enforces API access control
 ```
@@ -23,7 +23,8 @@ Hokusai's smart contract system is modular, designed to support decentralized AI
 - **DeltaOneVerifier**: Validates performance improvement off-chain
 - **TokenManager**: Issues tokens, handles mint/burn logic, distributes rewards
 - **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
-- **UsageFeeRouter**: Routes API fees based on per-model infrastructure accrual rate
+- **UsageFeeRouter**: Routes API fees using cost-plus logic, with `infrastructureAccrualBps` fallback
+- **InfrastructureCostOracle**: Stores per-model cost per 1000 API calls
 - **InfrastructureReserve**: Holds accrued infrastructure costs, pays providers
 - **ModelAccessController**: Enforces access control and fee collection for model usage
 
@@ -86,10 +87,11 @@ Model usage generates API fees that are split between infrastructure costs and p
 
 1. **Fee Collection & Routing**
    - API usage fees collected in USDC
-   - Each model has configurable `infrastructureAccrualBps` (50-100%) in HokusaiParams
-   - Infrastructure portion → `InfrastructureReserve` contract (for provider payments)
-   - Profit portion (residual) → AMM reserve via UsageFeeRouter
-   - Reserve increase raises token price (P = R / (w × S))
+   - `InfrastructureCostOracle` provides per-model cost estimates when configured
+   - `UsageFeeRouter` accrues infrastructure cost first
+   - If no oracle entry exists, the router falls back to `infrastructureAccrualBps` in `HokusaiParams`
+   - Profit portion (residual) → AMM reserve via `depositFees()`
+   - Reserve increase raises token price (`P = R / (w × S)`)
 
 2. **Price Impact**
    - Profit share deposited without minting tokens

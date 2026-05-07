@@ -9,6 +9,7 @@ graph TD
     TM -->|distributes rewards| TH["Token Holders"]
     TH <-->|"buy/sell with USDC<br/>(CRR bonding curve)"| AMM["HokusaiAMM"]
     API["API Usage"] --> UFR["UsageFeeRouter"]
+    UFR --> ICO["InfrastructureCostOracle"]
     UFR -->|costs| IR["InfrastructureReserve"]
     UFR -->|"profit → price increases"| AMM
     MAC["ModelAccessController"] -->|"access control<br/>& fee collection"| API
@@ -26,7 +27,8 @@ graph TD
 ### AMM & Trading
 - **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
 - **HokusaiAMMFactory**: Deploys new AMM pools for each model
-- **UsageFeeRouter**: Routes API fees based on per-model parameters
+- **UsageFeeRouter**: Routes API fees using cost-plus logic, with percentage fallback
+- **InfrastructureCostOracle**: Stores per-model infrastructure cost estimates
 - **InfrastructureReserve**: Holds infrastructure cost accruals, pays providers
 
 ### Access Control
@@ -41,10 +43,10 @@ graph TD
 - This bootstraps reserve depth before normal bonding-curve price discovery
 
 ### Infrastructure Cost Accrual
-- Each model has a configurable `infrastructureAccrualBps` (50-100%)
-- Infrastructure portion accrues in `InfrastructureReserve` contract
-- Providers paid manually with on-chain invoice tracking
-- Governance can adjust rates as actual costs become clearer
+- The primary path is cost-plus routing from `InfrastructureCostOracle`
+- If the oracle has no entry, each model falls back to `infrastructureAccrualBps`
+- Infrastructure portion accrues in `InfrastructureReserve`
+- Providers are paid manually with on-chain invoice tracking
 
 ### Profit Share to AMM
 - Residual after infrastructure (0-50%) flows to AMM USDC reserves
