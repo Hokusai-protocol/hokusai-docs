@@ -36,25 +36,36 @@ function mintForImprovement(
 - Maximum reward per improvement
 - Cooldown period between improvements
 
-### 2. Initial Model Registration
+### 2. Initial Allocation (At Deployment)
+
+When a model token is deployed, two allocation caps are recorded on-chain. No tokens are minted at this stage:
+
 ```solidity
-function mintInitialSupply(
-    bytes32 modelId,
-    address owner,
-    uint256 initialScore
-) external onlyRegistry {
-    require(initialScore >= MINIMUM_SCORE, "Score too low");
-    uint256 initialSupply = calculateInitialSupply(initialScore);
-    _mint(owner, initialSupply);
-    emit ModelRegistered(modelId, owner, initialSupply);
+// Called by the model deployer via TokenManager.deployTokenWithAllocations(...)
+// modelSupplierAllocation and investorAllocation are stored as caps; totalSupply starts at 0.
+// maxSupply = modelSupplierAllocation + investorAllocation
+```
+
+#### Supplier Allocation Distribution
+After the model passes verification, the Hokusai backend (not the deployer) calls:
+
+```solidity
+function distributeModelSupplierAllocation(
+    string calldata modelId
+) external onlyOwner {
+    // Mints the supplier allocation cap to the modelSupplierRecipient.
+    // Emits AllocationDistributed(modelId, modelSupplierRecipient, amount).
 }
 ```
 
-#### Initial Supply Rules
-- Based on model performance score
-- Minimum initial supply
-- Maximum initial supply
-- Vesting schedule for team tokens
+#### Investor Allocation
+The investor allocation is a cap on tokens mintable via AMM buys. Tokens are minted lazily as buyers purchase through the AMM, up to this cap. The `AllocationDistributed` event passes `address(0)` as the recipient to signal that no pre-mint occurs.
+
+#### Allocation Rules
+- `totalSupply` is `0` immediately after deployment
+- `maxSupply = modelSupplierAllocation + investorAllocation` (both in wei, 18 decimals)
+- Supplier tokens are minted by the Hokusai backend after verification; the deployer does not trigger this call
+- Investor allocation is consumed lazily by AMM buy activity
 
 ## Supply Reduction (AMM Selling)
 
