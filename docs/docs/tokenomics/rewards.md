@@ -24,13 +24,17 @@ graph TD
     style D fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
+#### Verification and Acceptance Flow
+
+**DeltaVerifier** (on-chain) validates each challenger submission by consuming **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts stored in MLflow. When a submission passes verification, DeltaVerifier publishes a **MintRequest** (schema v1.0) to Redis; amounts are standardized on bps + USDC micro-units for on-chain precision (see [HOK-1266](https://linear.app/hokusai/issue/HOK-1266/standardize-deltaone-acceptance-event-payload-for-on-chain)).
+
 #### Reward Calculation
 ```
 Reward = DeltaOnes * Tokens_Per_DeltaOne
 ```
 
 Where:
-- DeltaOnes = Number of percentage points of improvement (1 DeltaOne = 1% improvement)
+- DeltaOnes = Number of percentage points of improvement (1 DeltaOne = 1% improvement on the model's primary metric)
 - Tokens_Per_DeltaOne = Fixed number of tokens awarded per DeltaOne
 
 Example:
