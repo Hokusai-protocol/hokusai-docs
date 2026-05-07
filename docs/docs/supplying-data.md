@@ -513,6 +513,20 @@ To prevent duplicate jobs during bulk uploads, arrivals within the same `EVALUAT
 | `EVALUATION_DEBOUNCE_WINDOW_SECONDS` | `300` | Deduplication window for rapid successive uploads |
 | `HOKUSAI_DATASET_BUCKET` | — | S3 bucket where uploaded datasets are stored |
 
+#### Monitoring dataset arrivals
+
+Use `GET /api/v1/dataset-arrivals` to inspect which datasets have been received. This endpoint accepts optional `model_id` and `limit` query parameters:
+
+```bash
+curl "https://api.hokus.ai/api/v1/dataset-arrivals?model_id=my-model-id&limit=10" \
+  -H "Authorization: Bearer $HOKUSAI_API_KEY"
+```
+
+#### Related reading
+
+- [Tokenomics: DeltaOne Rewards](/tokenomics/rewards) — how performance improvements translate to reward payouts
+- [Model Lifecycle](/core-workflows/model-lifecycle) — full lifecycle from registration through evaluation and rewards
+
 ---
 
 
