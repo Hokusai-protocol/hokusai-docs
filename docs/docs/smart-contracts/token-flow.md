@@ -65,6 +65,7 @@ After launch, token holders can sell tokens back to the AMM for USDC under the a
 function sell(
     uint256 tokenAmount,
     uint256 minUSDC,
+    address to,
     uint256 deadline
 ) external nonReentrant returns (uint256 usdcAmount) {
     require(tokenAmount > 0, "Amount must be > 0");
@@ -118,24 +119,6 @@ function distributeRewards(
 - Cliff periods
 - Early withdrawal penalties
 
-### 2. Treasury Distribution
-```solidity
-function distributeTreasuryRewards(
-    address[] calldata recipients,
-    uint256[] calldata amounts
-) external onlyTreasury {
-    require(recipients.length == amounts.length, "Length mismatch");
-    for (uint i = 0; i < recipients.length; i++) {
-        _mint(recipients[i], amounts[i]);
-    }
-}
-```
-
-#### Treasury Rules
-- Protocol fee distribution
-- Liquidity provider rewards
-- Emergency fund allocation
-
 ## Token Flow Diagram
 
 ### Complete Token Lifecycle
@@ -153,7 +136,7 @@ function distributeTreasuryRewards(
          ↓                 ↓
      [USDC]          [API Fees Collected]
                            ↓
-              [UsageFeeRouter: 20% to Reserve]
+              [UsageFeeRouter: profit residual to reserve]
                            ↓
               [Reserve ↑] → [Price ↑]
 ```
@@ -226,7 +209,7 @@ Selling:
 ### 3. Performance Metrics
 - Model improvement rate
 - Access frequency
-- Treasury health
+- Infrastructure accrual health
 
 ### 4. AMM Metrics
 - Reserve balance (USDC)

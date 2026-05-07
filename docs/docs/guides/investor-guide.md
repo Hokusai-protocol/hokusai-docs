@@ -115,7 +115,7 @@ Before investing, thoroughly evaluate the model:
 ```
 ☐ Initial supply and distribution
 ☐ Reserve Ratio (CRR) setting
-☐ Trade and protocol fees
+☐ Trade fee
 ☐ Projected API usage and revenue
 ☐ Token minting schedule
 ```
@@ -139,20 +139,19 @@ Every model launches with specific AMM parameters:
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
 // Get key parameters
-const reserveRatio = await amm.reserveRatio(); // CRR (w)
+const reserveRatio = await amm.crr(); // CRR (w)
 const tradeFee = await amm.tradeFee(); // e.g., 0.30%
-const protocolFee = await amm.protocolFee(); // e.g., 5%
+const ibrEndTime = await amm.ibrEndTime(); // IBR phase end time
 const ibrDuration = "7 days max";
 const flatCurveThreshold = "25,000 USDC";
 const flatCurvePrice = "$0.01/token";
 
 // Get initial state
-const reserve = await amm.getReserve();
-const supply = await amm.getTotalSupply();
+const [reserve, supply] = await amm.getReserves();
 const price = await amm.spotPrice();
 
 console.log(`Initial Price: ${ethers.formatUnits(price, 18)} USDC`);
-console.log(`Reserve Ratio: ${reserveRatio / 1e16}%`);
+console.log(`Reserve Ratio (ppm): ${reserveRatio}`);
 console.log(`Initial Reserve: ${ethers.formatUnits(reserve, 6)} USDC`);
 ```
 
@@ -296,10 +295,9 @@ console.log("Purchase complete!");
 async function getModelMetrics(ammAddress) {
     const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
-    const reserve = await amm.getReserve();
-    const supply = await amm.getTotalSupply();
+    const [reserve, supply] = await amm.getReserves();
     const price = await amm.spotPrice();
-    const reserveRatio = await amm.reserveRatio();
+    const reserveRatio = await amm.crr();
 
     const marketCap = (price * supply) / BigInt(1e18);
     const tvl = reserve;
@@ -310,7 +308,7 @@ async function getModelMetrics(ammAddress) {
         supply: ethers.formatUnits(supply, 18),
         marketCap: ethers.formatUnits(marketCap, 6),
         tvl: ethers.formatUnits(tvl, 6),
-        reserveRatio: Number(reserveRatio) / 1e16
+        reserveRatioPpm: Number(reserveRatio)
     };
 }
 ```

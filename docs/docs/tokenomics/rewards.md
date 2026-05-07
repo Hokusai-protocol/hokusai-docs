@@ -47,11 +47,11 @@ Reward = 7 DeltaOnes * 100 tokens = 700 tokens
 API usage generates fees that benefit token holders indirectly:
 
 #### Fee Distribution via UsageFeeRouter
-The `UsageFeeRouter` contract routes API usage fees based on each model's governance-controlled parameters:
-- **Infrastructure Accrual (50-100%)**: Sent to `InfrastructureReserve` contract for provider payments
-- **Profit Share (0-50%, residual)**: Deposited to AMM Reserve as USDC, increases token price
+The `UsageFeeRouter` contract routes API usage fees with cost-plus logic when the oracle has a price for the model:
+- **Infrastructure cost**: Estimated from `InfrastructureCostOracle` and sent to `InfrastructureReserve`
+- **Profit Share (residual)**: Deposited to AMM Reserve as USDC, increasing token price
 
-Each model has its own `infrastructureAccrualBps` parameter in `HokusaiParams`. Governance can adjust this rate as actual costs become clearer.
+If the oracle has no entry for the model, the router falls back to the model's `infrastructureAccrualBps` parameter in `HokusaiParams`.
 
 **Note**: These are NOT direct rewards to token holders. Instead, the profit share increases the USDC reserve backing all tokens, which raises the token price proportionally.
 
@@ -104,21 +104,13 @@ The UsageFeeRouter contract routes API usage fees based on per-model parameters:
 ```solidity
 function depositFee(
     string memory modelId,
-    uint256 totalFees
+    uint256 totalFees,
+    uint256 callCount
 ) external onlyFeeDepositor {
-    // Get model's infrastructure accrual rate from HokusaiParams
-    IHokusaiParams params = getParamsForModel(modelId);
-    uint16 infraBps = params.infrastructureAccrualBps(); // e.g., 7000 = 70%
-
-    // Calculate split
-    uint256 infrastructureAmount = (totalFees * infraBps) / 10000;
+    uint256 costPer1000Calls = costOracle.getEstimatedCost(modelId);
+    uint256 infrastructureAmount = (costPer1000Calls * callCount) / 1000;
+    if (infrastructureAmount > totalFees) infrastructureAmount = totalFees;
     uint256 profitAmount = totalFees - infrastructureAmount;
-
-    // Send to infrastructure reserve (for provider payments)
-    infraReserve.deposit(modelId, infrastructureAmount);
-
-    // Deposit profit to AMM reserve (increases token price)
-    HokusaiAMM(ammAddress).depositFees(profitAmount);
 }
 ```
 

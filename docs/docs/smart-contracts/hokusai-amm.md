@@ -36,36 +36,37 @@ UsageFeeRouter (deposits API fees)
 ### Core Parameters
 
 ```solidity
-// Token being traded
-IERC20 public immutable token;
-
 // Reserve token (USDC)
 IERC20 public immutable reserveToken;
 
-// Constant Reserve Ratio (5% to 100%)
-uint256 public reserveRatio;
+// Model token and mint/burn delegate
+address public immutable hokusaiToken;
+TokenManager public immutable tokenManager;
 
-// Trade fee (0% to 10%)
+// Constant Reserve Ratio (ppm; 5% to 100%)
+uint256 public crr;
+
+// Trade fee in bps (0% to 10%)
 uint256 public tradeFee;
 
-// Protocol fee (0% to 50% of trade fee)
-uint256 public protocolFee;
+// Fee recipient for AMM trading fees
+address public treasury;
 
 // Launch-phase metadata and trade state helpers may expose IBR timing
 uint256 public immutable ibrEndTime;
 
-// Emergency pause flag
-bool public paused;
+// Tracked reserve balance
+uint256 public reserveBalance;
 ```
 
 ### Constants
 
 ```solidity
 uint256 public constant PRECISION = 1e18;
-uint256 public constant MAX_RESERVE_RATIO = 1e18;  // 100%
-uint256 public constant MIN_RESERVE_RATIO = 5e16;  // 5%
-uint256 public constant MAX_TRADE_FEE = 10e16;     // 10%
-uint256 public constant MAX_PROTOCOL_FEE = 50e16;  // 50%
+uint256 public constant MAX_CRR = 1000000; // 100%
+uint256 public constant MIN_CRR = 50000;   // 5%
+uint256 public constant MAX_TRADE_FEE = 1000; // 10%
+uint256 public constant MAX_TRADE_BPS_LIMIT = 5000; // 50%
 ```
 
 ## Core Functions
@@ -76,13 +77,17 @@ Purchase tokens by depositing USDC.
 
 ```solidity
 function buy(
-    uint256 minTokens,
+    uint256 reserveIn,
+    uint256 minTokensOut,
+    address to,
     uint256 deadline
-) external payable nonReentrant returns (uint256 tokensBought);
+) external nonReentrant returns (uint256 tokensOut);
 ```
 
 **Parameters**:
-- `minTokens`: Minimum tokens expected (slippage protection)
+- `reserveIn`: USDC amount to deposit
+- `minTokensOut`: Minimum tokens expected (slippage protection)
+- `to`: Recipient of minted tokens
 - `deadline`: Transaction deadline timestamp
 
 **Returns**: Number of tokens purchased
@@ -125,10 +130,10 @@ Where:
 ```solidity
 event Buy(
     address indexed buyer,
-    uint256 usdcSpent,
-    uint256 tokensBought,
-    uint256 tradeFee,
-    uint256 protocolFee
+    uint256 reserveIn,
+    uint256 tokensOut,
+    uint256 fee,
+    uint256 spotPrice
 );
 ```
 
@@ -138,15 +143,17 @@ Sell tokens back for USDC.
 
 ```solidity
 function sell(
-    uint256 tokenAmount,
-    uint256 minUSDC,
+    uint256 tokensIn,
+    uint256 minReserveOut,
+    address to,
     uint256 deadline
-) external nonReentrant returns (uint256 usdcReceived);
+) external nonReentrant returns (uint256 reserveOut);
 ```
 
 **Parameters**:
-- `tokenAmount`: Number of tokens to sell
-- `minUSDC`: Minimum USDC expected (slippage protection)
+- `tokensIn`: Number of tokens to sell
+- `minReserveOut`: Minimum USDC expected (slippage protection)
+- `to`: Recipient of USDC
 - `deadline`: Transaction deadline timestamp
 
 **Returns**: USDC amount received
@@ -202,10 +209,10 @@ Where:
 ```solidity
 event Sell(
     address indexed seller,
-    uint256 tokensSold,
-    uint256 usdcReceived,
-    uint256 tradeFee,
-    uint256 protocolFee
+    uint256 tokensIn,
+    uint256 reserveOut,
+    uint256 fee,
+    uint256 spotPrice
 );
 ```
 
@@ -214,15 +221,13 @@ event Sell(
 Deposit profit share from API usage fees directly to reserves (no token minting).
 
 ```solidity
-function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant;
+function depositFees(uint256 amount) external nonReentrant;
 ```
 
 **Parameters**:
 - `amount`: USDC amount to deposit (profit share after infrastructure accrual)
 
-**Access**: Only addresses with `FEE_DEPOSITOR_ROLE` (typically `UsageFeeRouter`)
-
-**Context**: The `UsageFeeRouter` calculates the profit share based on each model's `infrastructureAccrualBps` parameter. For example, if a model has 80% infrastructure accrual, only 20% of API revenue reaches this function.
+**Context**: The contract itself does not enforce `FEE_DEPOSITOR_ROLE`. In practice, the intended caller is the `UsageFeeRouter`, which routes the profit residual from API usage fees.
 
 **Effect**:
 - Increases reserve (R ↑)
@@ -252,7 +257,8 @@ await amm.depositFees(profitAmount);
 event FeesDeposited(
     address indexed depositor,
     uint256 amount,
-    uint256 newReserve
+    uint256 newReserveBalance,
+    uint256 newSpotPrice
 );
 ```
 
@@ -316,25 +322,34 @@ const usdcOut = await amm.getSellQuote(tokenAmount);
 console.log(`1000 tokens → ${ethers.formatUnits(usdcOut, 6)} USDC`);
 ```
 
-### getReserve()
+### getReserves()
 
 Get current USDC reserve balance.
 
 ```solidity
-function getReserve() external view returns (uint256);
+function getReserves() external view returns (uint256 reserve, uint256 supply);
 ```
 
-**Returns**: Current reserve in USDC
+**Returns**: Current reserve and token supply
 
-### getTotalSupply()
+### getPoolState()
 
 Get current token supply.
 
 ```solidity
-function getTotalSupply() external view returns (uint256);
+function getPoolState()
+    external
+    view
+    returns (
+        uint256 reserve,
+        uint256 supply,
+        uint256 price,
+        uint256 reserveRatio,
+        uint256 tradeFeeRate
+    );
 ```
 
-**Returns**: Current circulating supply
+**Returns**: Reserve, supply, spot price, CRR, and trade fee
 
 ### Launch-Phase Status
 
@@ -350,30 +365,35 @@ At minimum, an integration should surface:
 
 ## Governance Functions
 
-### updateParameters()
+### setParameters()
 
-Update AMM parameters (owner only).
+Update CRR and trade fee (owner only).
 
 ```solidity
-function updateParameters(
-    uint256 newReserveRatio,
-    uint256 newTradeFee,
-    uint256 newProtocolFee
+function setParameters(
+    uint256 newCrr,
+    uint256 newTradeFee
 ) external onlyOwner;
 ```
 
 **Parameters**:
-- `newReserveRatio`: New CRR (5% to 100%)
-- `newTradeFee`: New trade fee (0% to 10%)
-- `newProtocolFee`: New protocol fee (0% to 50% of trade fee)
+- `newCrr`: New CRR in ppm
+- `newTradeFee`: New trade fee in bps
 
 **Events Emitted**:
 ```solidity
 event ParametersUpdated(
-    uint256 reserveRatio,
-    uint256 tradeFee,
-    uint256 protocolFee
+    uint256 newCrr,
+    uint256 newTradeFee
 );
+```
+
+### setMaxTradeBps()
+
+Update the maximum single-trade size relative to reserve balance.
+
+```solidity
+function setMaxTradeBps(uint256 newMaxTradeBps) external onlyOwner;
 ```
 
 ### pause() / unpause()
@@ -389,34 +409,30 @@ function unpause() external onlyOwner;
 
 ### withdrawTreasury()
 
-Withdraw accumulated protocol fees.
+Withdraw accumulated trade-fee balance from the contract.
 
 ```solidity
 function withdrawTreasury(uint256 amount) external onlyOwner;
 ```
 
 **Parameters**:
-- `amount`: USDC amount to withdraw from protocol fee balance
+- `amount`: USDC amount to withdraw from the AMM-held trade-fee balance
+
+The `treasury` here is a configurable AMM fee-recipient address. It is not a protocol-wide treasury for API usage fees.
 
 ## Access Control
 
-The contract uses role-based access control:
+The contract uses `Ownable` plus conventional integration with the router:
 
-### Roles
-
-```solidity
-bytes32 public constant FEE_DEPOSITOR_ROLE = keccak256("FEE_DEPOSITOR_ROLE");
-```
-
-**Owner** (`Ownable`):
+**Owner**:
 - Update parameters
+- Update max trade size
 - Pause/unpause
-- Withdraw treasury
-- Grant/revoke roles
+- Withdraw accumulated trade fees
 
-**Fee Depositor** (role-based):
-- Deposit API fees
+**Usage-fee depositor**:
 - Typically the `UsageFeeRouter` contract
+- Calls `depositFees()` with the profit residual after cost-plus routing
 
 ### Granting Roles
 
@@ -424,9 +440,9 @@ bytes32 public constant FEE_DEPOSITOR_ROLE = keccak256("FEE_DEPOSITOR_ROLE");
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 const usageFeeRouter = "0x...";
 
-// Grant FEE_DEPOSITOR_ROLE to UsageFeeRouter
-const role = ethers.keccak256(ethers.toUtf8Bytes("FEE_DEPOSITOR_ROLE"));
-await amm.grantRole(role, usageFeeRouter);
+// The router approves USDC and calls depositFees()
+await usdc.approve(ammAddress, profitAmount);
+await amm.depositFees(profitAmount);
 ```
 
 ## Security Features
@@ -463,11 +479,7 @@ require(block.timestamp <= deadline, "Transaction expired");
 All parameters have strict bounds enforced:
 
 ```solidity
-require(
-    newReserveRatio >= MIN_RESERVE_RATIO &&
-    newReserveRatio <= MAX_RESERVE_RATIO,
-    "Invalid reserve ratio"
-);
+require(newCrr >= MIN_CRR && newCrr <= MAX_CRR, "CRR out of bounds");
 ```
 
 ### Emergency Pause
@@ -498,11 +510,11 @@ Uses fixed-point arithmetic with `PRECISION = 1e18` for accuracy.
 ```solidity
 function calculateBuy(uint256 usdcIn) internal view returns (uint256) {
     uint256 supply = token.totalSupply();
-    uint256 reserve = getReserve();
+    uint256 reserve = reserveBalance;
 
     // T = S × ((1 + E/R)^w - 1)
     uint256 ratio = (usdcIn * PRECISION) / reserve;
-    uint256 powered = power(PRECISION + ratio, reserveRatio);
+    uint256 powered = power(PRECISION + ratio, crr);
     uint256 tokensOut = (supply * (powered - PRECISION)) / PRECISION;
 
     return tokensOut;
@@ -514,12 +526,12 @@ function calculateBuy(uint256 usdcIn) internal view returns (uint256) {
 ```solidity
 function calculateSell(uint256 tokensIn) internal view returns (uint256) {
     uint256 supply = token.totalSupply();
-    uint256 reserve = getReserve();
+    uint256 reserve = reserveBalance;
 
     // F = R × (1 - (1 - T/S)^(1/w))
     uint256 ratio = (tokensIn * PRECISION) / supply;
     uint256 invRatio = PRECISION - ratio;
-    uint256 powered = power(invRatio, PRECISION / reserveRatio);
+    uint256 powered = power(invRatio, PRECISION / crr);
     uint256 usdcOut = (reserve * (PRECISION - powered)) / PRECISION;
 
     return usdcOut;
@@ -711,8 +723,8 @@ describe("HokusaiAMM", function() {
 ## Related Contracts
 
 - [HokusaiToken](/smart-contracts/model-tokens-and-token-manager) - ERC20 token implementation
-- [HokusaiAMMFactory](/smart-contracts/treasury-and-access) - Pool deployment
-- [UsageFeeRouter](/smart-contracts/treasury-and-access) - Fee routing
+- [Access Control & Roles](/smart-contracts/access-control) - Roles and operational permissions
+- [Usage Fee Routing](/smart-contracts/usage-fee-routing) - Cost-plus fee routing
 - [TokenManager](/smart-contracts/model-tokens-and-token-manager) - Token minting
 
 ## Next Steps
