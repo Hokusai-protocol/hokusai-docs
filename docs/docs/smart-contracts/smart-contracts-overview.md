@@ -35,10 +35,10 @@ graph TD
 
 ## Key Features
 
-### Seven-Day Launch Period
-- Each model token starts with buy-only period (Days 0-6)
-- Full trading enabled after Day 7
-- Prevents manipulation and enables fair price discovery
+### Initial Bonding Ratio (IBR) Phase
+- Each model token starts at a flat launch price of $0.01 per token
+- The AMM hands off to CRR pricing when reserves reach $25,000 USDC or 7 days elapse
+- This bootstraps reserve depth before normal bonding-curve price discovery
 
 ### Infrastructure Cost Accrual
 - Each model has a configurable `infrastructureAccrualBps` (50-100%)

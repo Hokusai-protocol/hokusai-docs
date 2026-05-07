@@ -97,8 +97,8 @@ Model usage generates API fees that are split between infrastructure costs and p
    - Token holders benefit from genuine profit after infrastructure costs
 
 ### Token Burning via AMM
-1. **Selling on AMM (After Day 7)**
-   - Sell tokens for USDC through bonding curve
+1. **Selling on AMM**
+   - Sell tokens for USDC under the AMM's active IBR or CRR pricing regime
    - Price impact based on sell amount
    - Slippage protection
    - Tokens are burned when sold, USDC returned

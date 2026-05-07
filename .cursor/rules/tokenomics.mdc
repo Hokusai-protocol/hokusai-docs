@@ -51,12 +51,12 @@ alwaysApply: false
       importance="high"
     />
     <TokenomicsRule
-      rule="Buy tokens with USDC, sell tokens for USDC (after 7-day launch)"
+      rule="Buy tokens with USDC and sell tokens for USDC under the AMM's active IBR or CRR pricing regime"
       type="action"
       importance="high"
     />
     <TokenomicsRule
-      rule="Seven-day buy-only launch period prevents manipulation"
+      rule="Every AMM launch starts with an Initial Bonding Ratio (IBR) phase: flat $0.01/token pricing until $25,000 reserves or 7 days"
       type="behavior"
       importance="high"
     />

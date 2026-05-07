@@ -6,14 +6,15 @@ The HokusaiAMM contract implements a **Constant Reserve Ratio (CRR)** bonding cu
 
 ### Core Mechanics
 - **Buy tokens**: Deposit USDC, receive tokens at bonding curve price
-- **Sell tokens**: Burn tokens, receive USDC (after Day 7)
+- **Sell tokens**: Burn tokens, receive USDC under the AMM's active pricing regime
 - **Price formula**: P = R / (w × S) where R=reserve, w=CRR, S=supply
 - **Always-available liquidity**: No need for liquidity providers
 
-### Seven-Day Launch Period
-- **Days 0-6**: Buy-only period (selling disabled)
-- **Day 7+**: Full trading enabled (buy & sell)
-- **Purpose**: Fair price discovery and prevent manipulation
+### Initial Bonding Ratio (IBR) Phase
+- **Launch price**: $0.01 per token
+- **Handoff threshold**: $25,000 USDC reserve
+- **Max duration**: 7 days
+- **Purpose**: Bootstrap reserve depth before CRR pricing
 
 ### Fee Structure
 
@@ -42,7 +43,7 @@ Deploys new AMM contracts for each model token.
 
 ### Responsibilities
 - Deploy HokusaiAMM instances
-- Set initial parameters (CRR, fees, launch period)
+- Set initial parameters (CRR, fees, IBR phase)
 - Register AMM with ModelRegistry
 - Grant appropriate roles (fee depositor, etc.)
 
