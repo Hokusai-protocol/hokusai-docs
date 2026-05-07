@@ -3,6 +3,7 @@ module.exports = {
   tagline: 'Fair Incentives for Training Smarter AI',
   url: 'https://docs.hokus.ai',
   baseUrl: '/',
+  trailingSlash: false,
   organizationName: 'Hokusai-protocol',
   projectName: 'hokusai-docs',
   favicon: 'img/favicon.ico',
@@ -37,6 +38,21 @@ module.exports = {
       href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
       type: 'text/css',
     },
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Preserve indexed legacy licensing routes after the underlying docs were removed.
+        redirects: [
+          {
+            from: ['/licensing/proprietary', '/licensing/open-source'],
+            to: '/licensing/overview',
+          },
+        ],
+      },
+    ],
   ],
 
   themeConfig: {
