@@ -1,12 +1,17 @@
 import React from 'react';
-import type { FC } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-const Logo: FC = () => {
+const NavbarLink = Link as unknown as React.ComponentType<{
+  children: React.ReactNode;
+  className?: string;
+  to: string;
+}>;
+
+export default function Logo(): React.ReactElement {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <Link to="/" className="navbar__brand flex items-center group">
+    <NavbarLink to="/" className="navbar__brand flex items-center group">
       <div className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center mr-2 transition-transform group-hover:scale-105">
         <svg
           viewBox="0 0 24 24"
@@ -48,8 +53,6 @@ const Logo: FC = () => {
       <span className="text-xl font-bold text-blue-900 dark:text-white transition-colors">
         {siteConfig.title}
       </span>
-    </Link>
+    </NavbarLink>
   );
-};
-
-export default Logo;
+}

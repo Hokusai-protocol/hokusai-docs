@@ -11,7 +11,7 @@ This guide explains how to create and register models in the Hokusai ecosystem, 
 
 ## Overview
 
-Hokusai allows model developers to register their AI models and earn rewards when the models are improved through data contributions. Each model has its own ERC-20 token that is minted when performance improves and can be traded on a dedicated AMM. API usage fees flow to the token's USDC reserve, increasing its price. This guide covers both the web-based creation process and programmatic integration using our SDK.
+Hokusai allows model developers to register their AI models and earn rewards when the models are improved through data contributions. Each model has its own ERC-20 token that is minted when performance improves and can be traded on a dedicated AMM. API usage fees flow to the token's USDC reserve, increasing its price. This guide covers both the web-based creation process and the equivalent programmatic workflow.
 
 ## Prerequisites
 
@@ -79,221 +79,150 @@ Review all settings and click "Create Model". After creation, you'll be guided t
 
 ## Programmatic Model Creation
 
-For advanced users or automated workflows, you can use our SDK to programmatically create and register models.
+For advanced users, CI pipelines, or custom launch flows, the on-chain portion of model creation is a direct smart contract call. The workflow has two parts:
 
-## Step 1: Install the SDK
+1. Deploy the model token on-chain with `TokenManager.deployTokenWithParams(...)`
+2. Register the model artifact off-chain with the MLflow-based `hokusai-ml-platform` SDK
+
+Use the web flow or the first five steps of the [Complete Model Launch Guide](guides/model-launch-guide) to define your model metadata and token economics, then script the deployment step below.
+
+## Step 1: Install ethers
 
 ```bash
-pip install hokusai-sdk
+npm install ethers
 ```
 
-## Step 2: Prepare Your Model
+### Prerequisites
 
-### Technical Requirements
+Before broadcasting a deployment transaction, make sure you have:
 
-Your model must meet these requirements:
+1. Node.js 18+ and `ethers` v6
+2. An RPC endpoint in `RPC_URL`
+3. A funded deployer private key in `PRIVATE_KEY`
+4. The deployed TokenManager contract address in `TOKEN_MANAGER_ADDRESS`
+5. A non-zero governor address in `GOVERNOR_ADDRESS`
+6. Model metadata, license text, and token economics from the model creation flow
 
-1. **Model Format**
-   - Must be a machine learning model
-   - Must be serializable (e.g., PyTorch, TensorFlow, scikit-learn)
-   - Must include input/output specifications
-   - Must have version control
+## Step 2: Compute the license hash
 
-2. **Performance Requirements**
-   - Must have baseline performance metrics
-   - Must be reproducible
-   - Must handle standard input formats
-   - Must provide confidence scores
-   - Must be verifiable by the DeltaOneVerifier contract
+`deployTokenWithParams()` stores a `licenseHash` on-chain and a `licenseURI` that points to the full license text. Hash the exact bytes you publish at `licenseURI` before deployment:
 
-3. **Documentation Requirements**
-   - Model architecture description
-   - Training methodology
-   - Performance benchmarks
-   - Input/output specifications
-   - Usage examples
+```typescript
+import { keccak256, toUtf8Bytes } from "ethers";
 
-### Model Packaging
+const licenseText = `# Commercial Model License
 
-Package your model for submission:
+Replace this text with the exact license you will publish off-chain.
+`;
 
-```python
-from hokusai import ModelPackager
-
-# Initialize packager
-packager = ModelPackager()
-
-# Package your model
-model_package = packager.package(
-    model_path='path/to/model',
-    metadata={
-        'name': 'Your Model Name',
-        'version': '1.0.0',
-        'description': 'Model description',
-        'architecture': 'Model architecture details',
-        'performance_metrics': {
-            'accuracy': 0.95,
-            'precision': 0.94,
-            'recall': 0.93
-        }
-    }
-)
+const licenseHash = keccak256(toUtf8Bytes(licenseText));
+console.log("License hash:", licenseHash);
 ```
 
-## Step 3: Smart Contract Interactions
+## Step 3: Deploy the model token
 
-### Initialize the Client
+The TokenManager contract accepts the model metadata plus an `InitialParams` struct. The example below uses the actual contract interface.
 
-```python
-from hokusai import HokusaiClient
+```typescript
+import {
+  Contract,
+  JsonRpcProvider,
+  Wallet,
+  keccak256,
+  parseUnits,
+  toUtf8Bytes,
+} from "ethers";
 
-# Initialize the client
-client = HokusaiClient(
-    api_key='your_api_key',
-    wallet_address='your_wallet_address'
-)
+const TOKEN_MANAGER_ABI = [
+  "function deployTokenWithParams(string modelId, string name, string symbol, uint256 totalSupply, (uint256 tokensPerDeltaOne, uint16 infrastructureAccrualBps, uint256 initialOraclePricePerThousandUsd, bytes32 licenseHash, string licenseURI, address governor) initialParams) payable returns (address)",
+];
 
-# Connect your wallet
-client.connect_wallet()
+async function main() {
+  const provider = new JsonRpcProvider(process.env.RPC_URL);
+  const wallet = new Wallet(process.env.PRIVATE_KEY!, provider);
+  const tokenManager = new Contract(
+    process.env.TOKEN_MANAGER_ADDRESS!,
+    TOKEN_MANAGER_ABI,
+    wallet,
+  );
+
+  const licenseText = `# Commercial Model License
+
+Replace this text with the exact license you will publish off-chain.
+`;
+
+  const initialParams = {
+    tokensPerDeltaOne: parseUnits("100000", 18),
+    infrastructureAccrualBps: 5000,
+    initialOraclePricePerThousandUsd: 0n,
+    licenseHash: keccak256(toUtf8Bytes(licenseText)),
+    licenseURI: "ipfs://Qm.../license.md",
+    governor: process.env.GOVERNOR_ADDRESS!,
+  };
+
+  const tx = await tokenManager.deployTokenWithParams(
+    "sentiment-v2",
+    "Sentiment Model",
+    "SENT",
+    parseUnits("1000000", 18),
+    initialParams,
+  );
+
+  console.log("Submitted transaction:", tx.hash);
+  const receipt = await tx.wait();
+  console.log("Mined in block:", receipt?.blockNumber);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
 ```
 
-### Register Model and Create Token
+### Parameter reference
 
-```python
-# Register model and create ERC-20 token
-registration = client.register_model(
-    model_package=model_package,
-    settings={
-        'reward_rate': 0.1,  # Percentage of improvement to reward
-        'min_improvement': 0.01,  # Minimum improvement threshold
-        'max_rewards': 1000  # Maximum rewards per improvement
-    }
-)
+| Parameter | Meaning |
+| --- | --- |
+| `modelId` | Unique model identifier. Reusing a prior `modelId` will revert. |
+| `name` | ERC-20 token name shown to users. |
+| `symbol` | ERC-20 token ticker. |
+| `totalSupply` | Initial token supply, typically expressed with 18 decimals via `parseUnits`. |
+| `tokensPerDeltaOne` | Tokens minted per DeltaOne improvement. See [DeltaOne Calculations](tokenomics/deltaone-calculations). |
+| `infrastructureAccrualBps` | Infrastructure share in basis points. Valid range is `1000` to `10000`. See [Treasury & Access](smart-contracts/treasury-and-access) and [Choosing CRR](guides/choosing-crr). |
+| `initialOraclePricePerThousandUsd` | Initial USD price per 1000 calls for oracle-based pricing. Set to `0` if you are leaving it unset at deployment time. |
+| `licenseHash` | `keccak256` hash of the exact license bytes published at `licenseURI`. |
+| `licenseURI` | Off-chain location of the full license text, typically IPFS or HTTPS. |
+| `governor` | Address that receives governance control for the model. Use a multisig in production. |
 
-# This will:
-# 1. Register the model in the ModelRegistry
-# 2. Create a new ERC-20 token for the model
-# 3. Set up the TokenManager for the model
-# 4. Configure the DeltaOneVerifier for performance tracking
+## Step 4: Register the model with the ML platform
 
-print(f"Model ID: {registration.model_id}")
-print(f"Token Address: {registration.token_address}")
-print(f"Registration Status: {registration.status}")
-```
+After the token is deployed, register the model artifact with the MLflow-based SDK documented in the launch guide. That guide is the source of truth for the Python registration flow and API key setup.
 
-### Configure Smart Contracts
-
-```python
-# Configure TokenManager settings
-token_settings = client.configure_token_manager(
-    model_id=registration.model_id,
-    settings={
-        'mint_threshold': 0.01,  # Minimum improvement to mint tokens
-        'api_fee_rate': 0.001,  # USDC fee per API call
-        'reward_distribution': {
-            'contributors': 0.7,  # 70% to data contributors
-            'model_owner': 0.3    # 30% to model owner
-        }
-    }
-)
-
-# Configure DeltaOneVerifier settings
-verifier_settings = client.configure_verifier(
-    model_id=registration.model_id,
-    settings={
-        'performance_metrics': ['accuracy', 'precision', 'recall'],
-        'verification_method': 'zkProof',  # or 'oracle'
-        'improvement_calculation': 'deltaInBps'  # Basis points calculation
-    }
-)
-```
-
-## Step 4: Test Integration
-
-### Run Validation Tests
-
-```python
-# Run integration tests
-test_results = client.test_model_integration(
-    model_id=registration.model_id,
-    test_cases=[
-        {
-            'input': test_input,
-            'expected_output': expected_output
-        }
-    ]
-)
-
-print(f"Test Results: {test_results.status}")
-print(f"Validation Score: {test_results.score}")
-```
-
-### Verify Smart Contract Integration
-
-```python
-# Verify smart contract integration
-contract_verification = client.verify_contract_integration(
-    model_id=registration.model_id,
-    checks=[
-        'token_creation',
-        'verifier_setup',
-        'manager_configuration',
-        'reward_distribution'
-    ]
-)
-
-print(f"Contract Verification: {contract_verification.status}")
-print(f"Token Manager: {contract_verification.token_manager}")
-print(f"DeltaOne Verifier: {contract_verification.verifier}")
+```text
+See guides/model-launch-guide#step-6-model-registration for:
+- pip install git+https://github.com/Hokusai-protocol/hokusai-data-pipeline.git#subdirectory=hokusai-ml-platform
+- export HOKUSAI_API_KEY=...
+- ModelRegistry.register_tokenized_model(...)
 ```
 
 ## Best Practices
 
-1. **Model Development**
-   - Use version control
-   - Document thoroughly
-   - Test extensively
-   - Optimize performance
-   - Ensure verifiability
-
-2. **Smart Contract Integration**
-   - Test contract interactions
-   - Verify token economics
-   - Monitor gas costs
-   - Secure private keys
-   - Backup contract addresses
-
-3. **Token Management**
-   - Set appropriate thresholds
-   - Configure fair rewards
-   - Monitor token supply
-   - Track API fee rates
-   - Manage liquidity
+1. **Pin license off-chain and hash it on-chain** - Publish the final license text at `licenseURI`, then verify `keccak256(toUtf8Bytes(licenseText))` matches `licenseHash` before you broadcast.
+2. **Choose `tokensPerDeltaOne` to match your dilution model** - Calibrate rewards against expected improvement cadence using the guidance in [DeltaOne Calculations](tokenomics/deltaone-calculations).
+3. **Set `infrastructureAccrualBps` from a real cost model** - This value must stay within `1000` to `10000`. Use [Choosing CRR](guides/choosing-crr) and [Treasury & Access](smart-contracts/treasury-and-access) when deciding the split.
+4. **Use a multisig for `governor`** - Production deployments should not hand governance to a single EOA.
+5. **Test with a non-production TokenManager first** - A testnet deployment is the fastest way to catch role issues, gas estimation problems, and `licenseHash` mismatches.
 
 ## Troubleshooting
 
-Common issues and solutions:
-
-1. **Registration Failures**
-   - Check model format
-   - Verify documentation
-   - Review requirements
-   - Test locally
-   - Check gas fees
-
-2. **Smart Contract Issues**
-   - Verify contract addresses
-   - Check transaction status
-   - Review error logs
-   - Monitor gas costs
-   - Verify permissions
-
-3. **Token Problems**
-   - Check token creation
-   - Verify minting rights
-   - Monitor fee deposits to reserve
-   - Review distribution
-   - Check balances
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `Token already deployed for this model` | The `modelId` already has an associated token. | Pick a new `modelId`, or inspect the previously deployed token before retrying. |
+| Revert during parameter validation | `tokensPerDeltaOne` or `infrastructureAccrualBps` is outside the contract's accepted range. | Keep `tokensPerDeltaOne` within the documented contract bounds and `infrastructureAccrualBps` within `1000` to `10000`. |
+| Revert caused by governor configuration | `governor` is the zero address or otherwise invalid for your flow. | Pass a valid non-zero address. A multisig is recommended for production. |
+| `AccessControl: account is missing role` | The caller does not hold the role required to deploy through TokenManager. | Use an authorized deployer wallet or coordinate with the team that manages contract roles. |
+| MLflow `401` or `403` during registration | `HOKUSAI_API_KEY` is missing, expired, or invalid. | Re-issue the key and follow the auth setup in the [Complete Model Launch Guide](guides/model-launch-guide#step-6-model-registration). |
+| License mismatch during later verification | The bytes hashed into `licenseHash` do not match the content served at `licenseURI`. | Recompute the hash from the exact published bytes. If the on-chain hash is wrong, redeploy with corrected values. |
 
 ## Next Steps
 
