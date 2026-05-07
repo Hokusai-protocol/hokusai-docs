@@ -11,27 +11,27 @@ sidebar_position: 3
 Before selling:
 - ✅ Verify current market price and liquidity
 - ✅ Understand slippage and price impact
-- ✅ Check for any selling restrictions or lock-up periods
+- ✅ Check whether the AMM is still in IBR or has handed off to CRR pricing
 - ✅ Be aware of tax implications in your jurisdiction
 
 **This is a technical guide only, not financial advice. Consult professionals for tax and legal guidance.**
 
 :::
 
-This guide provides step-by-step instructions for selling Hokusai model tokens on the bonding curve AMM. Learn how to check if selling is enabled, get quotes, set slippage protection, and execute sales.
+This guide provides step-by-step instructions for selling Hokusai model tokens on the bonding curve AMM. Learn how to identify the active pricing regime, get quotes, set slippage protection, and execute sales.
 
 ## Important Prerequisites
 
-### ⚠️ Selling Restrictions
+### ⚠️ Selling Context
 
-**You CANNOT sell during the seven-day bonding round (Days 0-6)**
+Selling behavior depends on the AMM's current phase:
 
 ```
-Day 0-6:  ❌ Selling DISABLED (buy-only period)
-Day 7+:   ✅ Selling ENABLED (full trading)
+IBR active:      Quotes reflect flat launch pricing at $0.01/token
+CRR active:      Quotes reflect reserve-ratio bonding curve pricing
 ```
 
-Before attempting to sell, verify the bonding round has ended.
+Before attempting to sell, verify which pricing regime is active.
 
 ### What You Need
 
@@ -39,28 +39,17 @@ Before attempting to sell, verify the bonding round has ended.
 2. **Crypto Wallet**: MetaMask, Rabby, or Web3 wallet
 3. **Gas Token**: ETH, MATIC, etc. for transaction fees
 4. **AMM Address**: Model's AMM contract address
-5. **Post-Launch**: Must be Day 7+ after model launch
+5. **Trade Context**: Know whether the AMM is still in IBR or already on CRR pricing
 
-## Check If Selling is Enabled
+## Check the Active Pricing Regime
 
 ### Method 1: Via Contract
 
 ```javascript
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
-// Check if still in bonding round
-const isBuyOnly = await amm.isBuyOnlyPeriod();
-
-if (isBuyOnly) {
-    console.log("❌ Selling disabled - still in bonding round");
-    const buyOnlyUntil = await amm.buyOnlyUntil();
-    const now = Math.floor(Date.now() / 1000);
-    const secondsRemaining = buyOnlyUntil - now;
-    const hoursRemaining = secondsRemaining / 3600;
-    console.log(`⏰ Selling enabled in ${hoursRemaining.toFixed(1)} hours`);
-} else {
-    console.log("✅ Selling is enabled!");
-}
+const tradeInfo = await amm.getTradeInfo?.();
+console.log(tradeInfo);
 ```
 
 ### Method 2: Via Block Explorer
@@ -68,30 +57,25 @@ if (isBuyOnly) {
 ```
 1. Go to AMM contract on Etherscan
 2. Click "Read Contract"
-3. Find "isBuyOnlyPeriod" function
+3. Find any launch-status or trade-status read method
 4. Click "Query"
 5. Result:
-   - "true" = Selling disabled
-   - "false" = Selling enabled
+   - Indicates whether the AMM is still in IBR
+   - Indicates whether CRR pricing is already active
 ```
 
 ### Method 3: Check Timestamp
 
 ```javascript
-const buyOnlyUntil = await amm.buyOnlyUntil();
-const now = Math.floor(Date.now() / 1000);
-
-if (now > buyOnlyUntil) {
-    console.log("✅ Selling enabled");
-} else {
-    console.log("❌ Selling still disabled");
-}
+const reserve = await amm.getReserve();
+console.log(`Current reserve: ${ethers.formatUnits(reserve, 6)} USDC`);
+console.log("Compare this with the $25,000 IBR handoff threshold");
 ```
 
 ## Overview of Selling Process
 
 ```
-1. Verify Selling Enabled → 2. Approve Tokens → 3. Get Quote → 4. Set Slippage → 5. Execute Sell
+1. Check Phase → 2. Approve Tokens → 3. Get Quote → 4. Set Slippage → 5. Execute Sell
 ```
 
 **Time Required**: 5-10 minutes
@@ -221,7 +205,7 @@ Protect yourself from unfavorable price movements:
 - **Normal conditions**: 1-2%
 - **High volatility**: 3-5%
 - **Large sells**: 5-10%
-- **Just after Day 7**: 3-5% (higher volatility)
+- **Near IBR handoff**: 3-5% (higher volatility)
 
 **Calculate minUSDC**:
 ```javascript
@@ -287,45 +271,39 @@ const deadline = Math.floor(Date.now() / 1000) + 300; // 5 minutes
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 const token = await ethers.getContractAt("IERC20", tokenAddress);
 
-// 1. Check if selling enabled
-const isBuyOnly = await amm.isBuyOnlyPeriod();
-if (isBuyOnly) {
-    throw new Error("Selling not enabled yet - still in bonding round");
-}
-
-// 2. Define amount to sell
+// 1. Define amount to sell
 const tokenAmount = ethers.parseUnits("1000", 18);
 
-// 3. Check balance
+// 2. Check balance
 const balance = await token.balanceOf(wallet.address);
 if (balance < tokenAmount) {
     throw new Error("Insufficient token balance");
 }
 
-// 4. Get quote
+// 3. Get quote
 const usdcOut = await amm.getSellQuote(tokenAmount);
 console.log(`Quote: ${ethers.formatUnits(usdcOut, 6)} USDC`);
 
-// 5. Calculate minUSDC (2% slippage)
+// 4. Calculate minUSDC (2% slippage)
 const minUSDC = usdcOut * 98n / 100n;
 
-// 6. Approve tokens
+// 5. Approve tokens
 const approveTx = await token.approve(ammAddress, tokenAmount);
 await approveTx.wait();
 console.log("Tokens approved");
 
-// 7. Set deadline
+// 6. Set deadline
 const deadline = Math.floor(Date.now() / 1000) + 300;
 
-// 8. Execute sell
+// 7. Execute sell
 const sellTx = await amm.sell(tokenAmount, minUSDC, deadline);
 console.log(`Transaction submitted: ${sellTx.hash}`);
 
-// 9. Wait for confirmation
+// 8. Wait for confirmation
 const receipt = await sellTx.wait();
 console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
 
-// 10. Check USDC balance
+// 9. Check USDC balance
 const usdc = await ethers.getContractAt("IERC20", usdcAddress);
 const usdcBalance = await usdc.balanceOf(wallet.address);
 console.log(`USDC balance: ${ethers.formatUnits(usdcBalance, 6)}`);
@@ -357,24 +335,16 @@ console.log(`USDC: ${ethers.formatUnits(usdcBalance, 6)}`);
 
 ## Common Issues & Solutions
 
-### Issue 1: "Selling Not Allowed During Bonding Round"
+### Issue 1: "Quote changed unexpectedly"
 
-**Cause**: Trying to sell before Day 7
+**Cause**: The AMM may have moved from IBR flat pricing to CRR pricing, or the reserve changed materially between quote and execution.
 
 **Solution**:
 ```
-1. Check buyOnlyUntil timestamp
-2. Calculate time remaining
-3. Wait until bonding round ends
-4. Retry after Day 7
-```
-
-**Check Time Remaining**:
-```javascript
-const buyOnlyUntil = await amm.buyOnlyUntil();
-const now = Math.floor(Date.now() / 1000);
-const hoursRemaining = (buyOnlyUntil - now) / 3600;
-console.log(`Wait ${hoursRemaining.toFixed(1)} more hours`);
+1. Refresh the quote
+2. Check current reserve
+3. Confirm whether the AMM is still in IBR
+4. Retry with updated slippage if needed
 ```
 
 ### Issue 2: "Insufficient Allowance"
@@ -432,7 +402,7 @@ console.log(`Wait ${hoursRemaining.toFixed(1)} more hours`);
 - ✅ During low network activity (cheaper gas)
 
 **Times to Avoid**:
-- ❌ Right at Day 7 start (high volatility)
+- ❌ Right at the IBR-to-CRR handoff (high volatility)
 - ❌ During panic selling
 - ❌ Network congestion (high gas)
 - ❌ Without checking price trends

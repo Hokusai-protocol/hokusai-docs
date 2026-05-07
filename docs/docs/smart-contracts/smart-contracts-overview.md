@@ -2,6 +2,8 @@
 
 Hokusai's smart contract system is modular, designed to support decentralized AI model development and tokenization. Here's a simplified flow:
 
+> Looking for contract addresses? See [Deployments](/smart-contracts/deployments).
+
 ```mermaid
 graph TD
     DC["Data Contributor"] -->|submits data| DOV["DeltaOneVerifier"]
@@ -9,6 +11,7 @@ graph TD
     TM -->|distributes rewards| TH["Token Holders"]
     TH <-->|"buy/sell with USDC<br/>(CRR bonding curve)"| AMM["HokusaiAMM"]
     API["API Usage"] --> UFR["UsageFeeRouter"]
+    UFR --> ICO["InfrastructureCostOracle"]
     UFR -->|costs| IR["InfrastructureReserve"]
     UFR -->|"profit → price increases"| AMM
     MAC["ModelAccessController"] -->|"access control<br/>& fee collection"| API
@@ -26,7 +29,8 @@ graph TD
 ### AMM & Trading
 - **HokusaiAMM**: CRR bonding curve for buying/selling tokens with USDC
 - **HokusaiAMMFactory**: Deploys new AMM pools for each model
-- **UsageFeeRouter**: Routes API fees based on per-model parameters
+- **UsageFeeRouter**: Routes API fees using cost-plus logic, with percentage fallback
+- **InfrastructureCostOracle**: Stores per-model infrastructure cost estimates
 - **InfrastructureReserve**: Holds infrastructure cost accruals, pays providers
 
 ### Access Control
@@ -35,16 +39,16 @@ graph TD
 
 ## Key Features
 
-### Seven-Day Launch Period
-- Each model token starts with buy-only period (Days 0-6)
-- Full trading enabled after Day 7
-- Prevents manipulation and enables fair price discovery
+### Initial Bonding Ratio (IBR) Phase
+- Each model token starts at a flat launch price of $0.01 per token
+- The AMM hands off to CRR pricing when reserves reach $25,000 USDC or 7 days elapse
+- This bootstraps reserve depth before normal bonding-curve price discovery
 
 ### Infrastructure Cost Accrual
-- Each model has a configurable `infrastructureAccrualBps` (50-100%)
-- Infrastructure portion accrues in `InfrastructureReserve` contract
-- Providers paid manually with on-chain invoice tracking
-- Governance can adjust rates as actual costs become clearer
+- The primary path is cost-plus routing from `InfrastructureCostOracle`
+- If the oracle has no entry, each model falls back to `infrastructureAccrualBps`
+- Infrastructure portion accrues in `InfrastructureReserve`
+- Providers are paid manually with on-chain invoice tracking
 
 ### Profit Share to AMM
 - Residual after infrastructure (0-50%) flows to AMM USDC reserves

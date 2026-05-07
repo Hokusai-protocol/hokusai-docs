@@ -75,6 +75,8 @@ Review all settings and click "Create Model". After creation, you'll be guided t
 1. **Register Base Model** - Connect your model to the Hokusai ML registry
 2. **Deploy Token to Blockchain** - Deploy your model's ERC-20 token contract (requires a Web3 wallet and ETH for gas)
 
+> Your model enters **DRAFT** when created and moves to **PROPOSAL** when published. See [Model Lifecycle](core-workflows/model-lifecycle) for the full path through **REGISTERED** and **DEPLOYED**, including how graduation deploys the AMM pool.
+
 ## Programmatic Model Creation
 
 For advanced users, CI pipelines, or custom launch flows, the on-chain portion of model creation is a direct smart contract call. The workflow has two parts:
@@ -186,7 +188,7 @@ main().catch((error) => {
 | `symbol` | ERC-20 token ticker. |
 | `totalSupply` | Initial token supply, typically expressed with 18 decimals via `parseUnits`. |
 | `tokensPerDeltaOne` | Tokens minted per DeltaOne improvement. See [DeltaOne Calculations](tokenomics/deltaone-calculations). |
-| `infrastructureAccrualBps` | Infrastructure share in basis points. Valid range is `1000` to `10000`. See [Treasury & Access](smart-contracts/treasury-and-access) and [Choosing CRR](guides/choosing-crr). |
+| `infrastructureAccrualBps` | Infrastructure share in basis points. Valid range is `1000` to `10000`. See [Usage Fee Routing](smart-contracts/usage-fee-routing) and [Choosing CRR](guides/choosing-crr). |
 | `initialOraclePricePerThousandUsd` | Initial USD price per 1000 calls for oracle-based pricing. Set to `0` if you are leaving it unset at deployment time. |
 | `licenseHash` | `keccak256` hash of the exact license bytes published at `licenseURI`. |
 | `licenseURI` | Off-chain location of the full license text, typically IPFS or HTTPS. |
@@ -207,7 +209,7 @@ See guides/model-launch-guide#step-6-model-registration for:
 
 1. **Pin license off-chain and hash it on-chain** - Publish the final license text at `licenseURI`, then verify `keccak256(toUtf8Bytes(licenseText))` matches `licenseHash` before you broadcast.
 2. **Choose `tokensPerDeltaOne` to match your dilution model** - Calibrate rewards against expected improvement cadence using the guidance in [DeltaOne Calculations](tokenomics/deltaone-calculations).
-3. **Set `infrastructureAccrualBps` from a real cost model** - This value must stay within `1000` to `10000`. Use [Choosing CRR](guides/choosing-crr) and [Treasury & Access](smart-contracts/treasury-and-access) when deciding the split.
+3. **Set `infrastructureAccrualBps` from a real cost model** - This value must stay within `1000` to `10000`. Use [Choosing CRR](guides/choosing-crr) and [Usage Fee Routing](smart-contracts/usage-fee-routing) when deciding the split.
 4. **Use a multisig for `governor`** - Production deployments should not hand governance to a single EOA.
 5. **Test with a non-production TokenManager first** - A testnet deployment is the fastest way to catch role issues, gas estimation problems, and `licenseHash` mismatches.
 

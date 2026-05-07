@@ -25,7 +25,7 @@ Token holders collectively govern the model through on-chain voting. They make d
 - **Pricing strategy** - Setting API fees that balance accessibility and sustainability
 - **Infrastructure provisioning** - Determining compute resources and scaling parameters
 - **Feature development** - Prioritizing improvements and new capabilities
-- **Revenue allocation** - Managing treasury and reinvestment strategies
+- **Revenue allocation** - Managing infrastructure spending, pricing, and reinvestment strategies
 
 ## Contrasting with Commercial Vendors
 
@@ -66,10 +66,10 @@ No permission, whitelist, or vendor relationship is required. The model is alway
 ### Revenue Flow
 
 ```
-API Fee Payment → Infrastructure Costs → Remaining Profit → Token Holders
+API Fee Payment → Infrastructure Costs → Remaining Profit → AMM Reserve → Token Holders benefit via price appreciation
 ```
 
-- **100% of profits** (fees minus infrastructure) flow to token holders
+- **100% of profits** (fees minus infrastructure) flow to the AMM reserve for token holders
 - Infrastructure costs are transparently tracked on-chain
 - Token holders vote on cost allocation and optimization
 
@@ -146,7 +146,7 @@ Token holders govern through on-chain proposals and voting:
 
 ### Initial Launch Period
 
-During the seven-day launch period:
+During the Initial Bonding Ratio (IBR) phase:
 
 - Early investors can provide initial liquidity
 - Data suppliers begin receiving DeltaOne rewards
@@ -160,7 +160,7 @@ After launch, the model operates under full community control:
 - API serves inference requests continuously
 - Token holders govern pricing and infrastructure
 - Data suppliers continue improving the model
-- Profits distribute to token holders automatically
+- Profit residuals increase AMM reserve backing
 
 ## Why Decentralized Matters
 
@@ -204,7 +204,7 @@ Decentralized licenses are enforced through smart contracts:
 - **ModelToken** - ERC-20 token representing ownership
 - **TokenManager** - Handles minting and distribution
 - **AccessControl** - Validates API access and fee payments
-- **Treasury** - Collects fees and distributes profits
+- **UsageFeeRouter / InfrastructureReserve** - Route usage fees and track infrastructure obligations
 - **Governance** - Executes token holder votes
 
 All contracts are audited, open-source, and deployed on Base (Ethereum L2).
@@ -213,7 +213,7 @@ All contracts are audited, open-source, and deployed on Base (Ethereum L2).
 
 ### What happens if infrastructure costs exceed API revenue?
 
-Token holders must vote to either increase API pricing, optimize infrastructure costs, or temporarily subsidize operations from treasury reserves. This is a normal part of governance.
+Token holders must vote to either increase API pricing, optimize infrastructure costs, or temporarily subsidize operations from available reserves. This is a normal part of governance.
 
 ### Can token holders vote to make the model private?
 

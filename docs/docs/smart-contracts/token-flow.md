@@ -59,15 +59,15 @@ function mintInitialSupply(
 ## Supply Reduction (AMM Selling)
 
 ### Selling Tokens on AMM
-After the 7-day launch period, token holders can sell tokens back to the AMM for USDC:
+After launch, token holders can sell tokens back to the AMM for USDC under the active pricing regime. During IBR, quotes reflect the flat launch curve; after handoff, they reflect the CRR curve:
 
 ```solidity
 function sell(
     uint256 tokenAmount,
     uint256 minUSDC,
+    address to,
     uint256 deadline
 ) external nonReentrant returns (uint256 usdcAmount) {
-    require(!isBuyOnlyPeriod(), "Selling not yet enabled");
     require(tokenAmount > 0, "Amount must be > 0");
 
     usdcAmount = getSellQuote(tokenAmount);
@@ -119,24 +119,6 @@ function distributeRewards(
 - Cliff periods
 - Early withdrawal penalties
 
-### 2. Treasury Distribution
-```solidity
-function distributeTreasuryRewards(
-    address[] calldata recipients,
-    uint256[] calldata amounts
-) external onlyTreasury {
-    require(recipients.length == amounts.length, "Length mismatch");
-    for (uint i = 0; i < recipients.length; i++) {
-        _mint(recipients[i], amounts[i]);
-    }
-}
-```
-
-#### Treasury Rules
-- Protocol fee distribution
-- Liquidity provider rewards
-- Emergency fund allocation
-
 ## Token Flow Diagram
 
 ### Complete Token Lifecycle
@@ -154,7 +136,7 @@ function distributeTreasuryRewards(
          ↓                 ↓
      [USDC]          [API Fees Collected]
                            ↓
-              [UsageFeeRouter: 20% to Reserve]
+              [UsageFeeRouter: profit residual to reserve]
                            ↓
               [Reserve ↑] → [Price ↑]
 ```
@@ -176,7 +158,7 @@ function distributeTreasuryRewards(
 ### Supply Reduction Flow
 
 ```
-AMM Selling (Day 7+):
+AMM Selling:
 [Holder] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
                 [Reserve ↓, Supply ↓, Price Adjusts]
@@ -204,7 +186,7 @@ Buying:
                                  ↓
                     [Reserve ↑, Supply ↑, Price ↑]
 
-Selling (Day 7+):
+Selling:
 [Holder] → [Approve Tokens] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
                     [Reserve ↓, Supply ↓, Price Adjusts]
@@ -227,7 +209,7 @@ Selling (Day 7+):
 ### 3. Performance Metrics
 - Model improvement rate
 - Access frequency
-- Treasury health
+- Infrastructure accrual health
 
 ### 4. AMM Metrics
 - Reserve balance (USDC)

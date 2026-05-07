@@ -440,17 +440,14 @@ Both buy and sell operations incur a trade fee:
 
 ```
 Trade Fee % = 0.30% (default, max 10%)
-Protocol Fee % = 5% of trade fee (default, max 50%)
 ```
 
 **Buy Transaction**:
 ```
 User deposits: 1,000 USDC
 Trade fee (0.30%): 3.00 USDC
-Protocol fee (5% of 3.00): 0.15 USDC
 To reserve: 997.00 USDC
-To protocol treasury: 0.15 USDC
-To AMM operations: 2.85 USDC
+To AMM trade-fee recipient: 3.00 USDC
 
 Tokens calculated from: 997.00 USDC
 ```
@@ -460,7 +457,6 @@ Tokens calculated from: 997.00 USDC
 Tokens burned: 1,990
 USDC from formula: 999.9 USDC
 Trade fee (0.30%): 3.00 USDC
-Protocol fee (5% of 3.00): 0.15 USDC
 User receives: 996.90 USDC
 ```
 
@@ -520,7 +516,6 @@ Governance cannot set extreme parameters:
 ```
 Reserve Ratio (w): 5% to 100%
 Trade Fee: 0% to 10%
-Protocol Fee: 0% to 50% of trade fee
 ```
 
 Prevents manipulation through parameter changes.
@@ -609,7 +604,7 @@ FDV = (R / (w × S_current)) × S_max
 
 ### For Sellers
 
-1. **Verify bonding round ended**: `amm.isBuyOnlyPeriod() == false`
+1. **Verify the current pricing regime**: confirm whether the AMM is still in IBR or already on CRR pricing
 2. **Check sell quote**: `amm.getSellQuote(tokenAmount)`
 3. **Set slippage protection**: `minUSDC` parameter
 4. **Consider profit share deposits**: Has reserve grown from API profit share?

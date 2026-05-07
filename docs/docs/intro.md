@@ -51,8 +51,8 @@ DeltaOne is Hokusai's performance-based reward measurement. It works as follows:
    In this example, a 7% improvement in model accuracy results in 7 DeltaOnes, awarding 700 tokens worth $175,000 to the data supplier.
 
 3. **Verification Process**
-   - All improvements are verified through the MegaAI benchmarking system
-   - Results are recorded on-chain for transparency
+   - Improvements are verified on-chain by **DeltaVerifier**, which consumes **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts persisted to MLflow; each verified gain is expressed as a **DeltaOne** (≈ 1% improvement on the model's primary metric)
+   - Accepted **DeltaOne** gains trigger a **MintRequest** (schema v1.0) published to Redis, standardized on bps + USDC micro-units
    - Smart contracts automatically handle token distribution
 
 ### Hokusai Tokens

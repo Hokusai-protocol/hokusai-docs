@@ -65,7 +65,7 @@ The technical foundation of the protocol:
    - Model tokens
    - Token manager
    - Verifier
-   - Treasury
+   - InfrastructureReserve
 
 2. **Governance**
    - Proposal system

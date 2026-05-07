@@ -34,8 +34,10 @@ This guide helps investors understand how to evaluate Hokusai model tokens and t
 **You should read this if you are**:
 - New to Hokusai protocol
 - Considering investing in a model token
-- Planning to participate in a seven-day launch
+- Planning to participate in an IBR launch
 - Looking to trade existing model tokens
+
+For the canonical state model behind launch participation, pre-commits, and deployment, see [Model Lifecycle](../core-workflows/model-lifecycle).
 
 ## Investment Thesis
 
@@ -56,7 +58,7 @@ Hokusai model tokens represent a new asset class backed by AI model performance 
 | **Backing** | USDC reserves + API profit share | Company assets | Company assets | Protocol value |
 | **Cash Flow** | Profit share (0-50%) → reserves | Variable | Dividends | Variable |
 | **Liquidity** | Always (AMM) | Illiquid | Market hours | 24/7 |
-| **Exit Strategy** | Sell anytime (after Day 7) | Acquisition/IPO | Sell anytime | Sell anytime |
+| **Exit Strategy** | Sell under the active AMM pricing regime | Acquisition/IPO | Sell anytime | Sell anytime |
 | **Price Discovery** | CRR formula | Valuation rounds | Market price | Market price |
 | **Governance** | Token votes (incl. infra rate) | Shareholder votes | Shareholder votes | Variable |
 | **Volatility** | High | Very High | Medium | Very High |
@@ -115,7 +117,7 @@ Before investing, thoroughly evaluate the model:
 ```
 ☐ Initial supply and distribution
 ☐ Reserve Ratio (CRR) setting
-☐ Trade and protocol fees
+☐ Trade fee
 ☐ Projected API usage and revenue
 ☐ Token minting schedule
 ```
@@ -139,18 +141,19 @@ Every model launches with specific AMM parameters:
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
 // Get key parameters
-const reserveRatio = await amm.reserveRatio(); // CRR (w)
+const reserveRatio = await amm.crr(); // CRR (w)
 const tradeFee = await amm.tradeFee(); // e.g., 0.30%
-const protocolFee = await amm.protocolFee(); // e.g., 5%
-const buyOnlyUntil = await amm.buyOnlyUntil(); // Launch end time
+const ibrEndTime = await amm.ibrEndTime(); // IBR phase end time
+const ibrDuration = "7 days max";
+const flatCurveThreshold = "25,000 USDC";
+const flatCurvePrice = "$0.01/token";
 
 // Get initial state
-const reserve = await amm.getReserve();
-const supply = await amm.getTotalSupply();
+const [reserve, supply] = await amm.getReserves();
 const price = await amm.spotPrice();
 
 console.log(`Initial Price: ${ethers.formatUnits(price, 18)} USDC`);
-console.log(`Reserve Ratio: ${reserveRatio / 1e16}%`);
+console.log(`Reserve Ratio (ppm): ${reserveRatio}`);
 console.log(`Initial Reserve: ${ethers.formatUnits(reserve, 6)} USDC`);
 ```
 
@@ -294,10 +297,9 @@ console.log("Purchase complete!");
 async function getModelMetrics(ammAddress) {
     const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
-    const reserve = await amm.getReserve();
-    const supply = await amm.getTotalSupply();
+    const [reserve, supply] = await amm.getReserves();
     const price = await amm.spotPrice();
-    const reserveRatio = await amm.reserveRatio();
+    const reserveRatio = await amm.crr();
 
     const marketCap = (price * supply) / BigInt(1e18);
     const tvl = reserve;
@@ -308,7 +310,7 @@ async function getModelMetrics(ammAddress) {
         supply: ethers.formatUnits(supply, 18),
         marketCap: ethers.formatUnits(marketCap, 6),
         tvl: ethers.formatUnits(tvl, 6),
-        reserveRatio: Number(reserveRatio) / 1e16
+        reserveRatioPpm: Number(reserveRatio)
     };
 }
 ```
@@ -359,31 +361,25 @@ Question: Has thesis changed?
 
 ### How to Sell
 
-**Post-Launch Only** (Day 7+):
+**Selling Context** (IBR or post-handoff):
 
 ```javascript
-// 1. Verify bonding round ended
-const isBuyOnly = await amm.isBuyOnlyPeriod();
-if (isBuyOnly) {
-    throw new Error("Cannot sell during bonding round");
-}
-
-// 2. Get sell quote
+// 1. Get sell quote
 const tokenAmount = ethers.parseUnits("1000", 18);
 const usdcOut = await amm.getSellQuote(tokenAmount);
 console.log(`Quote: ${ethers.formatUnits(usdcOut, 6)} USDC for 1000 tokens`);
 
-// 3. Approve tokens
+// 2. Approve tokens
 const token = await ethers.getContractAt("IERC20", TOKEN_ADDRESS);
 await token.approve(ammAddress, tokenAmount);
 
-// 4. Set slippage (e.g., 3% for volatile periods)
+// 3. Set slippage (e.g., 3% for volatile periods)
 const minUSDC = usdcOut * 97n / 100n;
 
-// 5. Set deadline
+// 4. Set deadline
 const deadline = Math.floor(Date.now() / 1000) + 300;
 
-// 6. Execute sell
+// 5. Execute sell
 const tx = await amm.sell(tokenAmount, minUSDC, deadline);
 await tx.wait();
 console.log("Sale complete!");
@@ -391,7 +387,7 @@ console.log("Sale complete!");
 
 **Timing Considerations**:
 - ⏰ **Best time**: After fee deposits (higher price)
-- ⏰ **Avoid**: Right after Day 7 (high volatility)
+- ⏰ **Avoid**: Right at the IBR-to-CRR handoff (high volatility)
 - ⏰ **Consider**: Tax implications (short vs long term)
 - ⏰ **Plan**: Stagger sells if large position
 
@@ -476,7 +472,7 @@ Speculative: < 0.5% of crypto portfolio
 **Current Revenue Mechanism:**
 - API fee deposits increase AMM reserve → token price rises
 - Hold tokens and benefit from reserve growth (passive appreciation)
-- Sell tokens on AMM after launch period (Day 7+)
+- Sell tokens on AMM with awareness of whether IBR or CRR pricing is active
 - No active participation or staking required
 
 **What Does NOT Exist:**
@@ -515,7 +511,7 @@ Short-term strategy for experienced traders:
 
 ```
 Buy Days 0-1 at low prices
-Sell Day 7-8 during initial hype
+Sell near the handoff only if your thesis is short-term and you accept elevated volatility
 Target: +50-200% in 7-10 days
 
 Risk:
@@ -634,7 +630,7 @@ Before investing in any model token:
 - Total: $3,000 for 26,667 tokens, avg $0.1125
 
 **Performance**:
-- Day 7: Price $0.25 (+122%)
+- Handoff: Price $0.25 (+122%)
 - Day 30: Price $0.40 (+256%) due to API fees
 - Day 90: Price $0.60 (+433%)
 
@@ -665,7 +661,7 @@ Before investing in any model token:
 - Total: $2,000 for 32,500 tokens, avg $0.0615
 
 **Performance**:
-- Day 7: Price $0.10 (+63%)
+- Handoff: Price $0.10 (+63%)
 - Day 8: Sell pressure, price crashes to $0.04 (-35%)
 - Day 30: Price $0.02 (-67%) due to no API usage
 
@@ -684,7 +680,7 @@ Before investing in any model token:
 
 ### Essential Links
 - [AMM Overview](/tokenomics/amm-overview) - Understand the mechanics
-- [Launch Period](/tokenomics/launch-period) - Seven-day bonding round
+- [Launch Phase](/tokenomics/launch-period) - Initial Bonding Ratio (IBR)
 - [Bonding Curve Math](/tokenomics/bonding-curve) - Formula deep dive
 - [HokusaiAMM Contract](/smart-contracts/hokusai-amm) - Technical reference
 - [Buying Guide](/guides/buying-tokens) - Step-by-step buying

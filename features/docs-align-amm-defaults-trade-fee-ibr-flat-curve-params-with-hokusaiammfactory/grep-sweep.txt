@@ -1,0 +1,36 @@
+docs/docs/getting-started.md:28:1. Research models before launch period
+docs/docs/getting-started.md:29:2. Buy tokens during seven-day bonding round or after
+docs/docs/guides/investor-guide.md:37:- Planning to participate in a seven-day launch
+docs/docs/guides/investor-guide.md:479:- Sell tokens on AMM after launch period (Day 7+)
+docs/docs/guides/buying-tokens.md:21:This guide provides step-by-step instructions for buying Hokusai model tokens using the bonding curve AMM. Whether you're participating in a launch period or buying existing tokens, this guide covers the technical process.
+docs/docs/guides/buying-tokens.md:46:- Whether in launch period (Day 0-6) or post-launch
+docs/docs/guides/buying-tokens.md:376:- ✅ Early in launch period (Day 0-2)
+docs/docs/guides/selling-tokens.md:27:**You CANNOT sell during the seven-day bonding round (Days 0-6)**
+docs/docs/smart-contracts/hokusai-amm.md:337:Check if still in seven-day bonding round.
+docs/docs/smart-contracts/treasury-and-access.md:45:- Set initial parameters (CRR, fees, launch period)
+docs/docs/smart-contracts/token-flow.md:62:After the 7-day launch period, token holders can sell tokens back to the AMM for USDC:
+docs/docs/personas.md:71:  - Invest in promising AI models during launch period
+docs/docs/personas.md:84:   - Research models before seven-day bonding round
+docs/docs/personas.md:86:   - Dollar-cost average across launch period
+docs/docs/tokenomics.md:30:- **Sell tokens** for USDC (enabled after 7-day launch period)
+docs/docs/tokenomics.md:50:- Tokens can be sold back to the AMM for USDC (after launch period)
+docs/docs/licensing/decentralized.md:149:During the seven-day launch period:
+docs/docs/tokenomics/amm-overview.md:20:- **Selling tokens** back to USDC (after the launch period)
+docs/docs/tokenomics/amm-overview.md:30:| API fees increase value | Flexibility in compensation | Participate in launch period |
+docs/docs/tokenomics/amm-overview.md:204:Every new model token starts with a **seven-day bonding round**:
+docs/docs/tokenomics/amm-overview.md:333:- **Control**: Set initial parameters and launch period
+docs/docs/tokenomics/amm-overview.md:337:- **Participate**: During seven-day launch period
+docs/docs/tokenomics/amm-overview.md:340:- **Exit**: Sell after launch period at market price
+docs/docs/tokenomics/launch-period.md:3:description: Understand the seven-day buy-only launch period for Hokusai model tokens. Fair price discovery, manipulation prevention, and early supporter accumulation.
+docs/docs/tokenomics/launch-period.md:4:keywords: [launch period, bonding round, buy-only period, token launch, price discovery, fair launch, seven-day]
+docs/docs/tokenomics/launch-period.md:13:Every new Hokusai model token begins with a **seven-day bonding round** where buying is enabled but selling is disabled. This launch period establishes initial price discovery, prevents manipulation, and allows early supporters to accumulate positions before full trading begins.
+docs/docs/tokenomics/launch-period.md:17:The seven-day launch period is a **buy-only window** designed to:
+docs/docs/tokenomics/launch-period.md:77:A seven-day buy-only period:
+docs/docs/tokenomics/launch-period.md:364:After the launch period, token price depends on:
+docs/docs/tokenomics/launch-period.md:541:6. **Prepare for Day 7**: Have plan for post-launch period
+docs/docs/tokenomics/api-fee-flow.md:589:   - Don't sell during launch period
+docs/docs/creating-models.md:191:        'mint_threshold': 0.01,  # Minimum improvement to mint tokens
+.cursor/rules/smart_contracts.mdc:29:      description="Constant Reserve Ratio (CRR) bonding curve AMM for buying/selling tokens with USDC. Implements seven-day buy-only launch period, receives API fees (20%) to increase reserves."
+.cursor/rules/smart_contracts.mdc:36:      description="Deploys new HokusaiAMM instances for each model token with initial parameters (CRR, fees, launch period)"
+.cursor/rules/tokenomics.mdc:54:      rule="Buy tokens with USDC, sell tokens for USDC (after 7-day launch)"
+.cursor/rules/tokenomics.mdc:59:      rule="Seven-day buy-only launch period prevents manipulation"

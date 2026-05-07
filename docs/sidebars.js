@@ -27,6 +27,7 @@ const sidebars = {
       type: 'category',
       label: 'Core Workflows',
       items: [
+        'core-workflows/model-lifecycle',
         'supplying-data',
         'data-validation-tools',
         'privacy-compliance',
@@ -77,11 +78,13 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'smart-contracts/smart-contracts-overview',
+        'smart-contracts/deployments',
         'smart-contracts/hokusai-amm',
         'smart-contracts/token-flow',
         'smart-contracts/model-tokens-and-token-manager',
         'smart-contracts/verifier-and-contribution',
-        'smart-contracts/treasury-and-access',
+        'smart-contracts/usage-fee-routing',
+        'smart-contracts/access-control',
         'smart-contracts/governance-and-security',
       ],
     },

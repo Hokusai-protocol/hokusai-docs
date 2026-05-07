@@ -131,34 +131,38 @@ const totalUSDC = 120; // $120 USDC
 
 ### Step 5: Route Through UsageFeeRouter
 
-The `UsageFeeRouter` contract reads the model's parameters and routes fees:
+The `UsageFeeRouter` contract routes fees with cost-plus logic first and percentage fallback second:
 
 ```solidity
-// UsageFeeRouter.sol
-function depositFee(string memory modelId, uint256 amount) external onlyAuthorized {
-    // Get model's infrastructure accrual rate from HokusaiParams
-    IHokusaiParams params = getParamsForModel(modelId);
-    uint16 infraBps = params.infrastructureAccrualBps(); // e.g., 8000 = 80%
+function depositFee(
+    string memory modelId,
+    uint256 amount,
+    uint256 callCount
+) external onlyRole(FEE_DEPOSITOR_ROLE) {
+    uint256 costPer1000Calls = costOracle.getEstimatedCost(modelId);
 
-    // Calculate split
-    uint256 infrastructureAmount = (amount * infraBps) / 10000;  // 80%
-    uint256 profitAmount = amount - infrastructureAmount;         // 20%
+    uint256 infrastructureAmount;
+    uint256 profitAmount;
 
-    // Route to infrastructure reserve
+    if (costPer1000Calls > 0) {
+        uint256 estimatedCost = (costPer1000Calls * callCount) / 1000;
+        infrastructureAmount = estimatedCost > amount ? amount : estimatedCost;
+        profitAmount = amount - infrastructureAmount;
+    } else {
+        uint16 infraBps = params.infrastructureAccrualBps();
+        infrastructureAmount = (amount * infraBps) / 10000;
+        profitAmount = amount - infrastructureAmount;
+    }
+
     infraReserve.deposit(modelId, infrastructureAmount);
-
-    // Route profit to AMM
-    HokusaiAMM amm = HokusaiAMM(registry.getAMM(modelId));
-    amm.depositFees(profitAmount);
-
-    emit FeeDeposited(modelId, amount, infrastructureAmount, profitAmount);
+    HokusaiAMM(poolAddress).depositFees(profitAmount);
 }
 ```
 
 **HokusaiAMM receives the profit share**:
 ```solidity
 // HokusaiAMM.sol
-function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant {
+function depositFees(uint256 amount) external nonReentrant {
     require(amount > 0, "Amount must be > 0");
 
     // Transfer USDC to contract
@@ -168,7 +172,7 @@ function depositFees(uint256 amount) external onlyFeeDepositor nonReentrant {
     // Supply stays same (S unchanged)
     // Price increases: P = R / (w × S)
 
-    emit FeesDeposited(msg.sender, amount, getReserve());
+    emit FeesDeposited(msg.sender, amount, reserveBalance, spotPrice());
 }
 ```
 
@@ -202,13 +206,25 @@ Market Cap: 0.55 × 1,000,000 = 550,000 USDC (+10%)
 
 ## Fee Distribution
 
-### Per-Model Configuration
+### Cost-Plus Splitting (Primary Path)
 
-Each model has its own `infrastructureAccrualBps` parameter stored in `HokusaiParams`, which determines what percentage of API revenue accrues for infrastructure costs. The profit share is calculated as the **residual** (what remains after infrastructure).
+When `InfrastructureCostOracle` has an entry for the model, fee routing is based on estimated cost per 1000 calls:
 
-**Configurable Range:**
-- **Infrastructure Accrual**: 50% to 100% (5000-10000 bps)
-- **Profit Share**: 0% to 50% (calculated as `10000 - infrastructureAccrualBps`)
+```text
+infrastructureAmount = min(amount, costPer1000Calls * callCount / 1000)
+profitAmount = amount - infrastructureAmount
+```
+
+This is the canonical fee model for API usage.
+
+### Percentage Fallback (when oracle has no entry)
+
+If the oracle has no configured cost, the router falls back to the model's `infrastructureAccrualBps` in `HokusaiParams`.
+
+```text
+infrastructureAmount = amount * infrastructureAccrualBps / 10000
+profitAmount = amount - infrastructureAmount
+```
 
 ### Example Fee Splits
 
@@ -238,25 +254,30 @@ The system uses two contracts for fee management:
 
 #### UsageFeeRouter
 
-Routes API fees based on each model's governance-controlled parameters:
+Routes API fees using cost-plus logic with percentage fallback:
 
 ```solidity
 contract UsageFeeRouter {
     InfrastructureReserve public immutable infraReserve;
 
-    function depositFee(string memory modelId, uint256 amount)
+    function depositFee(string memory modelId, uint256 amount, uint256 callCount)
         external
         nonReentrant
         onlyRole(FEE_DEPOSITOR_ROLE)
     {
-        // Get model's infrastructure accrual rate from HokusaiParams
-        address paramsAddress = pool.tokenManager().getParamsAddress(modelId);
-        IHokusaiParams params = IHokusaiParams(paramsAddress);
-        uint16 infraBps = params.infrastructureAccrualBps();
+        uint256 costPer1000Calls = costOracle.getEstimatedCost(modelId);
+        uint256 infrastructureAmount;
+        uint256 profitAmount;
 
-        // Calculate split: infrastructure first, profit is residual
-        uint256 infrastructureAmount = (amount * infraBps) / 10000;
-        uint256 profitAmount = amount - infrastructureAmount;
+        if (costPer1000Calls > 0) {
+            uint256 estimatedCost = (costPer1000Calls * callCount) / 1000;
+            infrastructureAmount = estimatedCost > amount ? amount : estimatedCost;
+            profitAmount = amount - infrastructureAmount;
+        } else {
+            uint16 infraBps = params.infrastructureAccrualBps();
+            infrastructureAmount = (amount * infraBps) / 10000;
+            profitAmount = amount - infrastructureAmount;
+        }
 
         // Route to infrastructure reserve (accrues for provider payments)
         if (infrastructureAmount > 0) {
@@ -318,7 +339,7 @@ contract InfrastructureReserve {
 
 **What these contracts do NOT do:**
 - Do NOT distribute fees to stakers (no staking mechanism exists)
-- Do NOT distribute fees for governance (separate mechanism)
+- Do NOT distribute fees to a protocol treasury (none exists for API fees)
 - Do NOT automatically pay providers (manual payouts with invoice tracking)
 
 ## Revenue Examples
@@ -496,17 +517,13 @@ event FeesDeposited(
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
 
 // Listen for fee deposits
-amm.on("FeesDeposited", (depositor, amount, newReserve, event) => {
+amm.on("FeesDeposited", (depositor, amount, newReserveBalance, newSpotPrice, event) => {
     console.log(`Fee Deposit Detected!`);
     console.log(`Amount: ${ethers.formatUnits(amount, 6)} USDC`);
-    console.log(`New Reserve: ${ethers.formatUnits(newReserve, 6)} USDC`);
+    console.log(`New Reserve: ${ethers.formatUnits(newReserveBalance, 6)} USDC`);
     console.log(`Block: ${event.blockNumber}`);
     console.log(`Tx: ${event.transactionHash}`);
-
-    // Calculate new price
-    const supply = await amm.getTotalSupply();
-    const newPrice = await amm.spotPrice();
-    console.log(`New Price: ${ethers.formatUnits(newPrice, 18)} USDC`);
+    console.log(`New Price: ${ethers.formatUnits(newSpotPrice, 18)} USDC`);
 });
 ```
 
@@ -520,7 +537,7 @@ async function getReserveGrowth(ammAddress, blocks = 1000) {
     const pastBlock = currentBlock - blocks;
 
     // Get current reserve
-    const currentReserve = await amm.getReserve();
+    const [currentReserve] = await amm.getReserves();
 
     // Query past events
     const filter = amm.filters.FeesDeposited();
@@ -586,7 +603,7 @@ async function getReserveGrowth(ammAddress, blocks = 1000) {
    - Benefit from price increase
 
 2. Hold During Growth
-   - Don't sell during launch period
+   - Don't assume the AMM stays in IBR for a full week; monitor the $25,000 reserve handoff
    - Let fees compound
    - Reinvest proceeds
 
@@ -679,7 +696,7 @@ Depends on the model's configuration. Typical patterns:
 ### Q: Can fee deposits be front-run?
 
 Technically yes, but:
-- Deposits are permissioned (only `FEE_DEPOSITOR_ROLE`)
+- Deposits are operationally permissioned through the router flow
 - Timing is not publicly announced
 - MEV risk is limited
 - Large holders may anticipate and position

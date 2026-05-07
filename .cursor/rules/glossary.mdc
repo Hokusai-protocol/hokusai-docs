@@ -10,10 +10,20 @@ alwaysApply: true
 - Type: Technical term
 - Context: Used in discussions about token economics and model-specific tokens
 
+## DeltaVerifier
+- Definition: On-chain contract that verifies improvement claims, calculates DeltaOne rewards, and enforces budget compliance by consuming HEM eval artifacts
+- Type: On-chain component
+- Context: Publishes a MintRequest (schema v1.0, bps + USDC micro-units) to Redis on acceptance; see HOK-1266
+
+## HEM (Hokusai Evaluation Manifest)
+- Definition: Per-row evaluation artifacts persisted to MLflow at `eval_results/per_row.parquet` for statistical comparison of challenger vs. champion model
+- Type: Evaluation artifact
+- Context: Consumed by DeltaVerifier to determine whether an improvement qualifies for a DeltaOne reward
+
 ## DeltaOne
-- Definition: Verified 1 percentage point (pp) gain on a benchmark
-- Type: Performance metric
-- Context: Used in model performance evaluation and benchmarking
+- Definition: Verified 1 percentage point (pp) gain on the model's primary metric (1 DeltaOne ≈ 1% improvement); computed by DeltaVerifier from HEM artifacts
+- Type: Performance metric / reward unit
+- Context: Used in model performance evaluation, reward calculation, and MintRequest payloads; cross-references DeltaVerifier and HEM
 
 ## Bonding Curve
 - Definition: Price increases as more USDC is deposited

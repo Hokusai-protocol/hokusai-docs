@@ -18,7 +18,7 @@ Before proceeding:
 
 :::
 
-This guide provides step-by-step instructions for buying Hokusai model tokens using the bonding curve AMM. Whether you're participating in a launch period or buying existing tokens, this guide covers the technical process.
+This guide provides step-by-step instructions for buying Hokusai model tokens using the bonding curve AMM. Whether you're participating during the IBR launch phase or after the CRR handoff, this guide covers the technical process.
 
 ## Prerequisites
 
@@ -43,7 +43,7 @@ Before you can buy tokens, you'll need:
 ### 4. Model Information
 - Model's AMM contract address
 - Current token price (check before buying)
-- Whether in launch period (Day 0-6) or post-launch
+- Whether the AMM is still in IBR or has already handed off to CRR pricing
 
 ## Overview of Buying Process
 
@@ -373,7 +373,7 @@ console.log(`Token balance: ${ethers.formatUnits(balance, 18)}`);
 - ✅ After major fee deposits (reserve increased)
 - ✅ During low network activity (cheaper gas)
 - ✅ After token minting events (supply dilution = lower price)
-- ✅ Early in launch period (Day 0-2)
+- ✅ Early in the IBR phase before reserves approach the $25,000 handoff
 
 **Times to Avoid**:
 - ❌ During extreme volatility
@@ -445,19 +445,19 @@ console.log(`Token balance: ${ethers.formatUnits(balance, 18)}`);
 ☐ Check for smart contract audits
 ```
 
-## Launch Period Buying
+## IBR-Phase Buying
 
-### Special Considerations (Days 0-6)
+### Special Considerations During IBR
 
-**During Launch**:
-- ✅ Selling is disabled (buy-only period)
-- ✅ Can buy anytime during 7 days
-- ⚠️ Cannot exit until Day 7+
-- ⚠️ Price only goes up (no sells)
+**During IBR**:
+- ✅ Flat launch price is $0.01/token before fees
+- ✅ The phase can end early once reserves hit $25,000
+- ⚠️ Quotes change once the AMM hands off to CRR pricing
+- ⚠️ API profit-share deposits can accelerate the handoff
 
 **Strategies**:
 
-**Early Entry** (Day 0-1):
+**Early Entry** (early IBR):
 ```
 Pros:
 - Lowest prices
@@ -466,16 +466,16 @@ Pros:
 
 Cons:
 - High risk if launch fails
-- Locked for full 7 days
+- Handoff can happen sooner than expected
 - Unknown demand
 ```
 
-**Dollar-Cost Averaging** (Days 0-6):
+**Dollar-Cost Averaging** (through IBR):
 ```
 Day 0: 25% of allocation
 Day 2: 25% of allocation
 Day 4: 25% of allocation
-Day 6: 25% of allocation
+Near handoff: 25% of allocation
 
 Pros:
 - Reduced timing risk
@@ -487,12 +487,12 @@ Cons:
 - More transactions = more gas
 ```
 
-**Late Launch** (Days 5-6):
+**Late IBR** (reserve close to handoff):
 ```
 Pros:
 - See actual demand
 - More information
-- Lower lockup time
+- Better visibility into whether CRR handoff is near
 
 Cons:
 - Higher prices
@@ -575,7 +575,7 @@ async function monitorPosition(ammAddress, yourAddress) {
 
 - [Investor Guide](/guides/investor-guide) - Complete investment playbook
 - [AMM Overview](/tokenomics/amm-overview) - How bonding curve works
-- [Launch Period](/tokenomics/launch-period) - Seven-day bonding round
+- [Launch Phase](/tokenomics/launch-period) - Initial Bonding Ratio (IBR)
 - [Bonding Curve Math](/tokenomics/bonding-curve) - Price formulas
 - [HokusaiAMM Contract](/smart-contracts/hokusai-amm) - Technical reference
 

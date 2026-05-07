@@ -246,7 +246,7 @@ Price
 ☐ Seed initial USDC reserve (optional)
 ☐ Mint initial token supply
 ☐ Set appropriate CRR (w)
-☐ Configure trade and protocol fees
+☐ Configure trade fee
 ☐ Deploy AMM contract
 ☐ Grant FEE_DEPOSITOR_ROLE to UsageFeeRouter
 ☐ Announce launch to community
@@ -394,7 +394,7 @@ Before participating in a launch:
 ```
 ☐ Initial supply and distribution
 ☐ CRR setting (higher = more stable)
-☐ Trade and protocol fees
+☐ Trade fee
 ☐ Expected API usage and revenue
 ☐ Minting schedule for rewards
 ```
