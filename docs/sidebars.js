@@ -27,6 +27,7 @@ const sidebars = {
       type: 'category',
       label: 'Core Workflows',
       items: [
+        'core-workflows/model-lifecycle',
         'supplying-data',
         'data-validation-tools',
         'privacy-compliance',

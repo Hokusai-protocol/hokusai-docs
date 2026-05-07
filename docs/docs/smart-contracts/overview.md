@@ -127,7 +127,7 @@ Model usage generates API fees that are split between infrastructure costs and p
 1. **Performance Verification**
    - Verifier checks improvement
    - TokenManager mints rewards
-   - Registry updates model status
+   - Registry updates model status. See [Model Lifecycle](../core-workflows/model-lifecycle) for the full state machine (DRAFT, PROPOSAL, REGISTERED, DEPLOYED).
 
 2. **Access Control**
    - AccessController verifies access rights
