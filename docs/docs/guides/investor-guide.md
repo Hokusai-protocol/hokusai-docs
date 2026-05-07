@@ -393,6 +393,14 @@ console.log("Sale complete!");
 
 ## Risk Management
 
+### Mid-epoch parameter stability
+
+Pricing parameters that directly affect token holders — specifically the infrastructure cost rate (`infrastructureAccrualBps`) and the per-model cost per 1000 API calls in `InfrastructureCostOracle` — are protected by a **30-day epoch lock**. Once a change is queued via `queueParamUpdate()`, it cannot take effect until the current epoch boundary passes. This gives you a predictable window of known fee economics when evaluating profitability and price trajectory.
+
+The exception is `emergencySetParam()`, an admin-only function that bypasses the queue. In production, the admin role is held by a multisig or timelock, so any emergency override is governance-accountable and leaves a permanent on-chain record. Before investing, verify the admin role holder and review the on-chain history of any emergency calls.
+
+You can monitor the pending parameter queue and the epoch boundary timestamp on-chain at any time to see what will change — and when — before it affects your position. See [Parameter Governance](/smart-contracts/parameter-governance) for the full mechanics.
+
 ### Diversification
 
 **Don't Put All Eggs in One Basket**:

@@ -84,6 +84,7 @@ const sidebars = {
         'smart-contracts/model-tokens-and-token-manager',
         'smart-contracts/verifier-and-contribution',
         'smart-contracts/usage-fee-routing',
+        'smart-contracts/parameter-governance',
         'smart-contracts/access-control',
         'smart-contracts/governance-and-security',
       ],
