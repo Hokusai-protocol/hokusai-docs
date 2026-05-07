@@ -39,3 +39,18 @@ alwaysApply: true
 - Definition: Tokens burned for model usage
 - Type: Economic mechanism
 - Context: Used in discussions about token economics and supply dynamics
+
+## BenchmarkSpec
+- Definition: Top-level entity describing how a model is evaluated. Owns the `eval_spec` JSONB schema, baseline, and metric direction. Became first-class in migration `014`.
+- Type: Platform entity
+- Context: Referenced by `--benchmark-spec-id` during model registration; provenance tracked via MLflow tags on runs and model versions
+
+## eval_spec
+- Definition: JSONB column on `BenchmarkSpec` (added in migration `014`) defining `primary_metric`, `secondary_metrics`, `guardrails`, `measurement_policy`, `label_policy`, and `coverage_policy`. Legacy scalar fields (`metric_name`, `metric_direction`, `baseline_value`) are auto-uplifted at runtime via `spec_translation.py`.
+- Type: Schema field
+- Context: Used in evaluation pipeline; the six headline fields cover most use cases; auxiliary fields include `unit_of_analysis`, `min_examples`, `metric_family`
+
+## --benchmark-spec-id
+- Definition: CLI flag on `hokusai model register` that fetches a BenchmarkSpec and derives metric and baseline automatically. Replaces explicit `--metric` + `--baseline` for new integrations.
+- Type: CLI flag
+- Context: When omitted, `--metric` and `--baseline` are required (legacy mode); `benchmark_spec_id` is recorded as an MLflow tag for provenance

@@ -29,6 +29,7 @@ const sidebars = {
       items: [
         'core-workflows/model-lifecycle',
         'core-workflows/custom-scorers-and-sales-metrics',
+        'core-workflows/benchmark-specs',
         'supplying-data',
         'data-validation-tools',
         'privacy-compliance',
