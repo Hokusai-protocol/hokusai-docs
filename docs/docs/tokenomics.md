@@ -22,7 +22,7 @@ Hokusai's tokenomics are designed to align incentives across data suppliers, mod
 ### DeltaOne Performance Rewards
 - **1 DeltaOne = 1% model improvement** (e.g., accuracy increase from 80% → 81%)
 - Tokens minted to reward data suppliers for verified performance gains
-- Performance verified through MegaAI benchmarking system
+- Performance verified on-chain by **DeltaVerifier**, using per-row eval artifacts from the **HEM** (Hokusai Evaluation Manifest) persisted to MLflow
 - Creates inflationary pressure when models improve
 
 ### CRR Bonding Curve AMM

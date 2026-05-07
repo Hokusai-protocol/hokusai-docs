@@ -152,7 +152,7 @@
 - [ ] Mobile responsiveness testing
 
 ## Documentation Gaps to Address
-- [ ] Document MegaAI benchmarking integration
+- [ ] Document DeltaVerifier + HEM integration
 - [ ] Define token audit standards
 - [ ] Document API usage metering
 - [ ] Design submission form UX/UI 

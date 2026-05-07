@@ -103,7 +103,7 @@ Referencing existing structure at https://docs.hokus.ai/, we propose the followi
 |------|-------------|-------------|
 | Draft intro, personas, and core concepts | Define “DeltaOne”, Hokusai token logic, overview diagram | [Writer A] |
 | Complete “Contributing Data” section | Include SDK usage, formatting standards, data validation tool | [Writer B] |
-| Build out “Creating & Improving Models” section | Includes registration flow, smart contract deploy, MegaAI integration | [Writer C] |
+| Build out “Creating & Improving Models” section | Includes registration flow, smart contract deploy, DeltaVerifier/HEM integration | [Writer C] |
 | Document usage and access flows | Write API and auction mechanism explanations | [Writer A] |
 | Write all Smart Contracts section | Token minting/burning logic with clear contract flowchart | [Writer D] |
 | Finalize tokenomics pages | Focus on bonding curve math, inflation logic, DeltaOne triggers | [Writer B] |
@@ -135,8 +135,7 @@ Referencing existing structure at https://docs.hokus.ai/, we propose the followi
 
 ## 🚧 Known Gaps / To Be Defined
 
-- Details on MegaAI benchmarking integration
+- Details on DeltaVerifier + HEM integration
 - Token audit standards and verification
 - API usage metering at scale
 - Submission form UX/UI
-

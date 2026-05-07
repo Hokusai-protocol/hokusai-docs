@@ -43,7 +43,7 @@ npm run serve      # Preview production build locally
 ### Important Concepts
 - **DeltaOne Rewards**: Core reward unit where 1 DeltaOne = 1% performance improvement
 - **Three User Personas**: Data suppliers, model developers, and investors
-- **Verification**: All improvements verified through MegaAI benchmarking system
+- **Verification**: All improvements verified through DeltaVerifier (on-chain) using HEM per-row eval artifacts
 
 ### Development Notes
 - Docusaurus configuration is in `docs/docusaurus.config.js`
