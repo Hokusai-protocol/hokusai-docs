@@ -609,7 +609,7 @@ FDV = (R / (w × S_current)) × S_max
 
 ### For Sellers
 
-1. **Verify bonding round ended**: `amm.isBuyOnlyPeriod() == false`
+1. **Verify the current pricing regime**: confirm whether the AMM is still in IBR or already on CRR pricing
 2. **Check sell quote**: `amm.getSellQuote(tokenAmount)`
 3. **Set slippage protection**: `minUSDC` parameter
 4. **Consider profit share deposits**: Has reserve grown from API profit share?

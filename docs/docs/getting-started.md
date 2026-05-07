@@ -25,8 +25,8 @@ Hokusai is a decentralized protocol that incentivizes high-quality data contribu
 **📖 New:** Check out our [Complete Model Launch Guide](guides/model-launch-guide) for step-by-step instructions on launching your model on Hokusai.
 
 ### For Token Investors
-1. Research models before launch period
-2. Buy tokens during seven-day bonding round or after
+1. Research models before and during the IBR phase
+2. Buy tokens during the IBR phase at $0.01/token, or at bonding curve price after the $25,000 handoff
 3. Trade on CRR bonding curve AMM with USDC
 4. Monitor API fees flowing to reserves
 5. Track model performance and token metrics
@@ -34,7 +34,7 @@ Hokusai is a decentralized protocol that incentivizes high-quality data contribu
 **📖 Complete Guides:**
 - [Investor Guide](/guides/investor-guide) - Investment strategies and due diligence
 - [Buying Tokens](/guides/buying-tokens) - Step-by-step buying guide
-- [Selling Tokens](/guides/selling-tokens) - Step-by-step selling guide (Day 7+)
+- [Selling Tokens](/guides/selling-tokens) - Step-by-step selling guide across IBR and post-handoff trading
 
 ## System Requirements
 

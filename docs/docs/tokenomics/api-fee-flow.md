@@ -586,7 +586,7 @@ async function getReserveGrowth(ammAddress, blocks = 1000) {
    - Benefit from price increase
 
 2. Hold During Growth
-   - Don't sell during launch period
+   - Don't assume the AMM stays in IBR for a full week; monitor the $25,000 reserve handoff
    - Let fees compound
    - Reinvest proceeds
 

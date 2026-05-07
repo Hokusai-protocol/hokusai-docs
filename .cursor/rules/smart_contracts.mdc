@@ -26,14 +26,14 @@ alwaysApply: false
       name="HokusaiAMM"
       type="pricing"
       importance="high"
-      description="Constant Reserve Ratio (CRR) bonding curve AMM for buying/selling tokens with USDC. Implements seven-day buy-only launch period, receives API fees (20%) to increase reserves."
+      description="Constant Reserve Ratio (CRR) bonding curve AMM for buying and selling tokens with USDC. Starts with an Initial Bonding Ratio (IBR) phase at $0.01/token until $25,000 reserves or 7 days, and receives API fees to increase reserves."
       implementation="On-chain"
     />
     <ContractComponent
       name="HokusaiAMMFactory"
       type="factory"
       importance="high"
-      description="Deploys new HokusaiAMM instances for each model token with initial parameters (CRR, fees, launch period)"
+      description="Deploys new HokusaiAMM instances for each model token with initial parameters (CRR, fees, IBR duration, flat-curve threshold, flat-curve price)"
       implementation="On-chain"
     />
     <ContractComponent

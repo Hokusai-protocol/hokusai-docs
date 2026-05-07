@@ -146,7 +146,7 @@ Token holders govern through on-chain proposals and voting:
 
 ### Initial Launch Period
 
-During the seven-day launch period:
+During the Initial Bonding Ratio (IBR) phase:
 
 - Early investors can provide initial liquidity
 - Data suppliers begin receiving DeltaOne rewards

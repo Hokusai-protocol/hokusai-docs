@@ -59,7 +59,7 @@ function mintInitialSupply(
 ## Supply Reduction (AMM Selling)
 
 ### Selling Tokens on AMM
-After the 7-day launch period, token holders can sell tokens back to the AMM for USDC:
+After launch, token holders can sell tokens back to the AMM for USDC under the active pricing regime. During IBR, quotes reflect the flat launch curve; after handoff, they reflect the CRR curve:
 
 ```solidity
 function sell(
@@ -67,7 +67,6 @@ function sell(
     uint256 minUSDC,
     uint256 deadline
 ) external nonReentrant returns (uint256 usdcAmount) {
-    require(!isBuyOnlyPeriod(), "Selling not yet enabled");
     require(tokenAmount > 0, "Amount must be > 0");
 
     usdcAmount = getSellQuote(tokenAmount);
@@ -176,7 +175,7 @@ function distributeTreasuryRewards(
 ### Supply Reduction Flow
 
 ```
-AMM Selling (Day 7+):
+AMM Selling:
 [Holder] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
                 [Reserve ↓, Supply ↓, Price Adjusts]
@@ -204,7 +203,7 @@ Buying:
                                  ↓
                     [Reserve ↑, Supply ↑, Price ↑]
 
-Selling (Day 7+):
+Selling:
 [Holder] → [Approve Tokens] → [sell() on AMM] → [Tokens Burned] → [Receive USDC]
                                     ↓
                     [Reserve ↓, Supply ↓, Price Adjusts]

@@ -17,7 +17,7 @@ The Hokusai AMM is a **Constant Reserve Ratio (CRR) bonding curve** that enables
 The Hokusai AMM is an automated market maker built into every model token. It allows:
 
 - **Buying tokens** with USDC at a mathematically determined price
-- **Selling tokens** back to USDC (after the launch period)
+- **Selling tokens** back to USDC under the active AMM pricing regime
 - **API revenue integration** that increases USDC reserves, supporting token value
 - **Predictable pricing** based on supply and reserve dynamics
 
@@ -27,7 +27,7 @@ The Hokusai AMM is an automated market maker built into every model token. It al
 |-------------------|------------------------|---------------|
 | Always-available liquidity | Tokens have real market value | Transparent pricing |
 | No need for order books | Can sell rewards for USDC | Continuous price discovery |
-| API fees increase value | Flexibility in compensation | Participate in launch period |
+| API fees increase value | Flexibility in compensation | Participate in IBR or post-handoff trading |
 | Deterministic pricing | Lower transaction costs | Support promising models |
 
 ## Why CRR Instead of Other AMMs?
@@ -78,7 +78,7 @@ The Hokusai protocol uses a **Constant Reserve Ratio (CRR)** bonding curve rathe
 ```
 
 - ✅ Tokens earned for performance improvements
-- ✅ Can sell tokens for USDC anytime (after launch)
+- ✅ Can sell tokens for USDC according to the AMM's current pricing regime
 - ✅ Market price based on reserves and supply
 - ✅ API fees increase reserves, raising token floor price
 
@@ -199,26 +199,26 @@ P = 100,000 / 200,000
 P = 0.5 USDC per token
 ```
 
-## Seven-Day Launch Period
+## Initial Bonding Ratio (IBR) Phase
 
-Every new model token starts with a **seven-day bonding round**:
+Every new model token starts on a flat launch curve before CRR pricing takes over.
 
 ```
-Day 0: Deploy → Buy enabled, Sell disabled
-Day 1-6: Bonding Round → Buy only
-Day 7: Launch Complete → Buy & Sell enabled
+Launch: IBR starts at $0.01/token
+During IBR: Reserves build toward $25,000 USDC
+Handoff: IBR ends when reserves hit $25,000 or 7 days elapse
+After handoff: Standard CRR bonding curve pricing
 ```
 
-### Why Buy-Only?
+### Why IBR exists
 
-The initial buy-only period:
-- ✅ Establishes initial price discovery
-- ✅ Prevents manipulation and front-running
-- ✅ Allows early supporters to accumulate
-- ✅ Builds initial USDC reserves
-- ⚠️ No selling allowed during this time
+The launch phase:
+- ✅ Gives the AMM a clear starting price of $0.01/token
+- ✅ Builds initial USDC reserve depth
+- ✅ Makes the handoff rule explicit: $25,000 reserve or 7-day cap
+- ✅ Transitions to CRR pricing only after initial bootstrap conditions are met
 
-Learn more: [Launch Period Guide](/tokenomics/launch-period)
+Learn more: [IBR Phase Guide](/tokenomics/launch-period)
 
 ## API Fee Integration
 
@@ -277,6 +277,16 @@ Net Deposited to Reserve: 997.00 USDC
 Tokens Received: ~1,984 (calculated from buy formula)
 ```
 
+### AMM Launch Defaults
+
+| Parameter | Default |
+|-----------|---------|
+| CRR | 20% (`200,000 ppm`) |
+| Trade fee | 0.30% (`30 bps`) |
+| Max IBR duration | 7 days |
+| Flat-curve threshold | $25,000 USDC |
+| Flat-curve price | $0.01 per token |
+
 ### 2. API Usage Fees (when using model API)
 
 Separate from AMM trading fees, routed by `UsageFeeRouter` based on per-model parameters:
@@ -330,14 +340,14 @@ All parameters are governance-controlled with strict bounds.
 ### Model Developers
 - **Launch**: Deploy token with AMM
 - **Benefit**: Automatic liquidity for contributors
-- **Control**: Set initial parameters and launch period
+- **Control**: Set initial parameters and IBR configuration
 - **Growth**: API fees increase token value automatically
 
 ### Investors
-- **Participate**: During seven-day launch period
+- **Participate**: During the IBR phase or after CRR handoff
 - **Buy**: Tokens at current bonding curve price
 - **Support**: Promising models with initial capital
-- **Exit**: Sell after launch period at market price
+- **Exit**: Sell according to the active AMM pricing regime
 
 Learn more: [Investor Guide](/guides/investor-guide)
 
@@ -353,7 +363,7 @@ Learn more: [Investor Guide](/guides/investor-guide)
 [Complete Buy Guide →](/guides/buying-tokens)
 
 ### For Sellers
-1. Check if bonding round is complete (day 7+)
+1. Check whether the AMM is still in IBR or has handed off to CRR pricing
 2. Get a quote: How much USDC for Y tokens?
 3. Approve token spending
 4. Set slippage tolerance
@@ -389,9 +399,9 @@ Yes. Token prices can go down if:
 - **Minting**: Creating new tokens as rewards for performance improvements (supply ↑)
 - **Buying**: Exchanging USDC for existing tokens via AMM (supply ↑, reserve ↑)
 
-### Q: Why can't I sell during the first 7 days?
+### Q: Is the first week a sell lock?
 
-The buy-only period prevents manipulation and ensures fair price discovery. After day 7, full trading is enabled.
+No. The launch phase is the **Initial Bonding Ratio (IBR)** window: flat pricing at **$0.01/token** until reserves reach **$25,000 USDC** or **7 days** elapse, then the AMM hands off to CRR pricing.
 
 ### Q: What happens to API fees?
 
@@ -408,7 +418,7 @@ Yes, to prevent manipulation. Exact limits are set per model and governance-cont
 ## Next Steps
 
 - **Understand Formulas**: [Bonding Curve Mathematics](/tokenomics/bonding-curve)
-- **Launch Period**: [Seven-Day Bonding Round](/tokenomics/launch-period)
+- **Launch Phase**: [Initial Bonding Ratio (IBR)](/tokenomics/launch-period)
 - **API Revenue**: [How Fees Increase Value](/tokenomics/api-fee-flow)
 - **Start Trading**: [Buy Tokens Guide](/guides/buying-tokens)
 - **Technical Deep Dive**: [HokusaiAMM Contract](/smart-contracts/hokusai-amm)

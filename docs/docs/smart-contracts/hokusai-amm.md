@@ -12,7 +12,7 @@ The `HokusaiAMM` contract implements a Constant Reserve Ratio (CRR) bonding curv
 
 **Key Features**:
 - CRR-based buy/sell formulas
-- Seven-day buy-only bonding round
+- IBR launch phase with flat pricing at $0.01/token until $25,000 reserves or 7 days
 - API fee deposit mechanism
 - Slippage and deadline protection
 - Emergency pause capability
@@ -51,8 +51,8 @@ uint256 public tradeFee;
 // Protocol fee (0% to 50% of trade fee)
 uint256 public protocolFee;
 
-// End of buy-only period (timestamp)
-uint256 public immutable buyOnlyUntil;
+// Launch-phase metadata and trade state helpers may expose IBR timing
+uint256 public immutable ibrEndTime;
 
 // Emergency pause flag
 bool public paused;
@@ -152,19 +152,13 @@ function sell(
 **Returns**: USDC amount received
 
 **Restrictions**:
-- ⚠️ **Cannot sell during buy-only period** (first 7 days)
+- ⚠️ Sell quotes depend on whether the AMM is still in IBR or has handed off to CRR pricing
 - Requires token approval first
 
 **Example**:
 ```javascript
 const token = await ethers.getContractAt("HokusaiToken", tokenAddress);
 const amm = await ethers.getContractAt("HokusaiAMM", ammAddress);
-
-// Check if bonding round is over
-const buyOnlyUntil = await amm.buyOnlyUntil();
-if (Date.now() / 1000 < buyOnlyUntil) {
-    throw new Error("Still in bonding round, cannot sell yet");
-}
 
 // Approve token spending
 const tokenAmount = ethers.parseUnits("1000", 18);
@@ -181,6 +175,16 @@ const tx = await amm.sell(tokenAmount, minUSDC, deadline);
 await tx.wait();
 console.log(`Received ${ethers.formatUnits(quote, 6)} USDC`);
 ```
+
+### Factory Defaults
+
+| Parameter | Default |
+|-----------|---------|
+| CRR | 20% (`200,000 ppm`) |
+| Trade fee | 0.30% (`30 bps`) |
+| Max IBR duration | 7 days |
+| Flat-curve threshold | $25,000 USDC |
+| Flat-curve price | $0.01 per token |
 
 **Formula**:
 ```
@@ -332,25 +336,17 @@ function getTotalSupply() external view returns (uint256);
 
 **Returns**: Current circulating supply
 
-### isBuyOnlyPeriod()
+### Launch-Phase Status
 
-Check if still in seven-day bonding round.
+Deployed AMM interfaces should expose enough state to determine whether the market is still in the **IBR flat-price phase** or has already handed off to CRR pricing.
 
-```solidity
-function isBuyOnlyPeriod() external view returns (bool);
-```
+At minimum, an integration should surface:
 
-**Returns**: `true` if selling is disabled, `false` if full trading enabled
+- Whether the AMM is still in IBR
+- When the 7-day IBR cap expires
+- Whether the reserve threshold handoff has already occurred
 
-**Example**:
-```javascript
-const isBuyOnly = await amm.isBuyOnlyPeriod();
-if (isBuyOnly) {
-    console.log("Still in bonding round - buys only");
-} else {
-    console.log("Full trading enabled");
-}
-```
+**Integration goal**: show users whether quotes are still on the **$0.01 launch curve** or on the **CRR bonding curve**.
 
 ## Governance Functions
 
@@ -578,12 +574,6 @@ class AMMService {
         const amm = this.amm.connect(signer);
         const tokensIn = ethers.parseUnits(tokenAmount, 18);
 
-        // Check if selling is allowed
-        const isBuyOnly = await amm.isBuyOnlyPeriod();
-        if (isBuyOnly) {
-            throw new Error("Selling not allowed during bonding round");
-        }
-
         // Get quote
         const usdcOut = await amm.getSellQuote(tokensIn);
         const minUSDC = usdcOut * BigInt(100 - slippagePct) / 100n;
@@ -651,11 +641,11 @@ class FeeDepositService {
 
 **Solution**: Increase deadline or use higher gas price
 
-### "Cannot sell during bonding round"
+### "Unexpected sell quote or unavailable trade path"
 
-**Cause**: Trying to sell before day 7 complete
+**Cause**: The AMM may still be in the IBR flat-price phase, may have just handed off to CRR pricing, or the frontend may be checking outdated launch-state assumptions.
 
-**Solution**: Wait until `buyOnlyUntil` timestamp passes
+**Solution**: Re-read the AMM trade-status fields, refresh the quote, and confirm whether the market is still on the flat $0.01 launch curve or already on CRR pricing.
 
 ### "Insufficient allowance"
 
@@ -686,10 +676,9 @@ describe("HokusaiAMM", function() {
         expect(balance).to.be.gte(quote * 99n / 100n);
     });
 
-    it("should prevent selling during bonding round", async function() {
-        await expect(
-            amm.sell(ethers.parseUnits("100", 18), 0, deadline)
-        ).to.be.revertedWith("Selling not allowed during bonding round");
+    it("should reflect launch-phase pricing before CRR handoff", async function() {
+        const quote = await amm.getSellQuote(ethers.parseUnits("100", 18));
+        expect(quote).to.be.gte(0);
     });
 
     it("should increase price when fees deposited", async function() {

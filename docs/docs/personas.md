@@ -68,7 +68,7 @@ Investors participate in model token launches, trade on the bonding curve AMM, a
 ### Profile
 - **Who**: Individual investors, crypto funds, or organizations seeking AI-backed assets
 - **Goals**:
-  - Invest in promising AI models during launch period
+  - Invest in promising AI models during the IBR phase
   - Trade tokens on the CRR bonding curve AMM
   - Benefit from API fee deposits to reserves
   - Support ecosystem growth and innovation
@@ -80,15 +80,15 @@ Investors participate in model token launches, trade on the bonding curve AMM, a
 
 ### Use Cases
 
-1. **Launch Period Participation**
-   - Research models before seven-day bonding round
-   - Buy tokens during buy-only period (Days 0-6)
-   - Dollar-cost average across launch period
+1. **IBR Phase Participation**
+   - Research models before and during the IBR phase
+   - Buy tokens at the $0.01 launch price before CRR handoff
+   - Dollar-cost average across the IBR window
    - Monitor reserve growth and community engagement
    - [Complete Guide →](/guides/investor-guide)
 
 2. **Secondary Trading**
-   - Buy tokens post-launch (Day 7+)
+   - Buy tokens after the AMM hands off to CRR pricing
    - Sell tokens on AMM for USDC
    - Time entries/exits based on API fee deposits
    - Monitor price dynamics and reserve changes
@@ -131,7 +131,7 @@ Investors participate in model token launches, trade on the bonding curve AMM, a
 ### Key Resources for Investors
 
 - [Investor Guide](/guides/investor-guide) - Complete investment playbook
-- [Launch Period](/tokenomics/launch-period) - Seven-day bonding round details
+- [Launch Phase](/tokenomics/launch-period) - Initial Bonding Ratio (IBR) details
 - [AMM Overview](/tokenomics/amm-overview) - How the bonding curve works
 - [Bonding Curve Math](/tokenomics/bonding-curve) - Price formulas and examples
 
