@@ -42,7 +42,7 @@ IERC20 public immutable token;
 // Reserve token (USDC)
 IERC20 public immutable reserveToken;
 
-// Constant Reserve Ratio (5% to 50%)
+// Constant Reserve Ratio (5% to 100%)
 uint256 public reserveRatio;
 
 // Trade fee (0% to 10%)
@@ -62,7 +62,7 @@ bool public paused;
 
 ```solidity
 uint256 public constant PRECISION = 1e18;
-uint256 public constant MAX_RESERVE_RATIO = 50e16; // 50%
+uint256 public constant MAX_RESERVE_RATIO = 1e18;  // 100%
 uint256 public constant MIN_RESERVE_RATIO = 5e16;  // 5%
 uint256 public constant MAX_TRADE_FEE = 10e16;     // 10%
 uint256 public constant MAX_PROTOCOL_FEE = 50e16;  // 50%
@@ -367,7 +367,7 @@ function updateParameters(
 ```
 
 **Parameters**:
-- `newReserveRatio`: New CRR (5% to 50%)
+- `newReserveRatio`: New CRR (5% to 100%)
 - `newTradeFee`: New trade fee (0% to 10%)
 - `newProtocolFee`: New protocol fee (0% to 50% of trade fee)
 

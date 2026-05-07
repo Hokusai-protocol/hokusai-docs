@@ -313,7 +313,7 @@ All state-changing functions use OpenZeppelin's `nonReentrant` modifier to preve
 Contract owner can pause trading in emergency situations while preserving user funds.
 
 ### Parameter Bounds
-- CRR (w): 5% to 50%
+- CRR (w): 5% to 100%
 - Trade Fee: 0% to 10%
 - Protocol Fee: 0% to 50%
 

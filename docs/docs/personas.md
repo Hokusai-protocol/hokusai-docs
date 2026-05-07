@@ -112,19 +112,19 @@ Investors participate in model token launches, trade on the bonding curve AMM, a
 
 **Conservative**:
 - Invest in mature models with proven API revenue
-- Higher CRR tokens (35-50%) for stability
+- Higher CRR tokens (50-100%) for stability
 - Hold long-term (90+ days)
 - 1-5% portfolio allocation
 
 **Moderate**:
 - Mix of launch and mature models
-- Medium CRR tokens (20-35%)
+- Medium CRR tokens (20-50%)
 - Medium-term holds (30-90 days)
 - 5-15% portfolio allocation
 
 **Aggressive**:
 - Focus on early launches and high-growth models
-- Lower CRR tokens (10-20%) for upside
+- Lower CRR tokens (5-20%) for upside
 - Short to medium-term (7-30 days)
 - 15-30% portfolio allocation
 
