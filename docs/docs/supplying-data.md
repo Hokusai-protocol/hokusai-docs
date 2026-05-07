@@ -429,6 +429,93 @@ The `spec_id` is the ID of the newly created `BenchmarkSpec`. Save it — you wi
 
 ---
 
+### Automating Evaluations with Schedules
+
+Once a `BenchmarkSpec` exists for your model (created automatically by the upload endpoint above, or via the SDK submit flow), you can configure a recurring evaluation schedule.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as API Server<br/>(POST /benchmarks/upload)
+    participant S3
+    participant SQS
+    participant Worker as DatasetArrivalWorker
+    participant Scheduler as EvaluationScheduler
+    participant Eval as Evaluation Engine
+    participant Chain as DeltaVerifier (on-chain)
+
+    Client->>API: POST /api/v1/benchmarks/upload/{model_id}
+    API->>API: Validate format, columns, PII
+    API->>S3: Store dataset
+    API-->>Client: 201 { spec_id, s3_uri }
+    S3->>SQS: S3 event notification
+    Worker->>SQS: Poll for new arrivals
+    SQS-->>Worker: New dataset event
+    Worker->>Eval: Enqueue re-evaluation job
+    Scheduler->>Eval: Trigger scheduled evaluation (cron)
+    Eval->>Chain: Submit HEM eval artifact
+    Chain-->>Client: DeltaOne reward minted
+```
+
+#### Prerequisites
+
+- The model must have a `BenchmarkSpec` record. Uploading a dataset file creates one automatically.
+- `ENABLE_EVALUATION_SCHEDULER=true` must be set on the API server for scheduled triggers to fire.
+
+#### Create a schedule
+
+```bash
+curl -X POST "https://api.hokus.ai/api/v1/models/my-model-id/evaluation-schedule" \
+  -H "Authorization: Bearer $HOKUSAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"cron_expression": "0 2 * * *", "enabled": true}'
+```
+
+The `cron_expression` field accepts standard cron syntax (validated by croniter). Each model may have at most one schedule; a second `POST` returns `409 Conflict`.
+
+#### EvaluationSchedule fields
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | string (UUID) | — | Schedule identifier |
+| `model_id` | string | — | Associated model |
+| `cron_expression` | string | — | Cron string controlling run frequency (croniter-validated) |
+| `enabled` | boolean | `true` | Whether the scheduler will trigger this schedule |
+| `last_run_at` | string (ISO 8601) \| null | `null` | Timestamp of the most recent triggered evaluation |
+| `next_run_at` | string (ISO 8601) \| null | `null` | Computed timestamp of the next scheduled run |
+| `created_at` | string (ISO 8601) | — | Creation timestamp |
+| `updated_at` | string (ISO 8601) | — | Last modification timestamp |
+
+#### Update or disable a schedule
+
+```bash
+# Pause a schedule without deleting it
+curl -X PUT "https://api.hokus.ai/api/v1/models/my-model-id/evaluation-schedule" \
+  -H "Authorization: Bearer $HOKUSAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"cron_expression": "0 2 * * *", "enabled": false}'
+```
+
+#### S3 event-driven re-evaluation
+
+In addition to cron schedules, uploading a new dataset version triggers an automatic re-evaluation via the S3 event listener. The background `DatasetArrivalWorker` polls the SQS queue at `DATASET_ARRIVAL_SQS_QUEUE_URL`, detects new objects matching `datasets/{model_id}/{version}/`, and enqueues a re-evaluation job.
+
+To prevent duplicate jobs during bulk uploads, arrivals within the same `EVALUATION_DEBOUNCE_WINDOW_SECONDS` window (default: 300 s) are deduplicated automatically.
+
+#### Relevant environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ENABLE_EVALUATION_SCHEDULER` | `false` | Set to `true` to activate the scheduled trigger service |
+| `SCHEDULER_POLL_INTERVAL_SECONDS` | `60` | How often the scheduler polls for due evaluations |
+| `SCHEDULER_MAX_CONCURRENT` | `5` | Maximum evaluations running at the same time |
+| `DATASET_ARRIVAL_SQS_QUEUE_URL` | — | SQS queue URL for S3 dataset arrival events |
+| `EVALUATION_DEBOUNCE_WINDOW_SECONDS` | `300` | Deduplication window for rapid successive uploads |
+| `HOKUSAI_DATASET_BUCKET` | — | S3 bucket where uploaded datasets are stored |
+
+---
+
+
 ### Step 5: Monitor Performance
 
 Track your contribution's impact:

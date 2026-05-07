@@ -140,6 +140,12 @@ All benchmark dataset endpoints require a valid API key. See [Uploading Datasets
 | `POST` | `/api/v1/benchmarks/upload/{model_id}` | Upload a CSV or Parquet benchmark dataset (multipart, ≤ 500 MB); creates a `BenchmarkSpec` record |
 | `GET` | `/api/v1/dataset-arrivals` | List recent S3 dataset arrivals; optional `?model_id=&limit=` query params |
 
+**Path parameters**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `model_id` | string | The unique identifier of the model to associate with the dataset |
+
 ### Evaluation Schedules
 
 All evaluation schedule endpoints require a valid API key. A `BenchmarkSpec` must exist for the model before a schedule can be created. See [Automating Evaluations with Schedules](/supplying-data#automating-evaluations-with-schedules).
@@ -150,6 +156,12 @@ All evaluation schedule endpoints require a valid API key. A `BenchmarkSpec` mus
 | `GET` | `/api/v1/models/{model_id}/evaluation-schedule` | 200 | Retrieve the current schedule |
 | `PUT` | `/api/v1/models/{model_id}/evaluation-schedule` | 200 | Update the `cron_expression` or `enabled` flag |
 | `DELETE` | `/api/v1/models/{model_id}/evaluation-schedule` | 204 | Remove the schedule |
+
+**Path parameters**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `model_id` | string | The unique identifier of the model whose evaluation schedule to manage |
 
 ## Common Response Formats
 
