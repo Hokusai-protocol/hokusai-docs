@@ -48,6 +48,8 @@ Hokusai's tokenomics are designed to create a sustainable ecosystem that rewards
 - CRR bonding curve pricing
 - Governance controls
 
+Parameter changes to infrastructure cost rates and bonding curve inputs are **epoch-gated** — no update takes effect sooner than the next 30-day epoch boundary. See [Parameter Governance](/smart-contracts/parameter-governance).
+
 ## Next Steps
 
 - [Understanding Token Value](/tokenomics/token-value)

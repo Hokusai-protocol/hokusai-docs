@@ -49,6 +49,7 @@ graph TD
 - If the oracle has no entry, each model falls back to `infrastructureAccrualBps`
 - Infrastructure portion accrues in `InfrastructureReserve`
 - Providers are paid manually with on-chain invoice tracking
+- Cost rates and per-model parameters are epoch-gated (30-day default) — see [Parameter Governance](/smart-contracts/parameter-governance)
 
 ### Profit Share to AMM
 - Residual after infrastructure (0-50%) flows to AMM USDC reserves

@@ -26,7 +26,7 @@ graph TD
 
 #### Verification and Acceptance Flow
 
-**DeltaVerifier** (on-chain) validates each challenger submission by consuming **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts stored in MLflow. When a submission passes verification, DeltaVerifier publishes a **MintRequest** (schema v1.0) to Redis; amounts are standardized on bps + USDC micro-units for on-chain precision (see [HOK-1266](https://linear.app/hokusai/issue/HOK-1266/standardize-deltaone-acceptance-event-payload-for-on-chain)).
+**DeltaVerifier** (on-chain) validates each challenger submission by consuming **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts stored in MLflow. When a submission passes verification, DeltaVerifier publishes a **MintRequest** (schema v1.0) to Redis; amounts are standardized on bps + USDC micro-units for on-chain precision (see [HOK-1266](https://linear.app/hokusai/issue/HOK-1266/standardize-deltaone-acceptance-event-payload-for-on-chain)). For sales-specific scorers, measurement policies, and mint-eligibility gates, see [Custom Scorers & Sales Metrics](../core-workflows/custom-scorers-and-sales-metrics).
 
 #### Reward Calculation
 ```
@@ -163,5 +163,6 @@ function depositFee(
 - Review [Token Value Mechanics](/tokenomics/token-value)
 - Understand [DeltaOne Calculations](/tokenomics/deltaone-calculations)
 - Learn about [Smart Contracts](/smart-contracts/overview)
+- Review [Custom Scorers & Sales Metrics](../core-workflows/custom-scorers-and-sales-metrics)
 
 For additional support, contact our [Support Team](https://hokus.ai/contact-us/) or join our [Community Forum](https://community.hokus.ai). 

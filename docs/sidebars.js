@@ -28,6 +28,7 @@ const sidebars = {
       label: 'Core Workflows',
       items: [
         'core-workflows/model-lifecycle',
+        'core-workflows/custom-scorers-and-sales-metrics',
         'supplying-data',
         'data-validation-tools',
         'privacy-compliance',
@@ -84,6 +85,7 @@ const sidebars = {
         'smart-contracts/model-tokens-and-token-manager',
         'smart-contracts/verifier-and-contribution',
         'smart-contracts/usage-fee-routing',
+        'smart-contracts/parameter-governance',
         'smart-contracts/access-control',
         'smart-contracts/governance-and-security',
       ],

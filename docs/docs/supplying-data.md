@@ -25,6 +25,19 @@ graph LR
     F --> G[DeltaOne Rewards]
 ```
 
+## Schema-driven contributions
+
+Each Hokusai model defines its own input schema — a JSON Schema document that describes the rows contributors must submit. The on-platform Submit-Data form is built dynamically from this schema (stored in `Model.api_schema` in Postgres), and client code should do the same: **fetch the schema at runtime** rather than assuming a fixed data shape.
+
+Two public endpoints expose the per-model contract:
+
+| Endpoint | Returns |
+|---|---|
+| `GET https://hokus.ai/api/models/{modelId}/data-spec` | JSON Schema describing accepted contribution rows (`Content-Type: application/schema+json`) |
+| `GET https://hokus.ai/api/models/{modelId}/data-spec/example` | A worked example row (`?format=csv` returns CSV) |
+
+Use the schema endpoint as the source of truth — the same document drives the website's form, the SDK validators, and the pipeline. Append `?download=true` to either endpoint to download the file directly.
+
 ## Hokusai Support Program
 
 For qualified data suppliers, Hokusai offers comprehensive support services to ensure successful data contribution:
@@ -77,8 +90,10 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ## Supported Data Types
 
+The examples below show common data shapes you may encounter, but they are **illustrative only**. Each model's authoritative input schema is available at `GET https://hokus.ai/api/models/{modelId}/data-spec` — fetch it at runtime to know exactly what fields and types that model expects.
+
 ### 1. Query-Document Pairs
-Most common format for information retrieval models:
+Common pattern for information retrieval models:
 
 ```csv
 query_id,query,relevant_doc_id,label
@@ -134,19 +149,50 @@ The pipeline automatically handles privacy:
 
 ### Step 1: Prepare Your Data
 
-Each model has specific format requirements. To find the exact requirements:
+The first step is to fetch the model's JSON Schema so you know the exact row shape required. Replace `21` with the ID of the model you want to contribute to.
 
-1. Select your target model on the platform
-2. Navigate to the "Submit Data" tab
-3. Review format specifications and validation rules
-4. Note required metadata fields
+**Fetch the schema:**
 
-Example data preparation:
+```bash
+curl https://hokus.ai/api/models/21/data-spec
+```
+
+**Fetch a worked example row:**
+
+```bash
+# JSON example
+curl https://hokus.ai/api/models/21/data-spec/example
+
+# CSV example
+curl "https://hokus.ai/api/models/21/data-spec/example?format=csv"
+```
+
+**Validate a row locally before submitting (Python):**
+
+```python
+import requests
+import jsonschema
+
+# Fetch the model's JSON Schema
+schema = requests.get("https://hokus.ai/api/models/21/data-spec").json()
+
+# Your candidate row — shape must match the schema
+row = {
+    "query": "How to use Hokusai pipeline?",
+    "document_id": "doc_hokusai",
+    "relevance": 1
+}
+
+# Raises jsonschema.ValidationError if the row is invalid
+jsonschema.validate(instance=row, schema=schema)
+print("Row is valid")
+```
+
+**Build your dataset once you've confirmed the schema:**
 
 ```python
 import pandas as pd
 
-# Create your dataset
 data = pd.DataFrame({
     'query_id': ['custom_001', 'custom_002', 'custom_003'],
     'query': [
@@ -158,7 +204,6 @@ data = pd.DataFrame({
     'relevance': [1, 1, 0]
 })
 
-# Save to CSV
 data.to_csv('my_contribution.csv', index=False)
 ```
 
@@ -229,6 +274,65 @@ python -m src.pipeline.hokusai_pipeline run \
     --contributor-manifest=manifest.json \
     --output-dir=./outputs
 ```
+
+#### Using the HTTP API:
+
+This is the same endpoint the Hokusai website uses when you submit data through the browser UI. It requires an authenticated session (the site session cookie or a Bearer token obtained from the auth service — see the [authentication quickstart](authentication/quickstart.md) for token mechanics).
+
+```bash
+curl -X POST https://hokus.ai/api/models/21/contributions \
+  -H "Content-Type: application/json" \
+  --cookie "hokusai_access_token=<your_token>" \
+  -d '{
+    "modelId": 21,
+    "benchmarkSpecId": null,
+    "rows": [
+      { "query": "How to use Hokusai pipeline?", "document_id": "doc_hokusai", "relevance": 1 }
+    ]
+  }'
+```
+
+On success the endpoint returns:
+```json
+{ "ok": true, "submittedRows": 1, "jobId": "job_abc123" }
+```
+
+On validation failure it returns HTTP 400 with:
+```json
+{
+  "ok": false,
+  "status": 400,
+  "message": "Validation failed",
+  "errors": [{ "path": "rows[0].relevance", "message": "Expected number", "rowIndex": 0 }]
+}
+```
+
+**Python equivalent:**
+
+```python
+import requests
+
+token = "<your_token>"
+payload = {
+    "modelId": 21,
+    "benchmarkSpecId": None,
+    "rows": [
+        {"query": "How to use Hokusai pipeline?", "document_id": "doc_hokusai", "relevance": 1}
+    ],
+}
+
+resp = requests.post(
+    "https://hokus.ai/api/models/21/contributions",
+    json=payload,
+    cookies={"hokusai_access_token": token},
+)
+resp.raise_for_status()
+print(resp.json())  # {"ok": True, "submittedRows": 1, "jobId": "..."}
+```
+
+:::note
+`benchmarkSpecId` is always required in the request body (pass `null` unless you have a specific benchmark spec). The optional fields `schemaVersion` and `templateId` may be omitted.
+:::
 
 ### Step 5: Monitor Performance
 
