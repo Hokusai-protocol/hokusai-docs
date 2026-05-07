@@ -93,6 +93,14 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Reference Apps',
+      items: [
+        'reference-apps/index',
+        'reference-apps/hlead',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Licensing',
       items: [
         'licensing/overview',
