@@ -78,6 +78,10 @@ Review all settings and click "Create Model". After creation, you'll be guided t
 
 > Your model enters **DRAFT** when created and moves to **PROPOSAL** when published. See [Model Lifecycle](core-workflows/model-lifecycle) for the full path through **REGISTERED** and **DEPLOYED**, including how graduation deploys the AMM pool.
 
+:::tip Before you register
+Model registration uses a [**BenchmarkSpec**](./core-workflows/benchmark-specs) — a top-level entity that defines the metric, baseline, and guardrails the model is evaluated against. Create a spec first (or reuse one prefilled by the web UI), then register your model with `--benchmark-spec-id`.
+:::
+
 ## Programmatic Model Creation
 
 For advanced users, CI pipelines, or custom launch flows, the on-chain portion of model creation is a direct smart contract call. The workflow has three parts:
@@ -211,14 +215,18 @@ The `initialOraclePricePerThousandUsd` field in `initialParams` sets the initial
 
 ## Step 4: Register the model with the ML platform
 
-After the token is deployed, register the model artifact with the MLflow-based SDK documented in the launch guide. That guide is the source of truth for the Python registration flow and API key setup.
+After the token is deployed, register the model artifact against a BenchmarkSpec. The recommended path is the `hokusai` CLI (provided by `hokusai-ml-platform`):
 
-```text
-See guides/model-launch-guide#step-6-model-registration for:
-- pip install git+https://github.com/Hokusai-protocol/hokusai-data-pipeline.git#subdirectory=hokusai-ml-platform
-- export HOKUSAI_API_KEY=...
-- ModelRegistry.register_tokenized_model(...)
+```bash
+hokusai model register \
+  --token-id TICKER \
+  --benchmark-spec-id <spec_id> \
+  --model-path ./models/final_model.pkl
 ```
+
+The CLI uploads the model to MLflow, validates that the model meets the spec's baseline, tags the MLflow run with `benchmark_spec_id` for provenance, and updates the model status to **REGISTERED**. See [Benchmark Specs](./core-workflows/benchmark-specs) for the spec schema and CRUD operations.
+
+For Python SDK usage (`registry.register_tokenized_model(...)`), see the [Complete Model Launch Guide](guides/model-launch-guide#step-6-model-registration).
 
 ## Best Practices
 
@@ -244,6 +252,7 @@ See guides/model-launch-guide#step-6-model-registration for:
 
 ## Next Steps
 
+- Review [Benchmark Specs](./core-workflows/benchmark-specs) — spec schema, CRUD, and the `--benchmark-spec-id` registration flow
 - Learn about [Improving Models](/improving-models)
 - Understand [Model API Guide](/model-api-guide)
 - Review [Auction Pricing](/auction-pricing)

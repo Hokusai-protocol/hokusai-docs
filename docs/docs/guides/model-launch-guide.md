@@ -201,6 +201,10 @@ export HOKUSAI_API_KEY="your-hokusai-api-key-here"
 
 ### Register Your Model
 
+:::note Recommended: register via BenchmarkSpec
+The Python `register_tokenized_model(metric_name=..., baseline_value=...)` call shown below uses the legacy scalar form. New integrations should create a [BenchmarkSpec](../core-workflows/benchmark-specs) and register with `--benchmark-spec-id`. The legacy scalar form continues to work — runtime auto-uplifts it via `spec_translation.py` — but BenchmarkSpec is the canonical source of truth going forward.
+:::
+
 Use the following Python code to register your model:
 
 ```python

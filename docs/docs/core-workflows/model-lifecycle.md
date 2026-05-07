@@ -32,7 +32,7 @@ The important distinction is that **DRAFT** and **PROPOSAL** are primarily off-c
 
 ## DRAFT
 
-In **DRAFT**, your model exists as an unpublished work in progress. You can still revise its metadata, benchmark configuration, licensing choices, and launch parameters before anyone else interacts with it.
+In **DRAFT**, your model exists as an unpublished work in progress. You can still revise its metadata, [benchmark spec](./benchmark-specs), licensing choices, and launch parameters before anyone else interacts with it.
 
 This is the most private stage in the lifecycle. Other users do not treat the model as available for investment, contribution, or trading yet.
 
@@ -67,6 +67,8 @@ See [Investor Guide](../guides/investor-guide) for participation context and [Se
 In **REGISTERED**, the model's baseline has been accepted on-chain and recorded through `ModelRegistry`. This is the point where the model stops being only a proposal and becomes an active target for measurable improvement work.
 
 The baseline matters because it fixes the threshold future contributions are judged against. That lock-in prevents the target from shifting underneath contributors and gives the protocol a stable reference point for validating model improvements.
+
+Registration binds the model to a [**BenchmarkSpec**](./benchmark-specs) — the spec's `eval_spec` defines the metric, baseline, and guardrails the on-chain registration is anchored to.
 
 The AMM pool is still not live in this state. Registration is about establishing the model as an accepted, on-chain baseline before launch liquidity is turned on.
 
@@ -119,6 +121,7 @@ Before graduation is announced, investors can withdraw their committed USDC from
 ## Related reading
 
 - [Creating Models](../creating-models)
+- [Benchmark Specs](./benchmark-specs)
 - [Model Launch Guide](../guides/model-launch-guide)
 - [Investor Guide](../guides/investor-guide)
 - [Smart Contract Overview](../smart-contracts/overview)
