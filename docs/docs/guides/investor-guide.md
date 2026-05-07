@@ -158,7 +158,7 @@ console.log(`Initial Reserve: ${ethers.formatUnits(reserve, 6)} USDC`);
 
 | Parameter | Conservative | Moderate | Aggressive |
 |-----------|-------------|----------|------------|
-| **CRR (w)** | 35-50% | 20-35% | 5-20% |
+| **CRR (w)** | 50-100% | 20-50% | 5-20% |
 | **Initial Reserve** | $50k+ | $10-50k | $1-10k |
 | **Initial Supply** | 500k-1M | 1-5M | 5-10M+ |
 | **Initial Price** | $0.10+ | $0.01-0.10 | $0.001-0.01 |

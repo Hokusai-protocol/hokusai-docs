@@ -23,6 +23,12 @@ This guide helps you choose the right CRR by showing concrete tradeoffs with rea
 
 Lower CRR does the opposite.
 
+> **Allowed range**: The contract permits CRR settings between **5% and 100%**
+> (governance-controlled). Most live models will sit between 10% and 30% - the
+> sweet spot for balancing reward sustainability with reasonable price action -
+> but very-high CRR (50-100%) is available for ultra-stable enterprise tokens
+> where price stability dominates other concerns.
+
 ## What CRR Actually Controls
 
 In Hokusai's bonding curve, spot price is determined by:
@@ -455,6 +461,7 @@ For models that reach performance ceiling quickly (Scenario C), low CRR maximize
 | Proven, moderate funding | 15-20% | 100k-150k | 20-30 | $40-80k |
 | Production, enterprise | 20-25% | 75k-125k | 30-50 | $60-150k |
 | Long-lived, ongoing improvements | 25-30% | 50k-100k | 50+ | $100k+ |
+| Ultra-stable enterprise / regulated | 50-100% | 25k-75k | 50+ | $200k+ |
 
 ## Calculator: Will My Reserve Last?
 

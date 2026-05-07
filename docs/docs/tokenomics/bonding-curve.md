@@ -40,7 +40,7 @@ The reserve ratio (w) determines how sensitive the price is to supply changes:
 
 - **Low w (e.g., 10%)**: More volatile price, higher returns, higher risk
 - **High w (e.g., 40%)**: More stable price, lower returns, lower risk
-- **Hokusai Range**: 5% to 50% (governance-controlled)
+- **Hokusai Range**: 5% to 100% (governance-controlled)
 
 **Example Reserve Ratios**:
 ```
@@ -518,7 +518,7 @@ Prevents transactions from executing at stale prices.
 Governance cannot set extreme parameters:
 
 ```
-Reserve Ratio (w): 5% to 50%
+Reserve Ratio (w): 5% to 100%
 Trade Fee: 0% to 10%
 Protocol Fee: 0% to 50% of trade fee
 ```
@@ -620,7 +620,7 @@ FDV = (R / (w × S_current)) × S_max
 1. **Choose appropriate CRR** (w):
    - Low w (10-20%): High growth potential, volatile
    - Medium w (20-35%): Balanced growth and stability
-   - High w (35-50%): Stable, conservative
+   - High w (35-100%): Stable, conservative
 2. **Monitor profit share deposits**: Ensure profit portion flows to reserves
 3. **Set appropriate infrastructure accrual**: Balance cost coverage with profit share
 3. **Communicate minting events**: Transparency prevents surprises
