@@ -37,6 +37,8 @@ This guide helps investors understand how to evaluate Hokusai model tokens and t
 - Planning to participate in a seven-day launch
 - Looking to trade existing model tokens
 
+For the canonical state model behind launch participation, pre-commits, and deployment, see [Model Lifecycle](../core-workflows/model-lifecycle).
+
 ## Investment Thesis
 
 ### Why Invest in Model Tokens?

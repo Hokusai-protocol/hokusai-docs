@@ -28,6 +28,8 @@ The model launch process consists of four main phases:
 3. **Token Configuration** - Set up the economic parameters for your model's token
 4. **Registration & Deployment** - Register your model and deploy the token to blockchain
 
+For the canonical view of model state, including the graduation transition that takes a model from **REGISTERED** to **DEPLOYED**, see [Model Lifecycle](../core-workflows/model-lifecycle).
+
 ## Step 1: Model Overview
 
 Begin by providing essential information about your AI model. This metadata helps users discover and understand your model's capabilities.

@@ -77,6 +77,8 @@ Review all settings and click "Create Model". After creation, you'll be guided t
 1. **Register Base Model** - Connect your model to the Hokusai ML registry
 2. **Deploy Token to Blockchain** - Deploy your model's ERC-20 token contract (requires a Web3 wallet and ETH for gas)
 
+> Your model enters **DRAFT** when created and moves to **PROPOSAL** when published. See [Model Lifecycle](core-workflows/model-lifecycle) for the full path through **REGISTERED** and **DEPLOYED**, including how graduation deploys the AMM pool.
+
 ## Programmatic Model Creation
 
 For advanced users, CI pipelines, or custom launch flows, the on-chain portion of model creation is a direct smart contract call. The workflow has two parts:
