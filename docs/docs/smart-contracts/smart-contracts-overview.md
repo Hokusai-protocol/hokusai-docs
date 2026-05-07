@@ -2,6 +2,8 @@
 
 Hokusai's smart contract system is modular, designed to support decentralized AI model development and tokenization. Here's a simplified flow:
 
+> Looking for contract addresses? See [Deployments](/smart-contracts/deployments).
+
 ```mermaid
 graph TD
     DC["Data Contributor"] -->|submits data| DOV["DeltaOneVerifier"]

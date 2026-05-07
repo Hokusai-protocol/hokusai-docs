@@ -77,6 +77,7 @@ const sidebars = {
       label: 'Smart Contracts',
       items: [
         'smart-contracts/smart-contracts-overview',
+        'smart-contracts/deployments',
         'smart-contracts/hokusai-amm',
         'smart-contracts/token-flow',
         'smart-contracts/model-tokens-and-token-manager',

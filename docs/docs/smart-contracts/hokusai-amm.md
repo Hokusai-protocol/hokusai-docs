@@ -18,7 +18,7 @@ The `HokusaiAMM` contract implements a Constant Reserve Ratio (CRR) bonding curv
 - Emergency pause capability
 - Governance-controlled parameters
 
-**Repository**: [hokusai-token](https://github.com/Hokusai-protocol/hokusai-token)
+**Repository**: [hokusai-token](https://github.com/Hokusai-protocol/hokusai-token) | [Deployed addresses](/smart-contracts/deployments)
 
 ## Architecture
 
