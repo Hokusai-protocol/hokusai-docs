@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from '@theme-original/Navbar';
-type Props = Record<string, never>;
+import type {WrapperProps} from '@docusaurus/types';
+
+type Props = WrapperProps<typeof Navbar>;
 
 export default function NavbarWrapper(props: Props): React.ReactElement {
   return (
