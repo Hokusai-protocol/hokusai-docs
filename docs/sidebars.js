@@ -35,6 +35,7 @@ const sidebars = {
         'privacy-compliance',
         'creating-models',
         'improving-models',
+        'inside-a-routing-decision',
         'using-models',
         'core-workflows/architecture',
       ],
