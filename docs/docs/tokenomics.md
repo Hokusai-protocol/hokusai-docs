@@ -1,69 +1,55 @@
 ---
 id: tokenomics
-title: Tokenomics Overview
-sidebar_label: Overview
+title: Rewards and Fee Flow
+sidebar_label: Rewards and Fee Flow
 ---
 
-:::caution IMPORTANT NOTICE
-**This documentation is for educational and informational purposes only.**
+# Rewards and Fee Flow
 
-- There is **no endorsement** of investment in any specific model tokens
-- Token trading is **highly risky** - you may lose 100% of invested funds
-- **Always verify** contract addresses, team credentials, and claims independently
-- Nothing here constitutes financial, investment, or legal advice
+Hokusai's token mechanics exist to connect useful AI decision-layer improvements with contributor ownership.
 
-See [Investor Guide](/guides/investor-guide) for complete risk disclosures before participating.
+For the Technical Task Router, the primary economic loop is:
+
+```mermaid
+flowchart TD
+    A[Integrator routes a coding task] --> B[Per-decision fee]
+    B --> C[Router fee stream]
+    A --> D[Harness executes route]
+    D --> E[Outcome reported]
+    E --> F[Router improves]
+    F --> G[Verified performance lift]
+    G --> H[Contributor rewards]
+```
+
+## What the Token Represents
+
+The router token represents a stake in the shared routing layer. It is not a claim that every submitted task or every outcome report creates value. Rewards depend on measurable improvement to future routing behavior.
+
+## How Value Is Created
+
+Value can come from two sources:
+
+- **Usage**: routing calls pay per-decision fees.
+- **Improvement**: outcome data and model updates make future routes more successful, cheaper, faster, or more reliable.
+
+For coding tasks, useful improvement signals include acceptance rate, test pass rate, reviewer accuracy, cost-adjusted success, latency, retry rate, and regression detection.
+
+## How Rewards Are Earned
+
+Contributors can earn rewards when their contributions create verified performance lift. In router contexts, contribution data can include task packets, route outcomes, evaluation results, and feedback that improves the choice layer.
+
+See [Routing Rewards](/contributor-rewards/routing-rewards) for the router-specific reward model.
+
+## Where Protocol Details Live
+
+The docs still include detailed mechanics for AMMs, bonding curves, DeltaOne calculations, fee routing, and smart contracts. Those pages are implementation references, not the primary onboarding path for router integrators.
+
+- [Usage Fee Routing](/smart-contracts/usage-fee-routing)
+- [Token Flow](/smart-contracts/token-flow)
+- [DeltaOne Calculations](/tokenomics/deltaone-calculations)
+- [AMM Overview](/tokenomics/amm-overview)
+- [Bonding Curve](/tokenomics/bonding-curve)
+
+:::caution
+This documentation is technical and informational. It is not financial, investment, or legal advice.
 :::
-
-Hokusai's tokenomics are designed to align incentives across data suppliers, model developers, and token holders. Each model has dedicated tokens that can be traded on an automated market maker (AMM) using a Constant Reserve Ratio (CRR) bonding curve. API revenue flows into the USDC reserve pool, increasing token backing and price.
-
-## Key Components
-
-### DeltaOne Performance Rewards
-- **1 DeltaOne = 1% model improvement** (e.g., accuracy increase from 80% → 81%)
-- Tokens minted to reward data suppliers for verified performance gains
-- Performance verified on-chain by **DeltaVerifier** using **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts stored in MLflow at `eval_results/per_row.parquet`; each accepted **DeltaOne** gain triggers a **MintRequest** (schema v1.0) published to Redis, standardized on bps + USDC micro-units
-- Creates inflationary pressure when models improve
-
-### CRR Bonding Curve AMM
-- **Buy tokens** with USDC at deterministic bonding curve price
-- **Sell tokens** for USDC at flat $0.01/token during the IBR phase, or at bonding curve price after handoff
-- **No liquidity providers needed** - always-available liquidity
-- Price formula: `P = R / (w × S)` where R=reserves, S=supply, w=CRR
-- [Learn more about the AMM →](/tokenomics/amm-overview)
-
-### Initial Bonding Ratio (IBR) Phase
-- Every new model starts on a flat launch curve at **$0.01/token**
-- IBR ends when reserves reach **$25,000 USDC** or **7 days** elapse
-- After handoff, quotes switch to the CRR bonding curve
-- [IBR phase details →](/tokenomics/launch-period)
-
-### API Fee Flow
-- **Primary path**: cost-plus splitting via `InfrastructureCostOracle`
-- **Fallback path**: per-model configurable split via `infrastructureAccrualBps` in `HokusaiParams`
-- **Infrastructure accrual** → sent to `InfrastructureReserve`
-- **Profit share (residual)** → deposited to the AMM USDC reserve (increases price)
-- Profit deposits increase reserves without minting tokens
-- Token holders benefit from genuine profit after infrastructure costs
-- [API fee mechanics →](/tokenomics/api-fee-flow)
-
-### Token Supply Dynamics
-- Tokens can be sold back to the AMM for USDC throughout the AMM lifecycle, with pricing determined by the active launch or CRR regime
-- Selling tokens on the AMM burns them and returns USDC from reserves
-- Supply adjusts based on minting (rewards) and selling (burns)
-
-## How to Participate
-
-| Role | How to Get Tokens | How to Benefit |
-|------|------------------|----------------|
-| **Data Supplier** | Earn DeltaOne rewards for improving models | Sell rewards on AMM or hold for appreciation |
-| **Investor** | Buy tokens on AMM during IBR or after CRR handoff | API fees increase reserve → price increases |
-| **Model User** | Buy tokens to access model APIs | Use tokens to access AI model inference |
-
-## Next Steps
-
-- [AMM Overview](/tokenomics/amm-overview) - How the bonding curve works
-- [Bonding Curve Formulas](/tokenomics/bonding-curve) - Mathematical details
-- [Launch Phase Guide](/tokenomics/launch-period) - Initial Bonding Ratio (IBR) phase
-- [API Fee Flow](/tokenomics/api-fee-flow) - How revenue increases token value
-- [Investor Guide](/guides/investor-guide) - Complete investment playbook

@@ -7,97 +7,56 @@ sidebar_position: 2
 
 # Key Concepts
 
-This guide explains the fundamental concepts that make up the Hokusai protocol. Understanding these concepts will help you make the most of the platform, whether you're contributing data, developing models, or consuming AI models.
+Hokusai coordinates a shared routing layer for AI systems. The first router focuses on coding tasks, but the same protocol can support other decision layers where outcome data improves future choices.
 
-## Core Components
+## Router Concepts
 
-### 1. Data Contribution
-- **Quality Verification**: All contributed data undergoes rigorous quality checks
-- **Privacy Protection**: Data is processed with privacy-preserving techniques
-- **Value Assessment**: Data is evaluated based on its potential to improve model performance
-- **Reward Distribution**: Contributors are rewarded based on measurable improvements
+### Task
 
-### 2. Model Performance
-- **Baseline Metrics**: Each model has established performance benchmarks
-- **Improvement Tracking**: Changes in performance are measured and recorded
-- **Verification System**: Independent verification of performance claims
-- **Continuous Improvement**: Models evolve through community contributions
+The user request or work item submitted by an integrating harness. Examples include bug fixes, refactors, feature work, documentation updates, test repair, and code review.
 
-### 3. Token Economics
-- **DeltaOne System**: Performance-based reward measurement
-- **Token Utility**: Access rights and governance participation
-- **Value Mechanics**: Supply and demand dynamics
-- **Bonding Curve**: Price discovery mechanism
+### Task Packet
 
-## Key Mechanisms
+A normalized task representation used for routing. It captures fields such as language, domain, task type, complexity, risk, budget, available models, and harness metadata.
 
-### DeltaOne Rewards
-The DeltaOne system is the foundation of Hokusai's reward mechanism:
+### Choice Layer
 
-1. **Performance Measurement**
-   - Baseline establishment
-   - Improvement calculation
-   - Verification process
-   - Reward distribution
+The routing model that compares the current task packet with historical tasks and outcomes. It selects based on observed success, cost, latency, and reliability, not static provider rankings.
 
-2. **Token Distribution**
-   - Performance-based minting
-   - AMM trading (buy/sell with USDC)
-   - Governance controls
-   - API fee revenue to reserves
+### Route
 
-### Model Access
-Understanding how to access and use Hokusai models:
+The recommended model or workflow. A route can be a single model or a staged selection such as planner, coder, and reviewer.
 
-1. **Access Levels**
-   - Token requirements
-   - Usage tiers
-   - Rate limits
-   - API access
+### Evaluation
 
-2. **Licensing**
-   - Decentralized (community-owned with token governance)
+The measured result of execution. Useful signals include task success, tests, human acceptance, review score, regressions, cost, latency, and retry count.
+
+### Feedback
+
+Outcome data returned by the harness. Feedback turns completed tasks into training examples for future routing decisions.
+
+## Protocol Concepts
+
+### Contributor Rewards
+
+Contributors can earn rewards when their data, evaluations, or improvements create measurable performance lift in the router. Rewards are tied to verified improvement, not to speculative claims.
+
+### Fee Stream
+
+Routing calls can pay per-decision fees. Those fees support the protocol economics behind the router and connect usage to contributor ownership.
+
+### DeltaOne
+
+DeltaOne is Hokusai's unit for verified performance improvement. In router contexts, the relevant improvement is better routing behavior: higher task success, lower cost for equal quality, faster accepted results, or improved reliability under evaluation.
 
 ### Smart Contracts
-The technical foundation of the protocol:
 
-1. **Core Contracts**
-   - Model tokens
-   - Token manager
-   - Verifier
-   - InfrastructureReserve
-
-2. **Governance**
-   - Proposal system
-   - Voting mechanisms
-   - Parameter updates
-   - Security measures
-
-## Value Creation
-
-### For Data Contributors
-- Earn rewards for valuable contributions
-- Participate in model improvement
-- Build reputation in the ecosystem
-- Access premium features
-
-### For Model Developers
-- Access high-quality training data
-- Benefit from community improvements
-- Monetize model usage
-- Maintain control over licensing
-
-### For End Users
-- Access improved AI models
-- Benefit from continuous updates
-- Benefit from decentralized licensing
-- Participate in governance
+Hokusai uses smart contracts for token issuance, fee routing, access control, and governance around protocol parameters. Most integrators do not need to start here, but the contract documentation is available for implementation and audit work.
 
 ## Next Steps
 
-- [Learn about Data Contribution](/supplying-data)
-- [Understand Model Development](/creating-models)
-- [Explore Tokenomics](/tokenomics)
-- [Review Smart Contracts](/smart-contracts/smart-contracts-overview)
-
-For additional information, check out our [FAQs](/faqs) or join our [Community Forum](https://community.hokus.ai). 
+- [Inside a Routing Decision](/inside-a-routing-decision)
+- [Router Quickstart](/technical-task-router/quickstart)
+- [Task Packets](/technical-task-router/task-packets)
+- [Outcome Reporting](/technical-task-router/outcome-reporting)
+- [Contributor Rewards](/contributor-rewards/routing-rewards)

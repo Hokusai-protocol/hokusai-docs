@@ -5,85 +5,51 @@ sidebar_label: Introduction
 sidebar_position: 1
 ---
 
-## What is Hokusai Protocol?
+# Introduction to Hokusai
 
-Hokusai is a decentralized protocol that incentivizes the contribution of high-quality data to improve AI models. Contributors are rewarded with tokens when their data leads to measurable performance enhancements.
+Hokusai is a protocol for improving shared AI decision layers. Its first production focus is the Technical Task Router, a model that routes coding tasks to the models and workflow stages most likely to succeed.
 
-This guide will help you understand how Hokusai tokens work, how you can contribute data to a specific model and potentially earn token rewards, and how to use Hokusai models in a production app. 
+Most coding harnesses already make routing decisions: which model should plan, which model should edit code, which model should review, how much budget to spend, and when to retry. Those decisions are valuable, but they are usually locked inside one lab, one product, or one team's private logs.
 
-## Key Features
+Hokusai turns those routing decisions into a shared optimization layer. Integrators route tasks through Hokusai, execute the selected workflow inside their own harness, then report the outcome. Successful and unsuccessful outcomes become training examples for future routing decisions.
 
-- **Fair Incentives**: Data suppliers are rewarded based on the actual performance improvement their data provides
-- **Transparent Metrics**: Clear and verifiable performance metrics for all models
-- **Privacy-Focused**: Data is handled with privacy in mind, ensuring sensitive information is protected
-- **Decentralized**: No central authority controls the protocol, ensuring fairness and transparency
+## The First Router
 
-## Core Concepts
+The Technical Task Router is designed for multi-model coding systems, including:
 
-### DeltaOne Rewards
+- Wavemill
+- Claude Code
+- OpenHands
+- Custom agent harnesses
+- Internal developer automation systems
 
-DeltaOne is Hokusai's performance-based reward measurement. It works as follows:
+It can recommend a single model or a staged route such as planner, coder, and reviewer. The router does not run shell commands, edit repositories, or manage prompts directly. The harness remains responsible for execution.
 
-1. **Performance Measurement**
-   - Each model has a baseline performance metric
-   - Improvements are measured as percentage increases over the baseline
-   - Each DeltaOne represents a 1% improvement in model performance
-   - Tokens are awarded based on the total number of DeltaOnes achieved
+## Core Flow
 
-2. **Token Calculation**
-   ```
-   Tokens Awarded = Performance Improvement (%) × Tokens per DeltaOne
-   ```
-   - Performance Improvement: Measured as percentage increase over baseline
-   - Tokens per DeltaOne: Fixed number of tokens awarded per 1% improvement
+```mermaid
+flowchart TD
+    A[Incoming coding task] --> B[Task packet]
+    B --> C[Choice layer]
+    C --> D[Planner / coder / reviewer route]
+    D --> E[Harness execution]
+    E --> F[Evaluation]
+    F --> G[Feedback into future routing]
+```
 
-   **Example:**
-   ```
-   Baseline Performance: 75% accuracy
-   New Performance: 82% accuracy
-   Performance Improvement: 7%
-   Tokens per DeltaOne: 100 tokens
-   Token Value: $250 per token
-   
-   Tokens Awarded = 7 × 100 = 700 tokens
-   Dollar Value = 700 tokens × $250 = $175,000
-   ```
-   In this example, a 7% improvement in model accuracy results in 7 DeltaOnes, awarding 700 tokens worth $175,000 to the data supplier.
+## Key Concepts
 
-3. **Verification Process**
-   - Improvements are verified on-chain by **DeltaVerifier**, which consumes **HEM** (Hokusai Evaluation Manifest) per-row eval artifacts persisted to MLflow; each verified gain is expressed as a **DeltaOne** (≈ 1% improvement on the model's primary metric)
-   - Accepted **DeltaOne** gains trigger a **MintRequest** (schema v1.0) published to Redis, standardized on bps + USDC micro-units
-   - Smart contracts automatically handle token distribution
+- **Task packet**: A normalized representation of a task, including language, domain, task type, complexity, risk, budget, available models, and harness metadata.
+- **Choice layer**: The routing model that compares the task packet with historical outcomes and current constraints.
+- **Route**: The selected model or staged workflow, such as planner, coder, and reviewer.
+- **Evaluation**: The measured result of a route, including test pass rate, human acceptance, cost, latency, and regression detection.
+- **Feedback**: Outcome data that improves future routing decisions.
+- **Rewards**: Token rewards for contributors whose outcome data or model improvements create measurable routing performance lift.
 
-### Hokusai Tokens
+## Where to Go Next
 
-Hokusai tokens serve multiple purposes in the ecosystem:
-
-1. **Access Rights**
-   - Required for model access
-   - Usage-based consumption
-   - Tiered access levels
-
-2. **Reward Mechanism**
-   - Distributed to data contributors
-   - Issued for model improvements
-   - Community governance participation
-
-3. **Economic Model**
-   - Deflationary design
-   - Usage-driven value
-   - Liquidity provision incentives
-
-## Getting Started
-
-- [Understanding User Personas](/personas)
-- [Getting Started as a Data Supplier](/supplying-data)
-- [Getting Started as a AI Developer](/using-models)
-- [Understanding Tokenomics](/tokenomics)
-- [Understanding Reward Mechanisms](/tokenomics/rewards)
-- [Custom Scorers & Sales Outcome Metrics](/core-workflows/custom-scorers-and-sales-metrics)
-- [Understanding Token Value](/tokenomics/token-value)
-- [Understanding Model Licenses](/licensing/overview)
-- [Smart Contract Architecture](/smart-contracts/overview)
-
-For further assistance, refer to the FAQs or join our community discussions.
+- [Router Quickstart](/technical-task-router/quickstart)
+- [Inside a Routing Decision](/inside-a-routing-decision)
+- [Task Packets](/technical-task-router/task-packets)
+- [Outcome Reporting](/technical-task-router/outcome-reporting)
+- [Contributor Rewards](/contributor-rewards/routing-rewards)

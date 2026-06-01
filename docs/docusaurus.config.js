@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Hokusai Docs',
-  tagline: 'Fair Incentives for Training Smarter AI',
+  tagline: 'Shared decision layers for AI systems',
   url: 'https://docs.hokus.ai',
   baseUrl: '/',
   trailingSlash: false,
@@ -83,23 +83,23 @@ module.exports = {
           activeBaseRegex: '^/$|^/(?!api|community|blog)',
         },
         {
-          to: '/tokenomics',
-          label: 'Tokenomics',
+          to: '/technical-task-router/quickstart',
+          label: 'Router',
+          position: 'left',
+        },
+        {
+          to: '/inside-a-routing-decision',
+          label: 'How It Works',
+          position: 'left',
+        },
+        {
+          to: '/contributor-rewards/routing-rewards',
+          label: 'Rewards',
           position: 'left',
         },
         {
           to: '/smart-contracts/smart-contracts-overview',
-          label: 'Smart Contracts',
-          position: 'left',
-        },
-        {
-          to: '/guides/investor-guide',
-          label: 'Guides',
-          position: 'left',
-        },
-        {
-          to: '/authentication/overview',
-          label: 'Authentication',
+          label: 'Protocol',
           position: 'left',
         },
         {
@@ -133,18 +133,18 @@ module.exports = {
         {
           title: 'Protocol',
           items: [
-            { label: 'How It Works', href: 'https://hokus.ai/how-it-works' },
-            { label: 'Explore Models', href: 'https://hokus.ai/explore-models' },
-            { label: 'Data Suppliers', href: 'https://hokus.ai/data-suppliers' },
-            { label: 'AI Developers', href: 'https://hokus.ai/ai-developers' },
+            { label: 'Technical Task Router', to: '/technical-task-router/quickstart' },
+            { label: 'Inside a Routing Decision', to: '/inside-a-routing-decision' },
+            { label: 'Contributor Rewards', to: '/contributor-rewards/routing-rewards' },
+            { label: 'Smart Contracts', to: '/smart-contracts/smart-contracts-overview' },
           ],
         },
         {
           title: 'Documentation',
           items: [
             { label: 'Getting Started', to: '/' },
-            { label: 'Tokenomics', to: '/tokenomics' },
-            { label: 'Smart Contracts', to: '/smart-contracts/smart-contracts-overview' },
+            { label: 'Task Packets', to: '/technical-task-router/task-packets' },
+            { label: 'Outcome Reporting', to: '/technical-task-router/outcome-reporting' },
             { label: 'API Reference', to: '/api-reference' },
           ],
         },
@@ -159,7 +159,8 @@ module.exports = {
         {
           title: 'Resources',
           items: [
-            { label: 'Investor Guide', to: '/guides/investor-guide' },
+            { label: 'Rewards and Fee Flow', to: '/tokenomics' },
+            { label: 'Legacy Model Workflows', to: '/using-models' },
             { label: 'Contact Us', href: 'https://hokus.ai/contact' },
             { label: 'Main Site', href: 'https://hokus.ai' },
           ],
