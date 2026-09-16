@@ -697,7 +697,7 @@ Before investing in any model token:
 ### Community
 - [Discord](https://discord.gg/hokusai) - Join discussions
 - [Forum](https://community.hokus.ai) - Long-form discussions
-- [Twitter](https://twitter.com/hokusai_ai) - News and updates
+- [X](https://x.com/usehokusai) - News and updates
 - [GitHub](https://github.com/Hokusai-protocol) - Source code
 
 ### Tools (Coming Soon)

@@ -12,15 +12,15 @@ Welcome to the Hokusai community! This section is currently under development.
 
 - Community forums
 - Discord server
-- Twitter updates
+- X updates
 - Developer meetups
 - Community calls
 
 In the meantime, you can:
 - Join our [Discord server](https://discord.gg/hokusai)
-- Follow us on [Twitter](https://twitter.com/hokusai_protocol)
+- Follow us on [X](https://x.com/usehokusai)
 - Check out our [GitHub repository](https://github.com/Hokusai-protocol/hokusai-docs)
 
 ## Stay Updated
 
-We're actively building our community resources. Check back soon for more updates! 
+We're actively building our community resources. Check back soon for more updates!

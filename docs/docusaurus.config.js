@@ -153,7 +153,7 @@ module.exports = {
           items: [
             { label: 'GitHub', href: 'https://github.com/Hokusai-protocol' },
             { label: 'Discord', href: 'https://discord.gg/hokusai' },
-            { label: 'Twitter', href: 'https://twitter.com/hokusai_protocol' },
+            { label: 'X', href: 'https://x.com/usehokusai' },
           ],
         },
         {
