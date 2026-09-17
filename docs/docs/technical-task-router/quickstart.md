@@ -1,98 +1,98 @@
 ---
-title: Router Quickstart
-sidebar_label: Quickstart
+title: Route Your First Task
+sidebar_label: Route Your First Task
 ---
 
-# Router Quickstart
+# Route Your First Task
 
-This page shows the minimal integration shape for the Hokusai Technical Task Router.
+This TypeScript quickstart sends one task to Hokusai and prints the recommended model. It uses the public `@hokusai/router` API.
 
-The router accepts a coding task and optional harness context. It returns a routing decision. Your harness executes the decision and reports the outcome.
+:::info Prerequisites
+- Node.js 18 or later
+- A [Hokusai API key](/authentication/quickstart)
+- At least two models your application can execute
+:::
 
-## 1. Submit a Task
+## 1. Set your API key
+
+Export the key in the same shell that will run the example:
+
+```bash
+export HOKUSAI_API_KEY=hk_live_your_key_here
+```
+
+## 2. Install the router package
+
+```bash
+npm install @hokusai/router
+```
+
+## 3. Send a routing request
+
+Create `route-first-task.mjs`:
 
 ```ts
 import { route } from '@hokusai/router';
 
+const task = 'Refactor billing webhook retry handling.';
+const availableModels = ['claude-sonnet-4-6', 'gpt-5'];
+
 const decision = await route({
-  task: {
-    title: 'Refactor auth middleware to support scoped API keys',
-    body: `Keep the middleware entrypoint stable, enforce scope checks
-before handlers run, preserve admin flows, and add missing-scope tests.`,
-    priority: 'high',
-    tags: ['auth', 'backend', 'middleware', 'api-keys'],
-  },
+  task,
   context: {
-    harness: 'wavemill',
-    repository: 'acme/api',
-    availableModels: [
-      'claude-opus-4-7',
-      'claude-sonnet-4-6',
-      'gpt-5.4',
-      'gemini-2.5-pro',
-      'o4-mini',
-    ],
-    budget: {
-      maxCostUsd: 25,
-      maxWallClockMinutes: 20,
-    },
+    language: 'typescript',
+    task_type: 'refactor',
   },
+  availableModels,
+  objective: 'reliability',
+  maxCostUsd: 1,
+});
+
+console.log({
+  model: decision.model,
+  reasoning: decision.reasoning,
+  routeId: decision.routeId,
+  correlationId: decision.correlationId,
 });
 ```
 
-## 2. Execute the Route
+Run it:
 
-The router may return a single model or a staged route. A staged route can independently select a planner, coder, and reviewer.
-
-```ts
-const plan = await models[decision.route.planner.model].run(
-  buildPlanningPrompt(userTask, decision)
-);
-
-const patch = await models[decision.route.coder.model].run(
-  buildCodingPrompt(userTask, plan)
-);
-
-const review = await models[decision.route.reviewer.model].run(
-  buildReviewPrompt(userTask, patch)
-);
+```bash
+node route-first-task.mjs
 ```
 
-Your harness owns prompts, context selection, tool execution, retries, and acceptance policy.
+The response includes `model`, `reasoning`, `alternatives`, `routeId`, and `correlationId`.
 
-## 3. Report the Outcome
+**Completion checkpoint:** `model` is one of the model IDs in `availableModels`. Hokusai recommends the model; your application remains responsible for calling it.
+
+## Optional: report the outcome
+
+Outcome reporting is not required to receive a recommendation. If you opt in, report the result before starting another route when using the default single-flight helper:
 
 ```ts
-await route.reportOutcome({
-  decisionId: decision.id,
-  result: {
-    accepted: true,
-    testsPassed: true,
-    costUsd: 18.42,
-    wallClockSeconds: 412,
-    retries: 1,
-    scores: {
-      planner: 9.2,
-      coder: 8.7,
-      reviewer: 9.5,
-    },
-  },
+const contribution = await route.reportOutcome({
+  status: 'succeeded',
+  actualCostUsd: 0.42,
+  wallClockSeconds: 31,
 });
+
+console.log(contribution.fidelityTier);
 ```
 
-Outcome reporting is what lets the router improve. Without outcomes, a routing decision is only a recommendation; with outcomes, it becomes training data for future tasks.
+Both `maxCostUsd` on the route and `actualCostUsd` on the outcome are required for the server to classify a contribution as `training_eligible`. Without both, the row may be accepted as `partial` telemetry but will not train the router or earn rewards.
 
 ## Integration Checklist
 
-- Map your task object to the router request.
-- Include available models and budget constraints.
-- Decide whether you want single-model or staged planner/coder/reviewer routes.
-- Execute the returned route inside your harness.
-- Capture cost, latency, test, review, and acceptance signals.
-- Report the outcome with the original decision ID.
+- Keep `HOKUSAI_API_KEY` in the calling process's environment.
+- Pass at least two model IDs your application can actually execute.
+- Put `availableModels` and `maxCostUsd` at the top level of the route request.
+- Execute `decision.model` in your own application or harness.
+- Treat outcome reporting as a separate, optional contribution step.
 
 ## Next Steps
 
+- [Choose another integration](https://hokus.ai/router/integrate)
 - [Inside a Routing Decision](/inside-a-routing-decision)
 - [Task Packets](/technical-task-router/task-packets)
 - [Outcome Reporting](/technical-task-router/outcome-reporting)

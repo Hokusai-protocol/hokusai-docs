@@ -1,71 +1,52 @@
 ---
 id: getting-started
-title: Getting Started
-sidebar_label: Getting Started
+title: Choose Your Integration
+sidebar_label: Choose Your Integration
 ---
 
-# Getting Started
+# Choose Your Integration
 
-Start with the Technical Task Router if you are evaluating Hokusai for an engineering agent or coding harness.
+Start with the environment where you already work. The [interactive integration guide](https://hokus.ai/router/integrate) provides the current installation commands for each available path.
 
-The router accepts a task, normalizes it into a task packet, chooses a route from historical outcomes, and returns a recommendation. Your harness executes that recommendation and reports the result.
+## Which path should I use?
 
-## Choose Your Path
+### AI Coding Agent
 
-### Integrate the Router
+Choose this path to route directly from **Claude Code** or **Codex**. Both use supported plugins. See [AI Coding Agents](/integration-guides/coding-agents).
 
-Use this path if you operate a coding harness, internal agent, benchmark runner, or autonomous engineering workflow.
+### Multi-Agent Harness
 
-1. Read [Inside a Routing Decision](/inside-a-routing-decision).
-2. Follow the [Router Quickstart](/technical-task-router/quickstart).
-3. Map your task format to a [Task Packet](/technical-task-router/task-packets).
-4. Execute the selected route inside your harness.
-5. Report the result through [Outcome Reporting](/technical-task-router/outcome-reporting).
+Choose this path if **OpenHands**, **Aider**, **LiteLLM**, **Wavemill**, or your own orchestration loop owns model execution. Maturity varies from a published adapter to examples and prototypes; see [Harness Integration](/integration-guides/harness-integration).
 
-### Evaluate Routing Quality
+### Custom Application
 
-Use this path if you want to understand whether routing improves cost, reliability, or task acceptance.
+Choose this path when your backend or application will call Hokusai. Use the published TypeScript SDK or call the REST API from Python, Go, Java, or another runtime. See [Custom Applications](/integration-guides/custom-applications).
 
-1. Define the tasks you want to route.
-2. Decide which models and workflow stages are available.
-3. Pick evaluation signals: tests, review score, human acceptance, cost, latency, and regressions.
-4. Compare Hokusai-selected routes against your current baseline.
-5. Inspect how feedback changes future routing decisions.
+### Quickstart
 
-See [Evaluations and Feedback](/technical-task-router/evaluations-and-feedback).
+Choose curl or the browser-based API guide when you want to confirm access before selecting a permanent integration.
 
-### Understand Rewards
+## Common first-run sequence
 
-Use this path if you want to understand why contributors receive tokens and where value comes from.
+Every path follows the same basic sequence:
 
-1. Routing calls pay per-decision fees.
-2. Fees back the router's token economics.
-3. Outcome data improves future route quality.
-4. Verified routing improvements can mint contributor rewards.
+1. [Create an API key](/authentication/quickstart).
+2. Make `HOKUSAI_API_KEY` available to the process that will call Hokusai.
+3. Install the relevant plugin, adapter, or SDK.
+4. Run the path's doctor command or known-good request.
+5. Route one real task from a candidate pool your system can execute.
 
-See [Contributor Rewards](/contributor-rewards/routing-rewards) and [Rewards and Fee Flow](/tokenomics).
+**Completion checkpoint:** the request returns a recommended model from the candidate pool you supplied.
 
-## Minimal Integration Shape
+If a checkpoint fails, use [Router Troubleshooting](/technical-task-router/troubleshooting) before continuing.
 
-```ts
-import { route } from '@hokusai/router';
+## Optional after routing: contribute outcomes
 
-const decision = await route({
-  task: userTask,
-  context: harnessContext,
-});
+Outcome reporting is not required to receive a routing recommendation. After the first route works, you can opt in to sharing redacted outcome data so future routing can improve. See [Outcome Reporting](/technical-task-router/outcome-reporting).
 
-const result = await runInHarness(decision);
+## What your system owns
 
-await route.reportOutcome({
-  decisionId: decision.id,
-  result,
-});
-```
-
-## What the Harness Owns
-
-Hokusai recommends the route. Your harness still owns:
+Hokusai recommends a model. Your coding agent, harness, or application still owns:
 
 - Prompt construction
 - Context selection
@@ -76,6 +57,9 @@ Hokusai recommends the route. Your harness still owns:
 - Human review workflow
 - Final acceptance decision
 
-## Legacy and Protocol Docs
+## Continue
 
-The repository also contains detailed documentation for the broader protocol: model lifecycle, BenchmarkSpec, data contribution, AMM mechanics, smart contracts, and deployments. Those pages remain available under Protocol Internals and Reference, but they are no longer the primary first-run path for router integrators.
+- [Open the interactive integration guide](https://hokus.ai/router/integrate)
+- [Route Your First Task with TypeScript](/technical-task-router/quickstart)
+- [Integrate a Custom Harness](/integration-guides/harness-integration)
+- [Understand a Routing Decision](/inside-a-routing-decision)

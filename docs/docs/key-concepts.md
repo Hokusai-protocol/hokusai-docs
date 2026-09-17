@@ -17,7 +17,7 @@ The user request or work item submitted by an integrating harness. Examples incl
 
 ### Task Packet
 
-A normalized task representation used for routing. It captures fields such as language, domain, task type, complexity, risk, budget, available models, and harness metadata.
+A normalized internal task descriptor used for comparison. It captures stable features such as language, domain, task type, complexity, repository-size bucket, test requirements, and risk. Budget and available models remain separate routing inputs.
 
 ### Choice Layer
 
@@ -25,7 +25,7 @@ The routing model that compares the current task packet with historical tasks an
 
 ### Route
 
-The recommended model or workflow. A route can be a single model or a staged selection such as planner, coder, and reviewer.
+The recommended model, rationale, confidence, alternatives, and identifiers returned for one routing request. A multi-stage harness requests a route separately for each stage.
 
 ### Evaluation
 
@@ -33,7 +33,7 @@ The measured result of execution. Useful signals include task success, tests, hu
 
 ### Feedback
 
-Outcome data returned by the harness. Feedback turns completed tasks into training examples for future routing decisions.
+Optional outcome data returned by the harness after routing and execution. Feedback turns completed tasks into training examples for future routing decisions, but it is not required to receive a recommendation.
 
 ## Protocol Concepts
 

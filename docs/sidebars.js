@@ -2,40 +2,47 @@ const sidebars = {
   docs: [
     {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Start Here',
       items: [
-        'intro',
         'getting-started',
-        'key-concepts',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Technical Task Router',
-      items: [
+        'authentication/quickstart',
         'technical-task-router/quickstart',
-        'inside-a-routing-decision',
-        'technical-task-router/task-packets',
-        'technical-task-router/outcome-reporting',
-        'technical-task-router/evaluations-and-feedback',
+        'technical-task-router/troubleshooting',
       ],
     },
     {
       type: 'category',
       label: 'Integration Guides',
       items: [
+        'integration-guides/coding-agents',
         'integration-guides/harness-integration',
-        'authentication/overview',
-        'authentication/api-keys',
-        'authentication/quickstart',
-        'api-reference',
+        'integration-guides/custom-applications',
       ],
     },
     {
       type: 'category',
-      label: 'Contributor Rewards',
+      label: 'Understand Hokusai',
       items: [
+        'intro',
+        'key-concepts',
+        'inside-a-routing-decision',
+        'technical-task-router/task-packets',
+        'technical-task-router/evaluations-and-feedback',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Contribute Outcomes',
+      items: [
+        'technical-task-router/privacy-and-consent',
+        'technical-task-router/outcome-reporting',
         'contributor-rewards/routing-rewards',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Protocol Rewards',
+      items: [
         'tokenomics',
         'tokenomics/rewards',
         'tokenomics/token-value',
@@ -82,6 +89,7 @@ const sidebars = {
         'data-validation-tools',
         'privacy-compliance',
         'configuration',
+        'troubleshooting',
         'getting-started/quick-start',
         'getting-started/first-contribution',
         'ml-infrastructure/ml-infrastructure-overview',
@@ -107,6 +115,10 @@ const sidebars = {
       type: 'category',
       label: 'Reference',
       items: [
+        'technical-task-router/contracts',
+        'authentication/overview',
+        'authentication/api-keys',
+        'api-reference',
         'authentication/registration',
         'authentication/validation',
         'authentication/usage-billing',

@@ -1,148 +1,45 @@
 ---
 id: quickstart
-title: Authentication Quickstart
-sidebar_label: Quickstart
+title: Get a Hokusai API Key
+sidebar_label: Get an API Key
 sidebar_position: 2
 ---
 
-# Authentication Quickstart
+# Get a Hokusai API Key
 
-Get up and running with Hokusai authentication in 5 minutes. This guide walks you through creating your first API key and validating it.
+Every Hokusai integration starts with an API key. Create the key in the Hokusai web application, then expose it only to the local process or service that calls Hokusai.
 
-:::info Prerequisites
-- A registered and approved Hokusai account (see [Registration](/authentication/registration))
-- An admin token for the Hokusai auth service (provided after approval, or by your platform administrator)
-- `curl` or Python 3.8+ installed
-:::
+## 1. Sign in or create an account
 
-:::tip Alternative: Wallet Authentication
-If you have an Ethereum wallet, you can authenticate via [Sign-In with Ethereum (SIWE)](/authentication/validation#sign-in-with-ethereum-siwe) to get a JWT token without needing an admin token.
-:::
+Open [Hokusai API Keys](https://hokus.ai/login?redirect=%2Fsettings%2Fapi-keys). If you are not signed in, Hokusai will preserve the destination while you sign in or create an account.
 
+You can use email and password, Google, or an Ethereum wallet. After authentication, continue to **Settings → API Keys**.
 
-## Step 1: Create an API Key
+## 2. Create the key
 
-Use your admin token to create a new API key:
-
-```bash
-curl -X POST https://auth.hokus.ai/api/v1/keys \
-  -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My First Key",
-    "service_id": "prediction",
-    "scopes": ["predict"],
-    "environment": "test"
-  }'
-```
-
-```python
-import requests
-
-response = requests.post(
-    "https://auth.hokus.ai/api/v1/keys",
-    headers={
-        "Authorization": "Bearer YOUR_ADMIN_TOKEN",
-        "Content-Type": "application/json",
-    },
-    json={
-        "name": "My First Key",
-        "service_id": "prediction",
-        "scopes": ["predict"],
-        "environment": "test",
-    },
-)
-
-data = response.json()
-api_key = data["api_key"]
-print(f"Your API key: {api_key}")
-```
-
-The response includes the full API key — **save it now**, as it cannot be retrieved again:
-
-```json
-{
-  "api_key": "hk_test_AbCdEfGhIjKlMnOpQrStUvWxYz123456",
-  "key_info": {
-    "key_id": "550e8400-e29b-41d4-a716-446655440000",
-    "name": "My First Key",
-    "key_prefix": "hk_test_AbC***",
-    "service_id": "prediction",
-    "scopes": ["predict"],
-    "environment": "test",
-    "is_active": true,
-    "rate_limit_per_hour": 1000,
-    "created_at": "2025-01-15T10:30:00Z"
-  }
-}
-```
+Select **Create API Key**, optionally give it a descriptive name such as `Local development`, and select **Create Key**.
 
 :::warning
-Store your API key securely. The full key is only shown at creation time. If you lose it, you will need to create a new key or rotate the existing one.
+Copy the full key immediately. Hokusai shows it only once. If you lose it, create a new key or rotate the existing key.
 :::
 
-## Step 2: Validate the Key
+## 3. Export the key
 
-Confirm your key works by calling the validation endpoint:
-
-```bash
-curl -X POST https://auth.hokus.ai/api/v1/keys/validate \
-  -H "Authorization: Bearer hk_test_AbCdEfGhIjKlMnOpQrStUvWxYz123456" \
-  -H "Content-Type: application/json" \
-  -d '{"service_id": "prediction"}'
-```
-
-```python
-response = requests.post(
-    "https://auth.hokus.ai/api/v1/keys/validate",
-    headers={
-        "Authorization": "Bearer hk_test_AbCdEfGhIjKlMnOpQrStUvWxYz123456",
-        "Content-Type": "application/json",
-    },
-    json={"service_id": "prediction"},
-)
-
-result = response.json()
-print(f"Valid: {result['is_valid']}")
-print(f"Scopes: {result['scopes']}")
-```
-
-A successful validation returns:
-
-```json
-{
-  "is_valid": true,
-  "key_id": "550e8400-e29b-41d4-a716-446655440000",
-  "user_id": "admin",
-  "service_id": "prediction",
-  "scopes": ["predict"],
-  "rate_limit_per_hour": 1000,
-  "billing_plan": "free"
-}
-```
-
-## Step 3: Use the Key with Hokusai Services
-
-Now use your key to call Hokusai APIs. All services accept the key as a Bearer token:
+Set the key in the same shell that will start your coding agent or application:
 
 ```bash
-curl https://api.hokus.ai/v1/models \
-  -H "Authorization: Bearer hk_test_AbCdEfGhIjKlMnOpQrStUvWxYz123456"
+export HOKUSAI_API_KEY=hk_live_your_key_here
 ```
 
-```python
-from hokusai import HokusaiClient
+Do not commit the value to source control. For deployed applications, store it in your platform's secrets manager.
 
-client = HokusaiClient(api_key="hk_test_AbCdEfGhIjKlMnOpQrStUvWxYz123456")
-models = client.list_models()
-```
+## 4. Continue with your integration
 
-## What's Next
+The key is verified as part of the first doctor check or routing request. Continue with one of these paths:
 
-Now that you have a working API key:
+- [Choose an integration](https://hokus.ai/router/integrate)
+- [Route your first task with TypeScript](/technical-task-router/quickstart)
 
-- **[API Keys](/authentication/api-keys)** — Learn about key rotation, revocation, and advanced options
-- **[Validation](/authentication/validation)** — Understand the three ways to send API keys
-- **[Usage & Billing](/authentication/usage-billing)** — Track your API usage and costs
-- **[Security](/authentication/security)** — Best practices for production deployments
-- **[Model API Guide](/model-api-guide)** — Start making predictions
+## Auth service operators
+
+The admin-token API is intended for operators managing the authentication service, not for ordinary developer signup. See [API Key Management](/authentication/api-keys) for administrative creation, rotation, revocation, scopes, and organization keys.
