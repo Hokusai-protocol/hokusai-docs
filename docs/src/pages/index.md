@@ -2,27 +2,43 @@
 sidebar_position: 1
 ---
 
-# Hokusai Documentation
+# Hokusai Developer Documentation
 
-Hokusai is a protocol for shared AI decision layers. The first decision layer is the Technical Task Router: a routing model that helps coding harnesses choose the planner, coder, reviewer, and workflow most likely to complete a submitted engineering task.
-
-The router does not replace your harness. Wavemill, Claude Code, OpenHands, custom agents, and internal coding systems still execute tasks, manage tools, run tests, and own the user experience. Hokusai provides the routing decision and learns from the outcome data you report back.
+Add Hokusai model routing to the coding agent, harness, or application you already use. Hokusai recommends a model from the candidate pool you provide; your system still executes the task and owns prompts, tools, tests, and the final result.
 
 ## Start Here
 
-- [Introduction](/intro) - what Hokusai is now optimized around
-- [Router Quickstart](/technical-task-router/quickstart) - submit a task and report an outcome
-- [Inside a Routing Decision](/inside-a-routing-decision) - step-by-step conceptual guide
-- [Task Packets](/technical-task-router/task-packets) - normalized task representation
-- [Outcome Reporting](/technical-task-router/outcome-reporting) - how execution results improve future routing
+The shortest path to a working route is:
+
+1. [Choose your integration](/getting-started).
+2. [Create a Hokusai API key](/authentication/quickstart).
+3. Install the plugin or SDK for your environment.
+4. Verify the connection and route one task.
+
+You are integrated when your first request returns a recommended model. Outcome contribution is optional and can be enabled afterward.
+
+### Choose the environment you already use
+
+- **[AI coding agent](/integration-guides/coding-agents)** — Claude Code or Codex
+- **[Multi-agent harness](/integration-guides/harness-integration)** — OpenHands, Aider, LiteLLM, Wavemill, or a custom harness
+- **[Custom application](/integration-guides/custom-applications)** — TypeScript, Python, Go, Java, or REST
+- **Quickstart** — curl or the browser-based API guide
+
+[Open the interactive integration guide →](https://hokus.ai/router/integrate)
+
+Prefer a code-first walkthrough? Follow [Route Your First Task](/technical-task-router/quickstart).
 
 ## For Integrators
 
-Use these docs if you operate a coding harness or agent runtime:
+Use these docs after your first route works:
 
 - [Integrating with a Harness](/integration-guides/harness-integration)
+- [Inside a Routing Decision](/inside-a-routing-decision)
+- [Task Packets](/technical-task-router/task-packets)
+- [Outcome Reporting](/technical-task-router/outcome-reporting)
 - [Router Evaluations and Feedback](/technical-task-router/evaluations-and-feedback)
-- [Authentication](/authentication/overview)
+- [Router Contracts](/technical-task-router/contracts)
+- [Router Troubleshooting](/technical-task-router/troubleshooting)
 - [API Reference](/api-reference)
 
 ## Protocol and Rewards

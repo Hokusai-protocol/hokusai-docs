@@ -125,6 +125,13 @@ For detailed Model API documentation, see the [Model API Guide](/model-api-guide
 | `POST` | `/v1/predict` | Single prediction |
 | `POST` | `/v1/batch-predict` | Batch prediction |
 
+### Technical Task Router (Model 30)
+
+| Method | Endpoint | Description | Docs |
+|--------|----------|-------------|------|
+| `POST` | `/api/v1/models/30/predict` | Request a routing recommendation | [Router Contracts](/technical-task-router/contracts#2-direct-model-30-rest-contract) |
+| `POST` | `/api/v1/models/30/contributions` | Submit optional `harness_outcome_row/v1` rows | [Outcome Reporting](/technical-task-router/outcome-reporting) |
+
 ### License Management
 
 | Method | Endpoint | Description |

@@ -142,10 +142,10 @@ module.exports = {
         {
           title: 'Documentation',
           items: [
-            { label: 'Getting Started', to: '/' },
-            { label: 'Task Packets', to: '/technical-task-router/task-packets' },
-            { label: 'Outcome Reporting', to: '/technical-task-router/outcome-reporting' },
-            { label: 'API Reference', to: '/api-reference' },
+            { label: 'Start Here', to: '/' },
+            { label: 'Choose Your Integration', to: '/getting-started' },
+            { label: 'Get an API Key', to: '/authentication/quickstart' },
+            { label: 'Troubleshooting', to: '/technical-task-router/troubleshooting' },
           ],
         },
         {

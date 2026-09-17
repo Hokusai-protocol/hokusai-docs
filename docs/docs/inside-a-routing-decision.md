@@ -7,7 +7,7 @@ sidebar_position: 9
 
 # Inside a Routing Decision
 
-The Hokusai Technical Task Router does not directly solve coding tasks. It selects the models and workflow stages most likely to succeed for a submitted task, using prior outcomes from similar tasks as evidence.
+The Hokusai Technical Task Router does not directly solve coding tasks. For each routing request, it recommends one model from the candidate pool supplied by the caller, using prior outcomes from similar tasks as evidence.
 
 For an integrating harness, the router is a decision service. Wavemill, Claude Code, OpenHands, custom agents, and other harnesses still execute the task, manage tools, construct prompts, and decide how to recover from failures.
 
@@ -65,51 +65,44 @@ The router treats this as input evidence, not as an execution prompt. The harnes
 
 ## Step 2: Task Packet Generation
 
-The router normalizes the submitted task into a task packet: a structured representation that can be compared across different repositories, harnesses, and model providers.
+The router derives a normalized task descriptor that can be compared across repositories, harnesses, and model providers. This internal descriptor is not the same object as the public SDK input or direct REST request.
 
-A task packet may include fields such as:
+A descriptor may include fields such as:
 
 | Field | Purpose |
 | --- | --- |
-| `language` | Dominant programming language or mixed-language profile |
-| `domain` | Area of the system, such as backend, frontend, infra, tests, docs, or security |
-| `task_type` | Bug fix, refactor, feature, review, documentation, migration, or test work |
+| `language` | Python, TypeScript, JavaScript, Go, Rust, Java, Bash, multi, or unknown |
+| `domain` | Backend, frontend, fullstack, devops, data, ML, mobile, or unknown |
+| `task_type` | Bug fix, feature, refactor, infra, tests, migration, docs, or unknown |
 | `complexity` | Estimated implementation difficulty and coordination cost |
-| `risk` | Expected blast radius, regression risk, or policy/security sensitivity |
-| `budget` | Cost, latency, or token limits supplied by the harness |
-| `available_models` | Models the harness is willing and able to run |
-| `harness_metadata` | Environment-specific details such as tool access, evaluation mode, or retry policy |
+| `risk_level` | Expected blast radius, regression risk, or policy/security sensitivity |
+| `repo_size_bucket` | Stable repository-size category |
+| `files_touched_bucket` | Stable changed-file-count category |
+| `requires_tests` | Whether the task requires test work |
 
 Example packet:
 
 ```json
 {
-  "title": "Refactor auth middleware to support scoped API keys",
+  "task_type": "refactor",
   "language": "typescript",
   "domain": "backend",
-  "task_type": "refactor",
   "complexity": 6,
-  "risk": "medium",
-  "budget": {
-    "max_cost_usd": 25,
-    "max_wall_clock_minutes": 20
-  },
-  "available_models": [
-    "claude-opus-4-7",
-    "claude-sonnet-4-6",
-    "gpt-5.4",
-    "gemini-2.5-pro",
-    "o4-mini"
-  ],
-  "harness_metadata": {
-    "harness": "wavemill",
-    "tools": ["shell", "apply_patch", "tests"],
-    "evaluation": ["unit_tests", "review_score", "human_acceptance"]
-  }
+  "repo_size_bucket": "medium",
+  "files_touched_bucket": "2_5",
+  "description_length_bucket": "medium",
+  "is_greenfield": false,
+  "is_migration": false,
+  "requires_tests": true,
+  "cross_service": false,
+  "ui_heavy": false,
+  "risk_level": "medium"
 }
 ```
 
-This normalized form is intentionally portable. A task from a GitHub issue, an internal queue, an autonomous benchmark, or an IDE assistant should become comparable once represented as a packet.
+Budget, latency, candidate models, and objectives remain separate routing inputs. This normalized descriptor is intentionally portable: a task from a GitHub issue, internal queue, benchmark, or IDE assistant can become comparable without sharing the integration's native task object.
+
+See [Router Contracts](/technical-task-router/contracts) for the public SDK, direct REST, internal descriptor, and contribution-row shapes.
 
 ## Step 3: Choice Layer
 
@@ -129,25 +122,19 @@ For example, the choice layer may find that a model with the best raw coding sco
 
 The result is a scored routing decision based on observed outcomes: what worked, what failed, what it cost, and whether the final task result held up during evaluation.
 
-## Step 4: Route Selection
+## Step 4: Model Recommendation
 
-The router may select different models for different stages of the workflow:
+The router ranks the candidate models the caller can actually execute. A response contains:
 
-- **Planner**: decomposes the task, identifies risk, and proposes an implementation path.
-- **Coder**: edits files, runs commands, repairs failures, and produces the candidate solution.
-- **Reviewer**: checks the result for correctness, regressions, missing tests, and policy issues.
+- **Model**: the recommended model ID.
+- **Reasoning**: why the model fits the task and supplied constraints.
+- **Confidence**: the router's confidence when available.
+- **Alternatives**: ranked fallback candidates.
+- **Route ID and correlation ID**: identifiers that connect the decision to a later optional outcome.
 
-These stages do not need to use the same model. A strong planner may be more expensive but valuable for ambiguous migrations. A different model may be more cost-effective for implementation. A reviewer may be selected for reliability on edge cases rather than raw coding throughput.
+A harness with separate planner, coder, and reviewer stages can make one routing request per stage, using categorical context such as `stage: 'planning'` or `stage: 'review'`. The public router does not return a multi-stage workflow from one call.
 
-Example route:
-
-| Stage | Selected model | Rationale |
-| --- | --- | --- |
-| Planner | `claude-opus-4-7` | Strong at shaping migration plans and isolating policy boundaries. |
-| Coder | `gpt-5.4` | Good implementation performance and test repair behavior within the supplied budget. |
-| Reviewer | `claude-sonnet-4-6` | Good balance for regression review and policy edge-case coverage. |
-
-The selected route may also include fallback candidates. If the primary coder exceeds budget, fails a harness constraint, or is unavailable, the harness can use the fallback list according to its own retry policy.
+If the primary recommendation is unavailable, the harness can select from `alternatives` according to its own provider and retry policy. The model recorded in any later outcome must be the model that actually ran.
 
 ## Step 5: Execution
 
@@ -171,26 +158,25 @@ import { route } from '@hokusai/router';
 
 const decision = await route({
   task: userTask,
-  context: harnessContext,
+  context: {
+    harness: 'custom',
+    language: 'typescript',
+    task_type: 'refactor',
+  },
+  availableModels: ['claude-sonnet-4-6', 'gpt-5'],
+  maxCostUsd: 1,
 });
 
-const plan = await models[decision.planner].run(planningPrompt);
-const patch = await models[decision.coder].run(codingPrompt(plan));
-const review = await models[decision.reviewer].run(reviewPrompt(patch));
+const result = await models[decision.model].run(userTask);
 
 await route.reportOutcome({
-  decisionId: decision.id,
-  result: {
-    accepted: true,
-    testsPassed: true,
-    costUsd: 18.42,
-    wallClockSeconds: 412,
-    reviewScore: 9.5
-  }
+  status: result.ok ? 'succeeded' : 'failed',
+  actualCostUsd: result.costUsd,
+  wallClockSeconds: result.wallClockSeconds,
 });
 ```
 
-In practice, the integration can be simpler or more complex. Some harnesses may ask for only one model recommendation. Others may use the full planner-coder-reviewer route, multiple attempts, or custom evaluation stages.
+Outcome reporting is optional. A more complex harness can make separate routing calls for multiple workflow stages, use alternatives for retries, or add custom evaluation stages around the same one-recommendation-per-call contract.
 
 ## Step 6: Evaluation
 
@@ -213,20 +199,16 @@ Example evaluation record:
 
 ```json
 {
-  "decision_id": "route_01HX...",
-  "accepted": true,
-  "tests": {
-    "passed": 128,
-    "failed": 0
+  "inference_log_id": "route_01HX...",
+  "completion_result": "success",
+  "selected_models": {
+    "coder": "claude-sonnet-4-6",
+    "reviewer": "claude-sonnet-4-6"
   },
-  "scores": {
-    "planner": 9.2,
-    "coder": 8.7,
-    "reviewer": 9.5
-  },
-  "cost_usd": 18.42,
+  "budget_usd": 1,
+  "actual_cost_usd": 0.42,
   "wall_clock_seconds": 412,
-  "regressions_detected": 0
+  "allowed_models": ["claude-sonnet-4-6", "gpt-5"]
 }
 ```
 
@@ -260,7 +242,7 @@ Use the Strategy Explorer to:
 - Compare candidate routes
 - See which historical outcomes influenced a recommendation
 - Test how budget or model availability changes the selected route
-- Understand why a planner, coder, or reviewer was chosen
+- Understand why a model was recommended for the current task or workflow stage
 
 For engineers evaluating an integration, the Strategy Explorer is the fastest way to validate whether the router's decisions match the constraints of a specific harness or task queue.
 
