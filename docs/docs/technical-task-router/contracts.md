@@ -81,6 +81,29 @@ POST https://api.hokus.ai/api/v1/models/30/predict
 
 The response exposes the model strategy under `predictions.recommended_strategy` and returns `inference_log_id` for attribution. The TypeScript façade converts the relevant recommendation into `decision.model` and exposes the same persisted route identifier as `decision.routeId`.
 
+### Candidate pools
+
+`routing.available_models` restricts every role. `routing.available_planner_models`, `routing.available_coder_models`, and `routing.available_reviewer_models` override it for one role. Omit all of them to let Model 30 rank every supported model.
+
+Requested ids are matched against the Model 30 supported-model catalog:
+
+- Retired ids with a known successor are replaced by that successor. For example, `claude-sonnet-4-5-20250929` becomes `claude-sonnet-4-6`. The response reports each replacement in `predictions.diagnostics.candidate_pool_substitutions`.
+- Other unsupported ids are dropped. A route only uses the ids that remain.
+- If **none** of the ids for a routed role are supported, the request fails with `422` and an `unsupported_candidate_pool` error. The error names the role, the field, and each unsupported id with its reason (`not_in_catalog`, `not_serving`, `not_eligible_for_role`, or `invalid_id`). Model 30 never silently widens a pool you restricted. Roles outside `workflow.stages` are not checked.
+
+```json
+{
+  "detail": [
+    {
+      "type": "unsupported_candidate_pool",
+      "loc": ["routing", "availableCoderModels"],
+      "msg": "No requested coder model is supported by Model 30: not-a-real-model (not_in_catalog). ...",
+      "ctx": {"role": "coder", "unsupported_model_ids": ["not-a-real-model"]}
+    }
+  ]
+}
+```
+
 ## 3. Internal task descriptor
 
 The SDK and router derive a normalized descriptor so outcomes can be compared across integrations. Public SDK users normally do not construct this object themselves.
