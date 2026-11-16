@@ -24,7 +24,7 @@ export HOKUSAI_API_KEY=hk_live_your_key_here
 ## 2. Install the router package
 
 ```bash
-npm install @hokusai/router
+npm install @hokusai/router@0.8.0
 ```
 
 ## 3. Send a routing request
@@ -70,17 +70,36 @@ The response includes `model`, `reasoning`, `alternatives`, `routeId`, and `corr
 
 Outcome reporting is not required to receive a recommendation. If you opt in, report the result before starting another route when using the default single-flight helper:
 
-```ts
-const contribution = await route.reportOutcome({
-  status: 'succeeded',
-  actualCostUsd: 0.42,
-  wallClockSeconds: 31,
-});
+Install `@hokusai/costs@0.8.0` for local measurement; align a direct core
+dependency to 0.8.0 as described in the
+[harness guide](/integration-guides/harness-integration#measuring-task-cost).
+Continue in the same file with your own usage-emitting harness:
 
+```ts
+import { measureTask } from '@hokusai/costs';
+
+const executedModel = decision.model;
+const { result, cost } = await measureTask({ events: harness }, () =>
+  harness.run(task, executedModel),
+);
+console.log(cost.totalUsd, cost.coverage, cost.pricing); // Inspect locally.
+
+// Only run this network submission after explicit contribution consent.
+const contribution = await route.reportOutcome({
+  correlationId: decision.correlationId,
+  model: executedModel,
+  status: result.ok ? 'succeeded' : 'failed',
+  cost,
+});
 console.log(contribution.fidelityTier);
 ```
 
-Both `maxCostUsd` on the route and `actualCostUsd` on the outcome are required for the server to classify a contribution as `training_eligible`. Without both, the row may be accepted as `partial` telemetry but will not train the router or earn rewards.
+Pass the whole report, including partial token and coverage evidence. Unknown
+totals stay null, never zero. Preserve the route budget and executed model;
+server repricing/trust determines cost-label eligibility, training and rewards,
+not a scalar amount alone. Measurement is independent of subscription or payment
+arrangement. The legacy `actualCostUsd` scalar remains supported when known;
+see [Outcome Reporting](/technical-task-router/outcome-reporting).
 
 ## Integration Checklist
 
