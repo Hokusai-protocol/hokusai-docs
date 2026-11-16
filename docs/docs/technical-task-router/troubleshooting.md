@@ -7,6 +7,37 @@ sidebar_label: Troubleshooting
 
 Use the checkpoint nearest to the failure. Do not enable optional contribution reporting until a normal routing request succeeds.
 
+## Missing task-cost exports
+
+Measurement itself needs no account, API key or network connection.
+Start with installed dependencies and the lockfile:
+
+```bash
+npm ls @hokusai/core @hokusai/costs
+node --input-type=module -e "import('@hokusai/core').then(m => console.log(typeof m.aggregateTaskCost))"
+```
+
+- Missing `aggregateTaskCost`: core predates 0.5.0, or a stale/duplicate install
+  is resolving instead of the version in your lockfile. 0.5.0 is the historical
+  first release, not a downgrade target.
+- Missing `fromCodexUsage` or `@hokusai/core/token-prices`: the verified published
+  0.8.0 release does not include those additions. Check the
+  [SDK release notes](https://github.com/Hokusai-protocol/hokusai-sdk/blob/main/docs/release-notes.md)
+  and installed export surface before using a new example. Reinstalling 0.8.0
+  cannot create an unpublished export.
+
+Align a direct core dependency with the exact core required by costs/adapters
+(0.8.0 for costs 0.8.0), following the
+[SDK versioning policy](https://github.com/Hokusai-protocol/hokusai-sdk/blob/main/docs/versioning-policy.md).
+Update dependencies and the lockfile using the project's package manager, then
+reinstall with `npm ci` or `pnpm install --frozen-lockfile`, as appropriate.
+Re-check which copy and exports the host resolves.
+
+Lazy loading or feature detection is optional for hosts supporting older SDKs;
+it is not a mandatory Hokusai feature flag. Surface unavailable measurement and
+retain evidence instead of silently dropping usage. See
+[Measuring task cost](/integration-guides/harness-integration#measuring-task-cost).
+
 ## API key is missing
 
 **Symptoms:** the plugin doctor reports missing credentials, or an application says `HOKUSAI_API_KEY` is not set.
@@ -87,10 +118,10 @@ An accepted contribution does not necessarily train the router. For a routed row
 - A non-empty task descriptor
 - The model that actually ran
 - `maxCostUsd` on the route
-- `actualCostUsd` on the outcome
+- The whole measured `cost` report on the outcome, retaining token evidence and coverage
 - The original route attribution
 
-The server's returned `fidelityTier` is authoritative. See [Outcome Reporting](/technical-task-router/outcome-reporting).
+A scalar cost alone does not establish cost-label eligibility: server repricing/trust checks decide. Preserve partial evidence and never turn a null total into zero. The server's returned `fidelityTier` is authoritative. See [Outcome Reporting](/technical-task-router/outcome-reporting).
 
 ## Privacy preview contains unexpected information
 

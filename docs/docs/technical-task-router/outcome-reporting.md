@@ -15,20 +15,33 @@ The router can recommend a route without outcome reporting, but it cannot learn 
 
 The `@hokusai/router` helper attributes an outcome to the most recent routing call. Report that outcome before starting another route:
 
+Install `@hokusai/router@0.8.0` and `@hokusai/costs@0.8.0`. If core is a direct
+dependency, align it to 0.8.0 as described in the
+[harness measurement guide](/integration-guides/harness-integration#measuring-task-cost).
+The host supplies `task`, runnable `availableModels` and an event-emitting `harness`.
+
 ```ts
+import { route } from '@hokusai/router';
+import { measureTask } from '@hokusai/costs';
+
 const decision = await route({
   task,
   availableModels,
   maxCostUsd: 1,
 });
 
-const result = await runWithModel(decision.model, task);
+const executedModel = decision.model;
+const { result, cost } = await measureTask({ events: harness }, () =>
+  harness.run(task, executedModel),
+);
+// Inspect cost, coverage, provenance and the redacted payload locally first.
+// The following network submission is an explicit contribution opt-in.
 
 const contribution = await route.reportOutcome({
   correlationId: decision.correlationId,
-  model: decision.model,
+  model: executedModel,
   status: result.ok ? 'succeeded' : 'failed',
-  actualCostUsd: result.costUsd,
+  cost, // Preserve the whole report, even when totalUsd is null.
   wallClockSeconds: result.wallClockSeconds,
 });
 
@@ -37,7 +50,7 @@ console.log(contribution.fidelityTier);
 
 The SDK threads the server's route identifier back as `inference_log_id` in the canonical contribution row. Advanced harnesses that construct rows directly must preserve that identifier unchanged.
 
-See [Router Contracts](/technical-task-router/contracts) for the difference between the SDK outcome helper and a direct `harness_outcome_row/v1` submission.
+See [Router Contracts](/technical-task-router/contracts) for the difference between the SDK outcome helper and a direct contribution submission.
 
 ## Recommended Signals
 
@@ -45,22 +58,42 @@ See [Router Contracts](/technical-task-router/contracts) for the difference betw
 | --- | --- |
 | `status` | Whether execution `succeeded` or `failed` |
 | `model` | Model actually executed; defaults to the recommendation |
-| `actualCostUsd` | Actual inference cost; required for training eligibility |
+| `cost` | Whole measured report: token facts, coverage, provenance and resolved cost |
+| `actualCostUsd` | Legacy optional scalar supported by this release; not a substitute for token evidence |
 | `wallClockSeconds` | End-to-end latency |
 | `correlationId` | Optional guard identifying the most recent route |
 | `notes` | Optional free-text notes, redacted before submission |
 
 ## Training eligibility
 
-The server, not the client, determines the returned `fidelityTier`. For a normal routed contribution to be `training_eligible`, include:
+The server, not the client, determines the returned `fidelityTier`, cost-label
+eligibility and rewards. Server repricing and trust checks use token evidence;
+the presence of a scalar amount alone does not guarantee eligibility.
+Preserve partial token/cost evidence when explicitly contributing, even if
+`cost.totalUsd` is null. Never coerce that null to zero.
 
-- At least two runnable models in `availableModels`
-- `maxCostUsd` in the routing request
-- `actualCostUsd` in the outcome
-- Non-empty task descriptors derived from the task and context
-- The model that actually ran
+For normal routed contributions, preserve the candidate pool (at least two
+runnable models), route budget, non-empty task descriptors, executed model and
+original route attribution. A row can be accepted as partial telemetry without
+qualifying for training or rewards. API-equivalent resource measurement applies
+equally to subscription-funded, discounted and subsidized usage; estimates are
+not ineligible merely because they are not provider bills.
 
-A row can be accepted as `partial` telemetry when information is missing. Partial rows do not train the router or earn rewards.
+### Advanced hosts and the legacy scalar path
+
+Core 0.8.0 exports `buildTechnicalTaskRouterRowV4` for
+`technical_task_router_row/v4`. Follow the
+[SDK contribution builder](https://github.com/Hokusai-protocol/hokusai-sdk/blob/main/packages/core/src/contribution/builder.ts)
+for per-stage `task_cost`, stage/executed-model evidence, inference-log linkage
+and explicit cost overrides. Keep the route's `inference_log_id` unchanged and
+record execution deviations. An override is reported evidence, not a way to
+bypass server repricing/trust.
+
+`route.reportOutcome({ status, actualCostUsd, ... })` remains supported for hosts
+with a known scalar. Omit `actualCostUsd` when unknown; it does not carry token
+coverage or pricing provenance. Prefer `cost` for measured runs and preserve
+source distinctions: `estimatedUsd` is token-derived, `actualUsd` is provider
+charge evidence, and `totalUsd` prefers charges per event when resolving them.
 
 ## Reporting Failed Routes
 
@@ -71,7 +104,7 @@ Report failures with the same care as successes:
 ```ts
 await route.reportOutcome({
   status: 'failed',
-  actualCostUsd: 0.31,
+  cost, // Include the partial report if execution failed after consuming tokens.
   wallClockSeconds: 611,
   notes: 'Selected model did not pass the required checks.',
 });
